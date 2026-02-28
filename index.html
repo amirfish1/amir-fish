@@ -1,190 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Amir Fish</title>
-      <meta name="description" content="Amir Fish — Personal Website">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-      <style>
-                :root {
-                              --cream: #F7F4EF;
-                              --warm-black: #1A1714;
-                              --stone: #A89F91;
-                              --sage: #8B9A7E;
-                              --sage-light: #C2CEBC;
-                              --warm-white: #FDFCFA;
-                }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amir Fish — AI Product Strategy for Startups</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="work-with-me.html">Work With Me</a>
+                <a href="case-studies.html">Track Record</a>
+                <a href="about.html">About</a>
+                <a href="packages.html" class="nav-cta">Book a Session</a>
+            </div>
+        </div>
+    </nav>
 
-                * {
-                              margin: 0;
-                              padding: 0;
-                              box-sizing: border-box;
-                }
+    <section class="hero">
+        <div class="hero-bg-elements">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-grid-overlay"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-badge">Ex-Google & Meta Group Product Manager · 15+ years shipping AI products at scale</div>
+            <h1 class="hero-title">
+                Your AI Startup Needs<br>
+                <span class="hero-accent">Its Unfair Advantage.</span>
+            </h1>
+            <p class="hero-subtitle">
+                I help Bay Area startups build the right AI product, ship it faster, and avoid the mistakes 
+                I've seen sink teams at Google, Meta, and dozens of startups. Fractional CPO-level thinking without the full-time hire.
+            </p>
+            <div class="hero-cta-group">
+                <a href="packages.html" class="btn btn-primary">Book a Strategy Session</a>
+                <a href="work-with-me.html" class="btn btn-secondary">How I Help Startups</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">Google & Meta</span>
+                    <span class="hero-stat-label">GPM-level experience</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">15+ Years</span>
+                    <span class="hero-stat-label">Product leadership</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">AI-Native</span>
+                    <span class="hero-stat-label">From LLMs to production</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                body {
-                              font-family: 'Jost', sans-serif;
-                              font-weight: 300;
-                              background: var(--cream);
-                              color: var(--warm-black);
-                              line-height: 1.7;
-                              -webkit-font-smoothing: antialiased;
-                }
+    <section class="section section-problems">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Problem</span>
+                <h2>Most AI Startups Build the Wrong Thing First</h2>
+                <p class="section-desc">You have strong engineers and a promising model. But product-market fit isn't an engineering problem — it's a product problem.</p>
+            </div>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Demo ≠ Product</h3>
+                    <p>Your AI is impressive in a demo, but you can't articulate why a customer should pay for it. You're shipping capabilities, not outcomes.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔥</div>
+                    <h3>Burning Runway Blindly</h3>
+                    <p>Every sprint feels productive but you haven't validated willingness to pay. Six months in, your model is great — your PMF story isn't.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🧭</div>
+                    <h3>No Senior Product Voice</h3>
+                    <p>Your founding team is technical. You need someone who's shipped AI products at Google-scale to pressure-test your roadmap, positioning, and GTM.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                .page {
-                              max-width: 720px;
-                              margin: 0 auto;
-                              padding: 80px 24px 60px;
-                }
+    <section class="section section-approach">
+        <div class="container">
+            <div class="approach-layout">
+                <div class="approach-text">
+                    <span class="section-tag">My Approach</span>
+                    <h2>Senior Product Leadership, <em>On Demand</em></h2>
+                    <p>I've been the GPM at Google and Meta responsible for AI products used by hundreds of millions. I've also built AI products from zero. I bring that pattern recognition to your startup — without the $400K+ CPO salary.</p>
+                    <p>This isn't slide-deck consulting. I sit in your sprint planning, review your PRDs, talk to your customers, and tell you the hard truths about your roadmap.</p>
+                    <div class="approach-steps">
+                        <div class="approach-step">
+                            <span class="step-num">01</span>
+                            <div>
+                                <strong>Product Strategy & Roadmap</strong>
+                                <p>What to build, what to kill, and in what order — informed by what actually works at scale.</p>
+                            </div>
+                        </div>
+                        <div class="approach-step">
+                            <span class="step-num">02</span>
+                            <div>
+                                <strong>AI Product-Market Fit</strong>
+                                <p>Validating that your AI capability maps to real willingness to pay — before you burn more runway.</p>
+                            </div>
+                        </div>
+                        <div class="approach-step">
+                            <span class="step-num">03</span>
+                            <div>
+                                <strong>Ship & Scale</strong>
+                                <p>AI quality, monitoring, trust & safety — the operational rigor that separates demos from products.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="approach-visual">
+                    <div class="maturity-card">
+                        <h4>Where startups get stuck</h4>
+                        <div class="maturity-stages">
+                            <div class="maturity-stage">
+                                <div class="maturity-dot active"></div>
+                                <div class="maturity-info">
+                                    <span class="maturity-label">Cool Demo</span>
+                                    <span class="maturity-desc">"Look what our model can do"</span>
+                                </div>
+                            </div>
+                            <div class="maturity-line"></div>
+                            <div class="maturity-stage">
+                                <div class="maturity-dot"></div>
+                                <div class="maturity-info">
+                                    <span class="maturity-label">Real Product</span>
+                                    <span class="maturity-desc">Solves a specific, painful problem</span>
+                                </div>
+                            </div>
+                            <div class="maturity-line"></div>
+                            <div class="maturity-stage">
+                                <div class="maturity-dot"></div>
+                                <div class="maturity-info">
+                                    <span class="maturity-label">Product-Market Fit</span>
+                                    <span class="maturity-desc">Customers pull, not push</span>
+                                </div>
+                            </div>
+                            <div class="maturity-line"></div>
+                            <div class="maturity-stage">
+                                <div class="maturity-dot"></div>
+                                <div class="maturity-info">
+                                    <span class="maturity-label">Scale</span>
+                                    <span class="maturity-desc">Repeatable growth engine</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                h1 {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-weight: 400;
-                              font-size: clamp(2.4rem, 6vw, 3.6rem);
-                              letter-spacing: -0.02em;
-                              line-height: 1.15;
-                              margin-bottom: 12px;
-                }
+    <section class="section section-case-study">
+        <div class="container">
+            <div class="case-study-card">
+                <div class="case-study-badge">What I Bring</div>
+                <div class="case-study-content">
+                    <h2>Battle-Tested AI Product Expertise</h2>
+                    <p class="case-study-subtitle">I've shipped AI at the largest scale and know exactly where startups go wrong.</p>
+                    <div class="case-study-details">
+                        <div class="case-detail">
+                            <span class="detail-label">At Google & Meta</span>
+                            <p>Group Product Manager leading AI-powered product lines used by hundreds of millions. Deep experience with LLMs, recommendation systems, trust & safety, and the product decisions that determine whether AI capabilities become real products.</p>
+                        </div>
+                        <div class="case-detail">
+                            <span class="detail-label">AI Quality & Production Readiness</span>
+                            <p>Built a 4-step AI monitoring framework that reduced chatbot overpromises from 15% to under 2%. I know how to take AI from "works in a demo" to "works in production at scale."</p>
+                        </div>
+                        <div class="case-detail">
+                            <span class="detail-label">The Numbers</span>
+                            <div class="case-results">
+                                <div class="case-result">
+                                    <strong>0 → 1</strong>
+                                    <span>AI products from scratch</span>
+                                </div>
+                                <div class="case-result">
+                                    <strong>15% → 2%</strong>
+                                    <span>AI error rate reduction</span>
+                                </div>
+                                <div class="case-result">
+                                    <strong>GPM</strong>
+                                    <span>at Google & Meta</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="about.html" class="btn btn-primary">Full Background →</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                .tagline {
-                              font-family: 'Jost', sans-serif;
-                              font-weight: 300;
-                              font-size: 0.95rem;
-                              letter-spacing: 0.15em;
-                              text-transform: uppercase;
-                              color: var(--stone);
-                              margin-bottom: 60px;
-                }
+    <section class="section section-services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Services</span>
+                <h2>Where Startups Need Me Most</h2>
+                <p class="section-desc">Pre-seed figuring out what to build, or Series A trying to scale — here's where I make the biggest impact.</p>
+            </div>
+            <div class="services-grid">
+                <a href="work-with-me.html#strategy" class="service-card">
+                    <div class="service-icon">🧭</div>
+                    <h3>AI Product Strategy</h3>
+                    <p>Roadmap reviews, prioritization, competitive positioning — the senior product thinking your team needs but doesn't have bandwidth for.</p>
+                    <span class="service-link">Learn more →</span>
+                </a>
+                <a href="work-with-me.html#pmf" class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3>Product-Market Fit</h3>
+                    <p>Customer discovery, value prop sharpening, pricing strategy, and the hard conversations about whether your current direction will work.</p>
+                    <span class="service-link">Learn more →</span>
+                </a>
+                <a href="work-with-me.html#ship" class="service-card">
+                    <div class="service-icon">🚀</div>
+                    <h3>Ship & Scale AI</h3>
+                    <p>From prototype to production — AI monitoring, quality frameworks, and operational systems that separate real products from demos.</p>
+                    <span class="service-link">Learn more →</span>
+                </a>
+                <a href="work-with-me.html#fractional" class="service-card">
+                    <div class="service-icon">👤</div>
+                    <h3>Fractional Head of Product</h3>
+                    <p>Embedded product leadership. I join your standups, review PRDs, mentor PMs, and own strategy alongside founders.</p>
+                    <span class="service-link">Learn more →</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
-                .divider {
-                              width: 48px;
-                              height: 1px;
-                              background: var(--sage);
-                              margin: 48px 0;
-                }
+    <section class="section section-pricing-preview">
+        <div class="container">
+            <div class="pricing-preview-card">
+                <div class="pricing-preview-content">
+                    <h2>Straightforward Pricing. Prepaid.</h2>
+                    <p>No retainer surprises. Pay upfront for a defined engagement. If I can't help, I'll tell you in the first 15 minutes and refund you.</p>
+                    <a href="packages.html" class="btn btn-primary">View All Packages</a>
+                </div>
+                <div class="pricing-preview-tiers">
+                    <div class="preview-tier">
+                        <span class="tier-name">Strategy Session</span>
+                        <span class="tier-price">$200</span>
+                    </div>
+                    <div class="preview-tier">
+                        <span class="tier-name">Product Deep Dive</span>
+                        <span class="tier-price">$1,000</span>
+                    </div>
+                    <div class="preview-tier">
+                        <span class="tier-name">Sprint Engagement</span>
+                        <span class="tier-price">$2,000+</span>
+                    </div>
+                    <div class="preview-tier">
+                        <span class="tier-name">Fractional Monthly</span>
+                        <span class="tier-price">$800/mo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                h2 {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-weight: 600;
-                              font-size: 1.5rem;
-                              margin-bottom: 20px;
-                              letter-spacing: -0.01em;
-                }
+    <section class="section section-trust">
+        <div class="container">
+            <div class="trust-layout">
+                <div class="trust-logos">
+                    <span class="trust-label">Product leadership experience at</span>
+                    <div class="trust-company-list">
+                        <span class="trust-company">Google</span>
+                        <span class="trust-divider">·</span>
+                        <span class="trust-company">Meta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                p {
-                              margin-bottom: 16px;
-                              font-size: 1.02rem;
-                }
+    <section class="section section-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Let's Pressure-Test Your AI Roadmap</h2>
+                <p>1-hour strategy session. I'll review your product, give you honest feedback, and identify the highest-leverage moves for the next 90 days.</p>
+                <div class="cta-buttons">
+                    <a href="packages.html" class="btn btn-primary btn-large">Book a Strategy Session — $200</a>
+                    <a href="mailto:amir@amirfish.com" class="btn btn-secondary btn-large">Questions? Email Me</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                .links {
-                              display: flex;
-                              flex-direction: column;
-                              gap: 20px;
-                              margin: 28px 0;
-                }
-
-                .link-card {
-                              background: var(--warm-white);
-                              border: 1px solid #E8E3DB;
-                              border-radius: 8px;
-                              padding: 28px 32px;
-                              display: flex;
-                              justify-content: space-between;
-                              align-items: center;
-                              text-decoration: none;
-                              color: var(--warm-black);
-                              transition: border-color 0.2s, box-shadow 0.2s;
-                }
-
-                .link-card:hover {
-                              border-color: var(--sage-light);
-                              box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-                }
-
-                .link-name {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-weight: 600;
-                              font-size: 1.15rem;
-                              margin-bottom: 4px;
-                }
-
-                .link-detail {
-                              font-size: 0.9rem;
-                              color: var(--stone);
-                }
-
-                .link-arrow {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 1.4rem;
-                              font-weight: 400;
-                              color: var(--sage);
-                              margin-left: 24px;
-                }
-
-                .contact-block {
-                              background: var(--warm-white);
-                              border: 1px solid #E8E3DB;
-                              border-radius: 8px;
-                              padding: 32px;
-                              margin-top: 28px;
-                }
-
-                .contact-block a {
-                              color: var(--sage);
-                              text-decoration: none;
-                              border-bottom: 1px solid var(--sage-light);
-                              transition: border-color 0.2s;
-                }
-
-                .contact-block a:hover {
-                              border-color: var(--sage);
-                }
-
-                footer {
-                              margin-top: 80px;
-                              padding-top: 24px;
-                              border-top: 1px solid #E8E3DB;
-                              font-size: 0.85rem;
-                              color: var(--stone);
-                }
-
-                @media (max-width: 500px) {
-                              .link-card {
-                                                flex-direction: column;
-                                                align-items: flex-start;
-                                                gap: 8px;
-                              }
-                              .link-arrow {
-                                                margin-left: 0;
-                              }
-                }
-            </style>
-  </head>
-  <body>
-        <div class="page">
-                  <h1>Amir Fish</h1>
-                <p class="tagline">Welcome</p>p>
-        
-                <div class="divider"></div>div>
-        
-                <h2>About</h2>
-                <p>This is the personal website of Amir Fish.</p>
-        
-                <div class="divider"></div>div>
-        
-                <h2>Get in Touch</h2>
-                <div class="contact-block">
-                            <p>Feel free to reach out at <a href="mailto:amir@amirfish.com">amir@amirfish.com</a>a>.</p>
-                </div>div>
-        
-                <footer>
-                              <span>&copy; 2025 Amir Fish</span>
-                </footer>
-        </div>div>
-  </body>
-</html>html></span>
-                </footer></p></p></h2></h1>
-  </body>
-      </style></title>
-  </head>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-layout">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo"><span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span></a>
+                    <p>AI product strategy for startups — from someone who's shipped AI at Google and Meta.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Services</h4>
+                        <a href="work-with-me.html">Work With Me</a>
+                        <a href="packages.html">Packages & Pricing</a>
+                        <a href="case-studies.html">Track Record</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <a href="about.html">About</a>
+                        <a href="mailto:amir@amirfish.com">Contact</a>
+                        <a href="https://linkedin.com/in/" target="_blank">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 AmirFish.com · All rights reserved.</p></div>
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+</html>

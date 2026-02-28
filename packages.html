@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages & Pricing — Amir Fish</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <nav class="nav scrolled" id="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo"><span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span></a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+            <div class="nav-links" id="navLinks">
+                <a href="work-with-me.html">Work With Me</a>
+                <a href="case-studies.html">Track Record</a>
+                <a href="about.html">About</a>
+                <a href="packages.html" class="nav-cta">Book a Session</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Packages & Pricing</h1>
+            <p>Prepaid engagements with clear deliverables. No hourly billing surprises. Pay upfront, get results.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="pricing-grid">
+
+                <div class="pricing-card">
+                    <div class="pricing-card-header">
+                        <div class="pricing-card-name">Strategy Session</div>
+                        <div class="pricing-card-price">$200</div>
+                        <div class="pricing-card-desc">1 hour of focused, senior product strategy. I review your AI product, roadmap, or GTM approach and give you honest, actionable feedback.</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Pre-session questionnaire so I come prepared</li>
+                        <li>1-hour live session (Zoom or in-person in Bay Area)</li>
+                        <li>Honest assessment of your product direction</li>
+                        <li>Top 3 highest-leverage moves for the next 90 days</li>
+                        <li>Written summary within 48 hours</li>
+                    </ul>
+                    <button class="btn btn-outline" onclick="handlePayment('quickWin')">Book Strategy Session — $200</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-card-header">
+                        <div class="pricing-card-name">Product Deep Dive</div>
+                        <div class="pricing-card-price">$1,000</div>
+                        <div class="pricing-card-desc">5 hours of deep product work. I go through your product, talk to your team, review your data, and deliver a comprehensive product strategy memo.</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Strategy Session, plus:</li>
+                        <li>Product walkthrough and competitive analysis</li>
+                        <li>Conversations with founders and key team members</li>
+                        <li>Roadmap review with prioritization recommendations</li>
+                        <li>PMF assessment — where you are, what's missing</li>
+                        <li>Detailed product strategy memo with specific recommendations</li>
+                        <li>30-minute follow-up call after you've digested it</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="handlePayment('roadmap')">Book Product Deep Dive — $1,000</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-card-header">
+                        <div class="pricing-card-name">Sprint Engagement</div>
+                        <div class="pricing-card-price">$2,000<span>+</span></div>
+                        <div class="pricing-card-desc">10+ hours over 2-4 weeks. I embed with your team to tackle a specific product challenge — PMF validation, launch readiness, or AI quality systems.</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Product Deep Dive, plus:</li>
+                        <li>Hands-on involvement in your product process</li>
+                        <li>Customer interview design and analysis</li>
+                        <li>PRD and spec reviews before engineering starts</li>
+                        <li>AI quality/monitoring framework setup</li>
+                        <li>Investor-ready product narrative</li>
+                        <li>Slack access for async questions during the sprint</li>
+                    </ul>
+                    <button class="btn btn-outline" onclick="handlePayment('buildLaunch')">Book Sprint — $2,000+</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-card-header">
+                        <div class="pricing-card-name">Fractional Monthly</div>
+                        <div class="pricing-card-price">$800<span>/month</span></div>
+                        <div class="pricing-card-desc">4 hours/month of ongoing product leadership. I become a regular part of your team rhythm — standups, roadmap sessions, and strategic decisions.</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>4 hours of product leadership per month</li>
+                        <li>Weekly or biweekly sync with founders</li>
+                        <li>PRD reviews and roadmap input</li>
+                        <li>PM mentorship for junior product hires</li>
+                        <li>Async availability via Slack</li>
+                        <li>Cancel anytime — no long-term contracts</li>
+                    </ul>
+                    <button class="btn btn-outline" onclick="handlePayment('retainer')">Start Retainer — $800/mo</button>
+                </div>
+
+            </div>
+
+            <div class="payment-note">
+                <p><strong>How it works:</strong> All packages are prepaid via Stripe. After payment, you'll get a scheduling link to book your session. If I'm not the right fit for your challenge, I'll tell you in the first 15 minutes and refund you in full.</p>
+            </div>
+
+            <div style="max-width: 640px; margin: 3rem auto 0; text-align: center;">
+                <p style="color: var(--ink-muted); font-size: 0.95rem; line-height: 1.7;">
+                    <strong style="color: var(--ink);">Not sure where to start?</strong><br>
+                    The Strategy Session is designed to be low-risk. In one hour, you'll know whether my perspective is valuable for your team — and you'll walk away with actionable recommendations either way.
+                </p>
+                <div style="margin-top: 1.5rem;">
+                    <a href="mailto:amir@amirfish.com" style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">Have questions? Email me →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-cta" style="padding-top: 2rem;">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Bigger Engagement?</h2>
+                <p>Need full-time fractional product leadership, help preparing for a fundraise, or a multi-month engagement? Let's talk.</p>
+                <a href="mailto:amir@amirfish.com" class="btn btn-primary btn-large">Discuss a Custom Engagement</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-layout">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo"><span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span></a>
+                    <p>AI product strategy for startups — from someone who's shipped AI at Google and Meta.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h4>Services</h4><a href="work-with-me.html">Work With Me</a><a href="packages.html">Packages & Pricing</a><a href="case-studies.html">Track Record</a></div>
+                    <div class="footer-col"><h4>Connect</h4><a href="about.html">About</a><a href="mailto:amir@amirfish.com">Contact</a><a href="https://linkedin.com/in/" target="_blank">LinkedIn</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 AmirFish.com · All rights reserved.</p></div>
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+</html>
