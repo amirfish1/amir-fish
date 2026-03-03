@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detecting & Fixing AI Overreach</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+  }
+
+  /* ── Slide container ── */
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; align-items: center; padding: 60px 80px; text-align: center;
+  }
+  .slide.active { display: flex; }
+
+  /* ── Typography ── */
+  h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+  h2 { font-size: 36px; font-weight: 600; margin-bottom: 16px; line-height: 1.3; }
+  h3 { font-size: 24px; font-weight: 600; margin-bottom: 12px; color: #8b949e; }
+  p, li { font-size: 22px; line-height: 1.6; color: #c9d1d9; }
+  .subtitle { font-size: 24px; color: #8b949e; margin-top: 8px; }
+  .accent { color: #58a6ff; }
+  .warn { color: #f0883e; }
+  .green { color: #3fb950; }
+  .red { color: #f85149; }
+
+  /* ── Lists ── */
+  ul { list-style: none; text-align: left; max-width: 700px; }
+  ul li { padding: 8px 0; position: relative; padding-left: 28px; }
+  ul li::before { content: ''; position: absolute; left: 0; top: 16px; width: 12px; height: 12px; border-radius: 3px; background: #58a6ff; }
+
+  /* ── Example boxes ── */
+  .example-grid { display: flex; gap: 24px; margin-top: 24px; max-width: 900px; width: 100%; }
+  .example-box {
+    flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 20px; text-align: left;
+  }
+  .example-box h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .example-box p { font-size: 15px; line-height: 1.5; }
+  .example-box.before { border-color: #da3633; }
+  .example-box.before h4 { color: #f85149; }
+  .example-box.after { border-color: #2ea043; }
+  .example-box.after h4 { color: #3fb950; }
+
+  /* ── Chat bubbles ── */
+  .chat-demo { max-width: 600px; width: 100%; text-align: left; margin-top: 20px; }
+  .chat-bubble {
+    padding: 12px 16px; border-radius: 8px; margin-bottom: 8px;
+    font-size: 16px; line-height: 1.5;
+  }
+  .chat-user { background: #1f3a5f; border: 1px solid #2d5a8e; }
+  .chat-user .chat-label { color: #58a6ff; }
+  .chat-assistant { background: #161b22; border: 1px solid #30363d; }
+  .chat-assistant .chat-label { color: #3fb950; }
+  .chat-label { font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+  /* ── Screenshot placeholder ── */
+  .screenshot {
+    width: 100%; max-width: 700px; height: 280px; margin-top: 20px;
+    background: #161b22; border: 2px dashed #30363d; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #484f58; font-size: 16px;
+  }
+  .screenshot-row { display: flex; gap: 16px; margin-top: 20px; max-width: 900px; width: 100%; }
+  .screenshot-row .screenshot { flex: 1; height: 200px; }
+
+  /* ── Process steps ── */
+  .process-steps {
+    display: flex; gap: 12px; margin-top: 24px; max-width: 900px; width: 100%;
+  }
+  .process-step {
+    flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 16px; text-align: center;
+  }
+  .process-step .step-num {
+    width: 32px; height: 32px; border-radius: 50%; background: #1f6feb;
+    color: #fff; font-weight: 700; font-size: 16px;
+    display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px;
+  }
+  .process-step h4 { font-size: 16px; margin-bottom: 4px; color: #e6edf3; }
+  .process-step p { font-size: 13px; color: #8b949e; line-height: 1.4; }
+
+  /* ── Navigation ── */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 10px; background: #161b22; border-top: 1px solid #21262d; z-index: 10;
+  }
+  .nav-bar button {
+    background: #21262d; border: 1px solid #30363d; color: #e6edf3;
+    padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 14px;
+  }
+  .nav-bar button:hover { background: #30363d; }
+  .nav-bar button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .nav-bar .slide-counter { font-size: 13px; color: #8b949e; min-width: 60px; text-align: center; }
+
+  /* ── Dots ── */
+  .dots { display: flex; gap: 6px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #30363d; cursor: pointer;
+  }
+  .dot.active { background: #58a6ff; }
+
+  /* ── Back link ── */
+  .back-link {
+    position: fixed; top: 12px; left: 16px; z-index: 10;
+    font-size: 13px; color: #58a6ff; text-decoration: none;
+  }
+  .back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/">&larr; Back to app</a>
+
+<div class="deck" id="deck">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <h1>Detecting & Fixing<br><span class="accent">AI Overreach</span></h1>
+    <p class="subtitle">A practical system for building eval-driven guardrails</p>
+  </div>
+
+  <!-- Slide 2: The problem -->
+  <div class="slide">
+    <h2>The Problem</h2>
+    <p style="max-width:700px; margin-bottom:20px;">
+      AI agents go beyond their defined capabilities &mdash; fabricating processes,
+      claiming false actions, and inventing information.
+    </p>
+    <ul>
+      <li><span class="red">Invents</span> support phone numbers and email addresses</li>
+      <li><span class="red">Claims</span> to perform actions it cannot execute</li>
+      <li><span class="red">Promises</span> features that don't exist</li>
+      <li><span class="red">Fabricates</span> processes and workflows</li>
+    </ul>
+  </div>
+
+  <!-- Slide 3: Live example -->
+  <div class="slide">
+    <h3>Live Example &mdash; WealthSync AI</h3>
+    <div class="chat-demo">
+      <div class="chat-bubble chat-user">
+        <div class="chat-label">User</div>
+        Can you connect me to customer support? I need help with my account.
+      </div>
+      <div class="chat-bubble chat-assistant">
+        <div class="chat-label">Assistant <span class="red">(overpromising)</span></div>
+        Of course! You can reach our support team at:<br>
+        &bull; Phone: <span class="red">1-800-555-WEALTH</span> (invented)<br>
+        &bull; Email: <span class="red">support@wealthsync.com</span> (invented)<br>
+        &bull; Live chat: <span class="red">available 24/7</span> (doesn't exist)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: More examples -->
+  <div class="slide">
+    <h3>Before vs. After</h3>
+    <div class="example-grid">
+      <div class="example-box before">
+        <h4>Before (naive prompt)</h4>
+        <p>&ldquo;I've set up automatic weekly budget alerts for you! You'll receive notifications every Monday.&rdquo;</p>
+        <p style="margin-top:8px; font-size:13px; color:#f85149;">The assistant cannot set up alerts.</p>
+      </div>
+      <div class="example-box after">
+        <h4>After (guardrailed)</h4>
+        <p>&ldquo;I don't have the ability to set up alerts. I can help you analyze your current spending with the tools I have available.&rdquo;</p>
+        <p style="margin-top:8px; font-size:13px; color:#3fb950;">Honest about limitations.</p>
+      </div>
+    </div>
+    <div class="example-grid" style="margin-top:12px;">
+      <div class="example-box before">
+        <h4>Before</h4>
+        <p>&ldquo;I'll connect your Chase account right now so we can pull in real-time data...&rdquo;</p>
+      </div>
+      <div class="example-box after">
+        <h4>After</h4>
+        <p>&ldquo;I can't connect to external bank accounts. I can work with the demo budget data I have access to.&rdquo;</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Why this matters -->
+  <div class="slide">
+    <h2>Why This Matters</h2>
+    <ul>
+      <li><strong class="red">Trust erosion</strong> &mdash; Users lose faith when promises aren't kept</li>
+      <li><strong class="warn">Liability</strong> &mdash; False claims create legal and compliance risk</li>
+      <li><strong class="accent">User confusion</strong> &mdash; People take action based on fabricated info</li>
+      <li><strong>Compounding harm</strong> &mdash; One overpromise leads to more cover-up overpromises</li>
+    </ul>
+  </div>
+
+  <!-- Slide 6: The fix -->
+  <div class="slide">
+    <h2>The Fix: <span class="green">Building Evals</span></h2>
+    <p style="max-width:650px; margin-bottom:20px;">
+      Prompt engineering alone isn't reliable. We need a <strong>scalable system</strong>
+      to detect overreach automatically and measure improvement.
+    </p>
+    <p style="max-width:650px; color:#8b949e;">
+      The solution: build an evaluation pipeline that catches overpromises,
+      categorizes them, and scores the assistant &mdash; before and after prompt changes.
+    </p>
+  </div>
+
+  <!-- Slide 7: Process overview -->
+  <div class="slide">
+    <h2>The Process</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <h4>Annotate</h4>
+        <p>Review conversations and label overpromises with categories and severity</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <h4>Categorize</h4>
+        <p>Cluster annotations into common failure patterns</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <h4>Build Judges</h4>
+        <p>Create LLM evaluators that score conversations automatically</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <h4>Compare</h4>
+        <p>Run same scenarios with different prompts, measure improvement</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Step 1 - Annotate -->
+  <div class="slide">
+    <h2>Step 1: <span class="accent">Annotate</span></h2>
+    <p style="max-width:650px;">
+      Review each assistant response and label overpromises with a category
+      (e.g., false_action, fabricated_process) and severity level.
+    </p>
+    <div class="screenshot">Screenshot: Annotation UI</div>
+  </div>
+
+  <!-- Slide 9: Step 2 - Categorize -->
+  <div class="slide">
+    <h2>Step 2: <span class="accent">Categorize</span></h2>
+    <p style="max-width:650px;">
+      Use AI to cluster annotations into common failure modes.
+      This reveals which types of overreach are most frequent.
+    </p>
+    <div class="screenshot">Screenshot: Category clustering results</div>
+  </div>
+
+  <!-- Slide 10: Step 3 - Build judges -->
+  <div class="slide">
+    <h2>Step 3: <span class="accent">Build Judges</span></h2>
+    <p style="max-width:650px;">
+      Write an LLM-based evaluator that automatically scores each conversation
+      for overpromising on a 1&ndash;5 scale.
+    </p>
+    <div class="screenshot">Screenshot: Judge prompt + evaluation</div>
+  </div>
+
+  <!-- Slide 11: Step 4 - Before vs After scorecard -->
+  <div class="slide">
+    <h2>Step 4: <span class="green">Before vs. After</span></h2>
+    <p style="max-width:650px;">
+      Run the same scenarios with different prompts.
+      The scorecard shows measurable improvement.
+    </p>
+    <div class="example-grid">
+      <div class="example-box before">
+        <h4>BEFORE</h4>
+        <p style="font-size:28px; font-weight:700; color:#f85149;">7/10 overpromised</p>
+        <p>Avg score: 2.1 / 5</p>
+      </div>
+      <div class="example-box after">
+        <h4>AFTER</h4>
+        <p style="font-size:28px; font-weight:700; color:#3fb950;">1/10 overpromised</p>
+        <p>Avg score: 4.6 / 5</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12: What we built -->
+  <div class="slide">
+    <h2>What We Built</h2>
+    <div class="screenshot-row">
+      <div class="screenshot">Live Chat UI</div>
+      <div class="screenshot">Annotation UI</div>
+      <div class="screenshot">Judges Page</div>
+    </div>
+  </div>
+
+  <!-- Slide 13: Takeaway -->
+  <div class="slide">
+    <h1>Takeaway</h1>
+    <p style="max-width:650px; font-size:24px; margin-bottom:24px;">
+      Prompt engineering alone isn't enough.<br>
+      You need <strong class="green">continuous evaluation</strong>.
+    </p>
+    <ul>
+      <li>Generate conversations with test scenarios</li>
+      <li>Annotate failures &mdash; manually or with AI</li>
+      <li>Build automated judges to score at scale</li>
+      <li>Measure improvement with before/after comparison</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="nav-bar">
+  <button id="btn-prev" onclick="prevSlide()">&larr; Prev</button>
+  <div class="dots" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button id="btn-next" onclick="nextSlide()">Next &rarr;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    current = Math.max(0, Math.min(n, total - 1));
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+
+  // Build dots
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => showSlide(i);
+    dotsEl.appendChild(dot);
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
