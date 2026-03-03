@@ -3,300 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amir Fish — AI Product Strategy for Startups</title>
+    <title>Amir Fish</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #111;
+            background: #fcfcfc;
+            padding: 0 1.5rem;
+        }
+
+        a {
+            color: #111;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: #ccc;
+        }
+
+        a:hover { text-decoration-color: #111; }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* --- Hero --- */
+        .hero {
+            padding: 14vh 0 0;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: clamp(3rem, 7vw, 4.2rem);
+            font-weight: 600;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.85;
+            color: #444;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero p:last-child {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .hero p a { color: #444; }
+        .hero p:last-child a { color: #777; }
+
+        /* --- Sections --- */
+        hr {
+            border: none;
+            border-top: 1px solid #e5e5e5;
+            margin: 4rem 0;
+        }
+
+        .section-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #999;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Writing --- */
+        .writing-item {
+            margin-bottom: 2rem;
+        }
+
+        .writing-item:last-child { margin-bottom: 0; }
+
+        .writing-item .tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #c2693a;
+            margin-bottom: 0.3rem;
+        }
+
+        .writing-item h3 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.35;
+            margin-bottom: 0.25rem;
+        }
+
+        .writing-item p {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.65;
+        }
+
+        /* --- Building --- */
+        .building-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .building-item:last-child { margin-bottom: 0; }
+
+        .building-item strong {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .building-item span {
+            color: #888;
+            font-size: 0.92rem;
+        }
+
+        /* --- Advisory --- */
+        .advisory p {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.85;
+            margin-bottom: 1.25rem;
+        }
+
+        .advisory .cta {
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #111;
+            text-decoration: none;
+            border-bottom: 1.5px solid #111;
+            padding-bottom: 1px;
+        }
+
+        .advisory .cta:hover { opacity: 0.6; }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            padding-bottom: 4rem;
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        footer a {
+            color: #999;
+            text-decoration-color: #ddd;
+            margin-right: 1.5rem;
+        }
+
+        footer a:hover { text-decoration-color: #999; }
+
+        /* --- Responsive --- */
+        @media (max-width: 500px) {
+            .hero { padding-top: 8vh; }
+            .hero h1 { font-size: 2.6rem; }
+        }
+    </style>
 </head>
 <body>
-    <nav class="nav" id="nav">
-        <div class="nav-inner">
-            <a href="index.html" class="nav-logo">
-                <span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span>
-            </a>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="work-with-me.html">Work With Me</a>
-                <a href="case-studies.html">Track Record</a>
-                <a href="about.html">About</a>
-                <a href="packages.html" class="nav-cta">Book a Session</a>
-            </div>
-        </div>
-    </nav>
+    <div class="container">
 
-    <section class="hero">
-        <div class="hero-bg-elements">
-            <div class="hero-orb hero-orb-1"></div>
-            <div class="hero-orb hero-orb-2"></div>
-            <div class="hero-grid-overlay"></div>
-        </div>
-        <div class="container hero-content">
-            <div class="hero-badge">Ex-Google & Meta Group Product Manager · 15+ years shipping AI products at scale</div>
-            <h1 class="hero-title">
-                Your AI Startup Needs<br>
-                <span class="hero-accent">Its Unfair Advantage.</span>
-            </h1>
-            <p class="hero-subtitle">
-                I help Bay Area startups build the right AI product, ship it faster, and avoid the mistakes 
-                I've seen sink teams at Google, Meta, and dozens of startups. Fractional CPO-level thinking without the full-time hire.
-            </p>
-            <div class="hero-cta-group">
-                <a href="packages.html" class="btn btn-primary">Book a Strategy Session</a>
-                <a href="work-with-me.html" class="btn btn-secondary">How I Help Startups</a>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number">Google & Meta</span>
-                    <span class="hero-stat-label">GPM-level experience</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">15+ Years</span>
-                    <span class="hero-stat-label">Product leadership</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">AI-Native</span>
-                    <span class="hero-stat-label">From LLMs to production</span>
-                </div>
-            </div>
-        </div>
-    </section>
+        <section class="hero">
+            <h1>Amir Fish</h1>
+            <p>I spent 20 years building AI products at Google and Meta — leading teams, shipping to hundreds of millions of users, and learning what actually works.</p>
+            <p>Now I build things myself and help founders and small businesses do the same.</p>
+            <p>Currently building <a href="https://kneaded.ai">Kneaded.ai</a>. Based in Sunnyvale, CA.</p>
+        </section>
 
-    <section class="section section-problems">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">The Problem</span>
-                <h2>Most AI Startups Build the Wrong Thing First</h2>
-                <p class="section-desc">You have strong engineers and a promising model. But product-market fit isn't an engineering problem — it's a product problem.</p>
-            </div>
-            <div class="problems-grid">
-                <div class="problem-card">
-                    <div class="problem-icon">🎯</div>
-                    <h3>Demo ≠ Product</h3>
-                    <p>Your AI is impressive in a demo, but you can't articulate why a customer should pay for it. You're shipping capabilities, not outcomes.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🔥</div>
-                    <h3>Burning Runway Blindly</h3>
-                    <p>Every sprint feels productive but you haven't validated willingness to pay. Six months in, your model is great — your PMF story isn't.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🧭</div>
-                    <h3>No Senior Product Voice</h3>
-                    <p>Your founding team is technical. You need someone who's shipped AI products at Google-scale to pressure-test your roadmap, positioning, and GTM.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <hr>
 
-    <section class="section section-approach">
-        <div class="container">
-            <div class="approach-layout">
-                <div class="approach-text">
-                    <span class="section-tag">My Approach</span>
-                    <h2>Senior Product Leadership, <em>On Demand</em></h2>
-                    <p>I've been the GPM at Google and Meta responsible for AI products used by hundreds of millions. I've also built AI products from zero. I bring that pattern recognition to your startup — without the $400K+ CPO salary.</p>
-                    <p>This isn't slide-deck consulting. I sit in your sprint planning, review your PRDs, talk to your customers, and tell you the hard truths about your roadmap.</p>
-                    <div class="approach-steps">
-                        <div class="approach-step">
-                            <span class="step-num">01</span>
-                            <div>
-                                <strong>Product Strategy & Roadmap</strong>
-                                <p>What to build, what to kill, and in what order — informed by what actually works at scale.</p>
-                            </div>
-                        </div>
-                        <div class="approach-step">
-                            <span class="step-num">02</span>
-                            <div>
-                                <strong>AI Product-Market Fit</strong>
-                                <p>Validating that your AI capability maps to real willingness to pay — before you burn more runway.</p>
-                            </div>
-                        </div>
-                        <div class="approach-step">
-                            <span class="step-num">03</span>
-                            <div>
-                                <strong>Ship & Scale</strong>
-                                <p>AI quality, monitoring, trust & safety — the operational rigor that separates demos from products.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="approach-visual">
-                    <div class="maturity-card">
-                        <h4>Where startups get stuck</h4>
-                        <div class="maturity-stages">
-                            <div class="maturity-stage">
-                                <div class="maturity-dot active"></div>
-                                <div class="maturity-info">
-                                    <span class="maturity-label">Cool Demo</span>
-                                    <span class="maturity-desc">"Look what our model can do"</span>
-                                </div>
-                            </div>
-                            <div class="maturity-line"></div>
-                            <div class="maturity-stage">
-                                <div class="maturity-dot"></div>
-                                <div class="maturity-info">
-                                    <span class="maturity-label">Real Product</span>
-                                    <span class="maturity-desc">Solves a specific, painful problem</span>
-                                </div>
-                            </div>
-                            <div class="maturity-line"></div>
-                            <div class="maturity-stage">
-                                <div class="maturity-dot"></div>
-                                <div class="maturity-info">
-                                    <span class="maturity-label">Product-Market Fit</span>
-                                    <span class="maturity-desc">Customers pull, not push</span>
-                                </div>
-                            </div>
-                            <div class="maturity-line"></div>
-                            <div class="maturity-stage">
-                                <div class="maturity-dot"></div>
-                                <div class="maturity-info">
-                                    <span class="maturity-label">Scale</span>
-                                    <span class="maturity-desc">Repeatable growth engine</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <section>
+            <div class="section-label">Writing</div>
+            <div class="writing-item">
+                <span class="tag">Personal Obsession #4</span>
+                <h3>The Guided Verification Problem</h3>
+                <p>Why "human in the loop" is usually just rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google.</p>
             </div>
-        </div>
-    </section>
+            <div class="writing-item">
+                <span class="tag">Personal Obsession #3</span>
+                <h3>Every Small Business Deserves a Technical Co-Founder</h3>
+                <p>AI makes bespoke software economically viable for the first time. The one-size-fits-all SaaS era is ending.</p>
+            </div>
+            <div class="writing-item">
+                <span class="tag">Personal Obsession #2</span>
+                <h3>I Built My Wife's Pilates Studio a Custom Platform</h3>
+                <p>4 hours a week of admin, replaced by something built from scratch. Venmo payments, SMS reminders, WhatsApp booking. Admin time now: 20 minutes.</p>
+            </div>
+            <div class="writing-item">
+                <span class="tag">Personal Obsession #1</span>
+                <h3>The Cyborg Workflow</h3>
+                <p>How I build software now: Claude Code writing logic on one terminal, Claude configuring APIs on another. Two senior engineers, always available.</p>
+            </div>
+        </section>
 
-    <section class="section section-case-study">
-        <div class="container">
-            <div class="case-study-card">
-                <div class="case-study-badge">What I Bring</div>
-                <div class="case-study-content">
-                    <h2>Battle-Tested AI Product Expertise</h2>
-                    <p class="case-study-subtitle">I've shipped AI at the largest scale and know exactly where startups go wrong.</p>
-                    <div class="case-study-details">
-                        <div class="case-detail">
-                            <span class="detail-label">At Google & Meta</span>
-                            <p>Group Product Manager leading AI-powered product lines used by hundreds of millions. Deep experience with LLMs, recommendation systems, trust & safety, and the product decisions that determine whether AI capabilities become real products.</p>
-                        </div>
-                        <div class="case-detail">
-                            <span class="detail-label">AI Quality & Production Readiness</span>
-                            <p>Built a 4-step AI monitoring framework that reduced chatbot overpromises from 15% to under 2%. I know how to take AI from "works in a demo" to "works in production at scale."</p>
-                        </div>
-                        <div class="case-detail">
-                            <span class="detail-label">The Numbers</span>
-                            <div class="case-results">
-                                <div class="case-result">
-                                    <strong>0 → 1</strong>
-                                    <span>AI products from scratch</span>
-                                </div>
-                                <div class="case-result">
-                                    <strong>15% → 2%</strong>
-                                    <span>AI error rate reduction</span>
-                                </div>
-                                <div class="case-result">
-                                    <strong>GPM</strong>
-                                    <span>at Google & Meta</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="about.html" class="btn btn-primary">Full Background →</a>
-                </div>
-            </div>
-        </div>
-    </section>
+        <hr>
 
-    <section class="section section-services">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Services</span>
-                <h2>Where Startups Need Me Most</h2>
-                <p class="section-desc">Pre-seed figuring out what to build, or Series A trying to scale — here's where I make the biggest impact.</p>
+        <section>
+            <div class="section-label">Building</div>
+            <div class="building-item">
+                <strong>Kneaded.ai</strong> <span>— Custom AI software for small businesses. Every local business deserves tools built for exactly how they work.</span>
             </div>
-            <div class="services-grid">
-                <a href="work-with-me.html#strategy" class="service-card">
-                    <div class="service-icon">🧭</div>
-                    <h3>AI Product Strategy</h3>
-                    <p>Roadmap reviews, prioritization, competitive positioning — the senior product thinking your team needs but doesn't have bandwidth for.</p>
-                    <span class="service-link">Learn more →</span>
-                </a>
-                <a href="work-with-me.html#pmf" class="service-card">
-                    <div class="service-icon">🎯</div>
-                    <h3>Product-Market Fit</h3>
-                    <p>Customer discovery, value prop sharpening, pricing strategy, and the hard conversations about whether your current direction will work.</p>
-                    <span class="service-link">Learn more →</span>
-                </a>
-                <a href="work-with-me.html#ship" class="service-card">
-                    <div class="service-icon">🚀</div>
-                    <h3>Ship & Scale AI</h3>
-                    <p>From prototype to production — AI monitoring, quality frameworks, and operational systems that separate real products from demos.</p>
-                    <span class="service-link">Learn more →</span>
-                </a>
-                <a href="work-with-me.html#fractional" class="service-card">
-                    <div class="service-icon">👤</div>
-                    <h3>Fractional Head of Product</h3>
-                    <p>Embedded product leadership. I join your standups, review PRDs, mentor PMs, and own strategy alongside founders.</p>
-                    <span class="service-link">Learn more →</span>
-                </a>
+            <div class="building-item">
+                <strong>plts.xyz</strong> <span>— A complete business management platform for a Pilates studio. Scheduling, payments, reminders, client portal.</span>
             </div>
-        </div>
-    </section>
+            <div class="building-item">
+                <strong>Finance Tools</strong> <span>— Expense tracking and tax optimization for rental properties and small business. Where guided verification was born.</span>
+            </div>
+        </section>
 
+        <hr>
 
-    <section class="section section-trust">
-        <div class="container">
-            <div class="trust-layout">
-                <div class="trust-logos">
-                    <span class="trust-label">Product leadership experience at</span>
-                    <div class="trust-company-list">
-                        <span class="trust-company">Google</span>
-                        <span class="trust-divider">·</span>
-                        <span class="trust-company">Meta</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <section class="advisory">
+            <div class="section-label">Advisory</div>
+            <p>I take on 2–3 advisory roles at a time for early-stage AI startups. I focus on product strategy, product-market fit, and making sure you're building the right thing — not just an impressive demo.</p>
+            <a href="mailto:amir@amirfish.com" class="cta">Email me to see if there's a fit →</a>
+        </section>
 
-    <section class="section section-cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Let's Pressure-Test Your AI Roadmap</h2>
-                <p>1-hour strategy session. I'll review your product, give you honest feedback, and identify the highest-leverage moves for the next 90 days.</p>
-                <div class="cta-buttons">
-                    <a href="packages.html" class="btn btn-primary btn-large">Book a Strategy Session</a>
-                    <a href="mailto:amir@amirfish.com" class="btn btn-secondary btn-large">Questions? Email Me</a>
-                </div>
-            </div>
-        </div>
-    </section>
+        <footer>
+            <a href="https://linkedin.com/in/" target="_blank">LinkedIn</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-layout">
-                <div class="footer-brand">
-                    <a href="index.html" class="nav-logo"><span class="logo-icon">◈</span> amir<span class="logo-ai">fish</span></a>
-                    <p>AI product strategy for startups — from someone who's shipped AI at Google and Meta.</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-col">
-                        <h4>Services</h4>
-                        <a href="work-with-me.html">Work With Me</a>
-                        <a href="packages.html">Packages & Pricing</a>
-                        <a href="case-studies.html">Track Record</a>
-                    </div>
-                    <div class="footer-col">
-                        <h4>Connect</h4>
-                        <a href="about.html">About</a>
-                        <a href="mailto:amir@amirfish.com">Contact</a>
-                        <a href="https://linkedin.com/in/" target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom"><p>&copy; 2026 AmirFish.com · All rights reserved.</p></div>
-        </div>
-    </footer>
-    <script src="main.js"></script>
+    </div>
 </body>
 </html>
