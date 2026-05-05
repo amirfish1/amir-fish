@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Guided Verification Problem — Amir Fish</title>
+    <meta name="description" content="Why 'human in the loop' is usually rubber-stamping, and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google.">
+    <meta property="og:title" content="The Guided Verification Problem">
+    <meta property="og:description" content="Most AI products either automate everything (silently wrong) or ask the user to verify everything (soul-crushing). The pattern in between is the whole game.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/guided-verification">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
+        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
+        a:hover { text-decoration-color: #111; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
+        .top-nav a { color: #999; text-decoration-color: #ddd; }
+        .top-nav a:hover { color: #444; text-decoration-color: #999; }
+        .hero { padding: 8vh 0 0; }
+        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
+        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
+        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
+        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
+        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
+        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
+        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
+        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
+        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
+        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
+        .closing .cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; margin: 0 1rem; }
+        .closing .cta:hover { opacity: 0.6; }
+        .related { margin: 3rem 0; }
+        .related .section-label { margin-bottom: 1.25rem; }
+        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
+        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
+        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
+        footer a:hover { text-decoration-color: #999; }
+        @media (max-width: 500px) {
+            .hero { padding-top: 5vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.1rem; }
+            .closing { padding: 2rem 1.4rem; }
+            .closing .cta { display: block; margin: 0.5rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="top-nav">
+            <a href="/">← amirfish.ai</a>
+        </nav>
+
+        <section class="hero">
+            <span class="tag-eyebrow">Field Note · Product</span>
+            <h1>The Guided Verification Problem</h1>
+            <p class="subtitle">Most "human-in-the-loop" UX is rubber-stamping. The pattern that actually works looks different — and it's the whole game for AI products.</p>
+            <p>I built three versions of the same expense tracker. The first one looked great and was silently wrong. The second one was correct and unusable. The third one is the version I now think every AI product team should be building.</p>
+            <p>This is what each version got wrong, what the third version got right, and why I think this pattern matters more than the model you pick.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Version 1</span>
+            <h2>Full Automation. Silently Wrong.</h2>
+
+            <p>The first version was the obvious AI play. Plaid pulls every transaction from every account. The model categorizes each one — rental property, business, personal, charity. The user gets a clean report at the end of the month.</p>
+
+            <p>It looked great. It was wrong about the things that mattered.</p>
+
+            <p>A $2,400 plumbing repair on a rental property, miscategorized as <em>"office supplies."</em> A $180 dinner with a prospective Pilates client, dropped into <em>"personal."</em> A reimbursement for a deposit, double-counted because the model didn't recognize the reverse pair.</p>
+
+            <p>None of these errors fired an alert. There was nothing to alert on — the model returned a confident category for every transaction. The output was a beautiful, perfectly-formatted report containing dozens of expensive mistakes, and you only found them at tax time.</p>
+
+            <p>The deeper problem isn't the accuracy rate. It's that the user has no surface to engage with the model's reasoning. <strong>If the only way to catch errors is to re-do the categorization yourself, the AI hasn't actually saved you any work.</strong> You've just shifted from doing the task to auditing it — which is harder.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Version 2</span>
+            <h2>Fully Manual. Soul-Crushing.</h2>
+
+            <p>So I flipped it. Version 2 imported transactions and put them in a queue. The user sat at a table and clicked through every row. No AI. Just a fast-keyboard-driven categorization tool.</p>
+
+            <p>Accuracy: perfect. Adoption: zero.</p>
+
+            <p>Nobody — including me, the person who built it — wanted to grind through 200 transactions on the first of every month. The act of categorizing the tenth coffee shop transaction in a row is the kind of work AI is supposed to <em>obviate</em>, not formalize.</p>
+
+            <p>The lesson here was less obvious than the V1 lesson. The model wasn't useless — the V1 model had been right roughly 80% of the time. <strong>Throwing all of it away to recover trust was the wrong trade.</strong> What I needed was a way to keep the speed of automation and the trust of manual review.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Version 3</span>
+            <h2>Guided Verification.</h2>
+
+            <p>Version 3 is the one that works. The system does a first-pass categorization, then walks the user through the result one decision at a time — but it owns the walk. It's not a list with checkboxes. It's a flow.</p>
+
+            <p>Each transaction comes up on a card showing four things:</p>
+
+            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.6rem;"><strong>What it did</strong> — the category it picked.</li>
+                <li style="margin-bottom: 0.6rem;"><strong>Why</strong> — one sentence of reasoning, in plain English. <em>"Marked rental because the merchant matches a vendor you've previously paid from this property's account."</em></li>
+                <li style="margin-bottom: 0.6rem;"><strong>How confident</strong> — a flag if the signal was weak or contradictory.</li>
+                <li><strong>The choice</strong> — confirm, change, or skip. One keystroke each.</li>
+            </ol>
+
+            <p>The flow is ordered: high-uncertainty cards first, easy ones last. Often by the time the user gets through the uncertain ones, the system can confirm-by-default the rest. 100 transactions verified in under 10 minutes. Down from two hours, with the same accuracy as V2.</p>
+
+            <div class="pullquote">The key shift: the system takes ownership of the review. The user is responding, not driving.</div>
+
+            <p>That sentence is the whole pattern. In V1, the AI did the work and the user was supposed to audit it. In V2, the user did the work and the AI was absent. In V3, the AI does the work <em>and</em> the audit, and the user supplies one bit of judgment per uncertain decision. Their job is to react, not to scan.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Why This Matters</span>
+            <h2>"Human In The Loop" Is Doing A Lot Of Work In That Sentence.</h2>
+
+            <p>Every AI product team I talk to says they have a "human in the loop." Almost none of them mean what V3 means. Most mean V1: the model produces output, the human sees it, the human is theoretically responsible for catching errors. That's not a loop. That's a dump.</p>
+
+            <p>A real loop has three properties:</p>
+
+            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.6rem;"><strong>The system surfaces its own uncertainty.</strong> Not just confidence scores — readable explanations of why a particular call is hard. <em>"Two vendors with similar names. Last time you said personal."</em></li>
+                <li style="margin-bottom: 0.6rem;"><strong>The system orders the review for the user.</strong> Hardest first. Cheap signals last. Don't make the user prioritize.</li>
+                <li><strong>The system collapses to single-bit decisions.</strong> If a card asks the user to think for more than a few seconds, the design is wrong. Either pre-resolve more, or break the decision into parts.</li>
+            </ol>
+
+            <p>I've started using "guided verification" as the test. If you can't describe how your product does these three things, you don't have a human in the loop. You have a human at the dump.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Where I'm Taking This</span>
+            <h2>The Pattern Generalizes.</h2>
+
+            <p>Once you see the shape, it's everywhere. Code review of AI-generated patches. Reviewing AI-drafted emails. Triaging support tickets. Tagging photos. Every task that looks like <em>"AI does the bulk, human catches the edges"</em> has the same V1 / V2 / V3 trajectory available to it, and almost everyone is still on V1.</p>
+
+            <p>The teams I find myself most interested in are the ones building V3 from the start — designing the verification flow before they ship the categorizer. That's a different kind of product spec than most AI-native teams write today, and it's where I think the next few years of differentiation will come from.</p>
+
+            <p>If you're building something in this shape and want to compare notes, my email's at the bottom.</p>
+        </section>
+
+        <div class="related">
+            <span class="section-label">Related</span>
+            <a href="/cyborg-workflow">→ The Cyborg Workflow — how I build, in two terminals</a>
+            <a href="/small-business-cofounder">→ Every Small Business Deserves a Technical Co-Founder</a>
+            <a href="/pilates">→ The Pilates Studio Custom Platform</a>
+        </div>
+
+        <div class="closing">
+            <h2>Three doors</h2>
+            <p>If this resonated, the most useful next step is one of these:</p>
+            <a href="/" class="cta">More Field Notes →</a>
+            <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="cta">Try CCC →</a>
+        </div>
+
+        <footer>
+            <a href="/">amirfish.ai</a>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
+
+    </div>
+</body>
+</html>

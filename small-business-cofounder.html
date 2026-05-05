@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Every Small Business Deserves a Technical Co-Founder — Amir Fish</title>
+    <meta name="description" content="AI makes bespoke software economically viable for the first time. The one-size-fits-all SaaS era is ending. The thesis behind Kneaded.ai.">
+    <meta property="og:title" content="Every Small Business Deserves a Technical Co-Founder">
+    <meta property="og:description" content="The shift isn't 'AI inside SaaS.' It's that custom software for one customer is finally cheap enough to ship.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/small-business-cofounder">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
+        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
+        a:hover { text-decoration-color: #111; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
+        .top-nav a { color: #999; text-decoration-color: #ddd; }
+        .top-nav a:hover { color: #444; text-decoration-color: #999; }
+        .hero { padding: 8vh 0 0; }
+        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
+        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
+        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
+        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
+        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
+        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
+        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
+        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
+        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
+        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
+        .closing .cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; margin: 0 1rem; }
+        .closing .cta:hover { opacity: 0.6; }
+        .related { margin: 3rem 0; }
+        .related .section-label { margin-bottom: 1.25rem; }
+        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
+        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
+        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
+        footer a:hover { text-decoration-color: #999; }
+        @media (max-width: 500px) {
+            .hero { padding-top: 5vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.1rem; }
+            .closing { padding: 2rem 1.4rem; }
+            .closing .cta { display: block; margin: 0.5rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="top-nav">
+            <a href="/">← amirfish.ai</a>
+        </nav>
+
+        <section class="hero">
+            <span class="tag-eyebrow">Field Note · Thesis</span>
+            <h1>Every Small Business Deserves a Technical Co-Founder</h1>
+            <p class="subtitle">AI just made bespoke software cheap enough to build for one customer. The one-size-fits-all SaaS era is quietly ending.</p>
+            <p>For thirty years, "small business software" has meant the same trade. You take a tool built for ten thousand businesses that look roughly like yours, and you contort your operations to fit its assumptions. Acuity. QuickBooks. Square. Mailchimp. They're competent, generic, and never quite right.</p>
+            <p>That trade exists for one reason: building custom software for a single business has never been economically viable. Until now.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Old Math</span>
+            <h2>Why Custom Software Was A Luxury.</h2>
+
+            <p>A typical small business — a Pilates studio, a plumber, a bakery — has fifteen to twenty workflows that are unique to them. The way they handle a no-show, the way they run a couples' membership, the relationship between their booking system and their accountant. Each one of those workflows could be ten lines of logic in a custom app, but stringing those together into a maintained piece of software has historically cost six figures.</p>
+
+            <p>So they buy SaaS. The SaaS handles eighty percent of what they need. The other twenty percent — the parts that make their business <em>their</em> business — gets paved over with workarounds, spreadsheets, and the owner's memory.</p>
+
+            <div class="pullquote">The owner's memory <em>is</em> the operating system. The software is just the parts that fit on a screen.</div>
+
+            <p>That's the gap nobody talks about. Generic SaaS doesn't fail by being broken. It fails by ignoring the operational quirks that make a business worth running.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The New Math</span>
+            <h2>What Changed.</h2>
+
+            <p>I built a complete business management platform for my wife's Pilates studio in roughly three weekends. Scheduling, payments, SMS reminders, a "pays-through" rule where one Venmo account covers a husband and a wife and gets reconciled automatically, package management, win-back reminders for inactive clients, a public booking portal, WhatsApp integration. Things no commercial scheduler will ever build, because they only matter to one studio.</p>
+
+            <p>The build cost was a fraction of one year of the SaaS subscriptions it replaced. Admin time went from four hours a week to twenty minutes. <a href="/pilates">The full story is here.</a></p>
+
+            <p>I'm not a uniquely fast engineer. I'm a product manager who built this with Claude Code. The reason it took weekends instead of months isn't talent — it's that AI shifted where the cost of custom software lives. The bottleneck used to be implementation. Now the bottleneck is specifying what you actually want.</p>
+
+            <p>If you can describe your business clearly, you can have software shaped exactly like it.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Implication</span>
+            <h2>Every Small Business Now Deserves One.</h2>
+
+            <p>A "technical co-founder" used to be a luxury reserved for venture-backed startups — someone who could translate the operator's instincts into running code. Local businesses have never had that. They've had vendors, integrators, and SaaS sales reps, none of whom have a stake in how the business actually runs.</p>
+
+            <p>What AI changes is access to that role. The Pilates studio doesn't need a co-founder on payroll. It needs a piece of software that <em>behaves</em> like one — that knows the studio's quirks, ships features specifically for it, and adapts when the business changes.</p>
+
+            <p>That's the bet behind <a href="https://kneaded.ai">Kneaded.ai</a>. Not "AI inside SaaS." Not "make Acuity smarter." The bet is that bespoke software for one customer is now cheap enough to be the default — and the businesses that figure that out first will pull dramatically ahead of competitors still grinding through the workarounds.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">What I'm Looking For</span>
+            <h2>The Right Early Customers.</h2>
+
+            <p>I'm spending most of my time on this. The Pilates studio is the proof case. The next few customers are the ones that turn it into a repeatable model — local businesses with operations complex enough that generic software is genuinely costing them, but simple enough that a focused build can replace it end to end.</p>
+
+            <p>If you run a small business and you've been frustrated that no off-the-shelf tool quite fits, the email at the bottom is the way to start a conversation. I'm picky about who I take on right now, but I'm always interested in hearing the workflow that doesn't fit any product on the market.</p>
+        </section>
+
+        <div class="related">
+            <span class="section-label">Related</span>
+            <a href="/pilates">→ I Built My Wife's Pilates Studio a Custom Platform</a>
+            <a href="/guided-verification">→ The Guided Verification Problem</a>
+            <a href="/spec-is-the-hard-part">→ The Spec Is The Hard Part</a>
+        </div>
+
+        <div class="closing">
+            <h2>Three doors</h2>
+            <p>If this resonated, the most useful next step is one of these:</p>
+            <a href="/" class="cta">More Field Notes →</a>
+            <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+            <a href="https://kneaded.ai" target="_blank" class="cta">Kneaded.ai →</a>
+        </div>
+
+        <footer>
+            <a href="/">amirfish.ai</a>
+            <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
+
+    </div>
+</body>
+</html>

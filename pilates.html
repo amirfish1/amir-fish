@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Built My Wife's Pilates Studio a Custom Platform — Amir Fish</title>
+    <meta name="description" content="Four hours a week of admin, replaced by something built from scratch. Venmo payments, SMS reminders, WhatsApp booking. Admin time now: 20 minutes. The Kneaded.ai proof case.">
+    <meta property="og:title" content="I Built My Wife's Pilates Studio a Custom Platform">
+    <meta property="og:description" content="Replaced Acuity, Square, and a spreadsheet with one custom app. Three weekends of building. The proof case for bespoke software.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/pilates">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
+        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
+        a:hover { text-decoration-color: #111; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
+        .top-nav a { color: #999; text-decoration-color: #ddd; }
+        .top-nav a:hover { color: #444; text-decoration-color: #999; }
+        .hero { padding: 8vh 0 0; }
+        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
+        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
+        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
+        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
+        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
+        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
+        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
+        .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+        .stat { padding: 1.2rem 0; border-top: 1px solid #e5e5e5; }
+        .stat .num { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; color: #c2693a; line-height: 1; margin-bottom: 0.4rem; display: block; }
+        .stat .label { font-size: 0.85rem; color: #666; line-height: 1.4; }
+        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
+        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
+        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
+        .closing .cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; margin: 0 1rem; }
+        .closing .cta:hover { opacity: 0.6; }
+        .related { margin: 3rem 0; }
+        .related .section-label { margin-bottom: 1.25rem; }
+        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
+        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
+        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
+        footer a:hover { text-decoration-color: #999; }
+        @media (max-width: 500px) {
+            .hero { padding-top: 5vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.1rem; }
+            .closing { padding: 2rem 1.4rem; }
+            .closing .cta { display: block; margin: 0.5rem 0; }
+            .stat-row { grid-template-columns: 1fr; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="top-nav">
+            <a href="/">← amirfish.ai</a>
+        </nav>
+
+        <section class="hero">
+            <span class="tag-eyebrow">Field Note · Build</span>
+            <h1>I Built My Wife's Pilates Studio a Custom Platform</h1>
+            <p class="subtitle">Replaced Acuity, the payment processor, the SMS reminders, and a spreadsheet — with one app. The proof case for everything else I'm working on.</p>
+            <p>My wife runs a Pilates studio in Sunnyvale. For years she paid for Acuity Scheduling, paid Square for payments, paid for an SMS service, and still ran the actual operations of the business out of a Google Sheet she updated by hand on Sunday nights.</p>
+            <p>The Sunday-night spreadsheet is where I started. Three weekends later, it was gone — replaced by a custom platform built specifically for how her studio works. <a href="https://plts.xyz">plts.xyz</a> is the result.</p>
+
+            <div class="stat-row">
+                <div class="stat"><span class="num">4 hr → 20 min</span><span class="label">Weekly admin time</span></div>
+                <div class="stat"><span class="num">$0</span><span class="label">Payment processing fees</span></div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Real Problem</span>
+            <h2>The Software Wasn't The Problem. The Operations Were.</h2>
+
+            <p>If you'd asked her what was broken about Acuity, she'd have said "nothing, really." It scheduled appointments. It sent confirmations. It worked.</p>
+
+            <p>But "scheduling appointments" is roughly five percent of running a small Pilates studio. The other ninety-five percent is everything around it. Tracking who's on a 10-pack and who's on a monthly. Reconciling Venmo payments to specific clients. Knowing that one client always pays her husband's session through. Following up with the woman who hasn't been in for three weeks. Reminding the new mom her credit expires Friday.</p>
+
+            <p>None of those workflows were in Acuity. They were in my wife's head, and on Sunday nights they were in a spreadsheet, and twice a year they were in a panicked text to me.</p>
+
+            <div class="pullquote">The studio's actual operating system was her memory. The software was a calendar she pasted things into.</div>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">What Got Built</span>
+            <h2>The Feature List That No SaaS Will Ever Ship.</h2>
+
+            <p>I'm not going to list it as bullet points to look thorough. The point is what's specific to this studio:</p>
+
+            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.7rem;"><strong>Venmo payments, no fees.</strong> The studio's clients all use Venmo. So we built the booking flow around Venmo. Square took 2.9% of every transaction. Now that money is the studio's.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>"Pays-through" relationships.</strong> One Venmo account often covers two clients (a husband and wife). The system knows this and reconciles automatically. No commercial scheduler models this — it's too specific.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>Credit and package management.</strong> 10-packs, expiring credits, makeups, comp sessions. Tracked per client, surfaced at booking time.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>SMS reminders and confirmations.</strong> Two days before, day of, after a no-show. Different copy for each, in her voice.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>Win-back nudges.</strong> If a regular hasn't booked in 14 days, the system flags her. If they hit 30, it drafts an outreach.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>WhatsApp booking.</strong> Roughly a third of her clients prefer WhatsApp. The booking link works there too. Acuity does not do this.</li>
+                <li><strong>A client portal.</strong> Reschedule, see your remaining credits, book yourself in. Not a commercial scheduler's portal — one that knows the rules of <em>this</em> studio.</li>
+            </ul>
+
+            <p>None of these are hard pieces of software. Each one is maybe a hundred lines of logic. The reason no SaaS ships them isn't difficulty — it's that they're specific to one studio's operating quirks, and SaaS companies build for the median customer. There is no median customer for any of these features.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">How It Got Built</span>
+            <h2>Three Weekends, Two Claudes, One Vercel Bill.</h2>
+
+            <p>The stack is unremarkable: Next.js on Vercel. The story is the build process. I worked in what I now call the <a href="/cyborg-workflow">cyborg workflow</a> — Claude Code on one terminal building the Next.js app, Claude in a Chrome extension on another configuring Venmo and Twilio, both running at the same time. Three weekends of evening hours, plus a few weeknight blocks for the fiddlier integrations.</p>
+
+            <p>The thing I want to be honest about: I'm a product manager, not a senior engineer. My background is twenty years of shipping AI products at Google and Meta, leading teams. I haven't written production code as my day job in a long time. The reason this build worked at the speed it did is that AI moved the bottleneck from <em>writing code</em> to <em>specifying what should be built</em>, and specification is the thing twenty years of PM work prepared me for.</p>
+
+            <p>That's the move I think most operators are missing. The build cost of bespoke software has dropped by an order of magnitude. The people best positioned to use that aren't engineers — they're operators who can describe their business clearly.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">What This Proves</span>
+            <h2>The Generalizable Part.</h2>
+
+            <p>This is one studio. The result on its own is a nice anecdote. The thing it proves — and the thing I'm now building <a href="https://kneaded.ai">Kneaded.ai</a> around — is that the math has changed. Custom software for a single small business has crossed the threshold from "luxury" to "default." <a href="/small-business-cofounder">Long-form thesis here.</a></p>
+
+            <p>The bakery down the street, the plumber, the dentist, the law firm, the import-export shop — they all have the same shape of problem. They all have an operations spreadsheet and a SaaS subscription that almost fits. They are all about to figure out that someone with a clear head and access to AI can build them something that <em>actually</em> fits.</p>
+
+            <p>The studios and bakeries that figure this out first are going to be hard to compete with.</p>
+        </section>
+
+        <div class="related">
+            <span class="section-label">Related</span>
+            <a href="/small-business-cofounder">→ Every Small Business Deserves a Technical Co-Founder</a>
+            <a href="/cyborg-workflow">→ The Cyborg Workflow</a>
+            <a href="/guided-verification">→ The Guided Verification Problem</a>
+        </div>
+
+        <div class="closing">
+            <h2>Three doors</h2>
+            <p>If this resonated, the most useful next step is one of these:</p>
+            <a href="/" class="cta">More Field Notes →</a>
+            <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+            <a href="https://plts.xyz" target="_blank" class="cta">See plts.xyz →</a>
+        </div>
+
+        <footer>
+            <a href="/">amirfish.ai</a>
+            <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
+
+    </div>
+</body>
+</html>
