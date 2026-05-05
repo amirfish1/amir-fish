@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,381 +20,174 @@
 
         body {
             font-family: 'DM Sans', -apple-system, sans-serif;
-            font-size: 16px;
-            line-height: 1.8;
-            color: #111;
+            font-size: 18px;
+            line-height: 1.85;
+            color: #1a1a1a;
             background: #fcfcfc;
             padding: 0 1.5rem;
         }
 
         a {
-            color: #111;
+            color: #1a1a1a;
             text-decoration: underline;
             text-underline-offset: 3px;
-            text-decoration-color: #ccc;
+            text-decoration-thickness: 1px;
+            text-decoration-color: #c2693a;
         }
 
-        a:hover { text-decoration-color: #111; }
+        a:hover {
+            text-decoration-color: #1a1a1a;
+            text-decoration-thickness: 1.5px;
+        }
 
         .container {
-            max-width: 650px;
+            max-width: 620px;
             margin: 0 auto;
         }
 
-        /* --- Hero --- */
-        .hero {
+        /* --- Letterhead --- */
+        .letterhead {
             padding: 14vh 0 0;
+            margin-bottom: 3.5rem;
         }
 
-        .hero h1 {
+        .letterhead .name {
             font-family: 'Fraunces', Georgia, serif;
-            font-size: clamp(3rem, 7vw, 4.2rem);
-            font-weight: 600;
-            letter-spacing: -0.04em;
+            font-weight: 500;
+            font-size: clamp(2.6rem, 6vw, 3.6rem);
+            letter-spacing: -0.035em;
             line-height: 1;
-            margin-bottom: 2.5rem;
+            color: #111;
+            margin-bottom: 0.35rem;
         }
 
-        .hero p {
-            font-size: 1.1rem;
-            line-height: 1.85;
-            color: #444;
-            margin-bottom: 1.25rem;
+        .letterhead .subtitle {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.25rem;
+            letter-spacing: -0.005em;
+            color: #888;
         }
 
-        .hero p:last-child {
-            color: #999;
-            font-size: 0.95rem;
+        /* --- Body prose --- */
+        .prose p {
+            margin-bottom: 1.5rem;
+            color: #2a2a2a;
+        }
+
+        .prose p:last-child {
             margin-bottom: 0;
         }
 
-        .hero p a { color: #444; }
-        .hero p:last-child a { color: #777; }
-
-        /* --- Sections --- */
-        hr {
-            border: none;
-            border-top: 1px solid #e5e5e5;
-            margin: 4rem 0;
-        }
-
-        .section-label {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #999;
-            margin-bottom: 2rem;
-        }
-
-        /* --- Writing --- */
-        .writing-item {
-            margin-bottom: 2rem;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .writing-item:last-child { margin-bottom: 0; }
-
-        .writing-item:hover h3 {
-            text-decoration: underline;
-            text-decoration-color: #c2693a;
-            text-underline-offset: 4px;
-        }
-
-        .writing-item .tag {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #c2693a;
-            margin-bottom: 0.3rem;
-        }
-
-        .writing-item h3 {
+        .prose em {
             font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.15rem;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            line-height: 1.35;
-            margin-bottom: 0.25rem;
-            color: #111;
-        }
-
-        .writing-item p {
-            font-size: 0.9rem;
-            color: #888;
-            line-height: 1.65;
-        }
-
-        /* --- Building --- */
-        .building-item {
-            margin-bottom: 1.25rem;
-        }
-
-        .building-item:last-child { margin-bottom: 0; }
-
-        .building-item strong {
-            font-family: 'Fraunces', Georgia, serif;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .building-item span {
-            color: #888;
-            font-size: 0.92rem;
-        }
-
-        .building-item a {
-            color: #111;
-            text-decoration-color: #ccc;
-        }
-
-        /* --- CCC banner card --- */
-        .ccc-card {
-            border: 1px solid #e5e5e5;
-            border-radius: 4px;
-            padding: 1.6rem 1.8rem;
-            margin: 0;
-            background: #fff;
-        }
-
-        .ccc-card .ccc-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #c2693a;
-            margin-bottom: 0.6rem;
-            display: block;
-        }
-
-        .ccc-card h3 {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 0.6rem;
-        }
-
-        .ccc-card p {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-
-        .ccc-card pre {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            background: #f5f4f1;
-            padding: 0.8rem 1rem;
-            border-radius: 3px;
-            color: #333;
-            overflow-x: auto;
-            margin-bottom: 1rem;
-        }
-
-        .ccc-card .links {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .ccc-card .links a {
-            color: #c2693a;
-            text-decoration-color: #e5c5b3;
-            margin-right: 1.2rem;
-        }
-
-        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
-
-        .ccc-card .disclaimer {
-            font-size: 0.85rem;
-            color: #999;
             font-style: italic;
-            margin-top: 1rem;
+            font-weight: 400;
+            font-size: 1.05em;
         }
 
-        /* --- Advisory --- */
-        .advisory p {
-            font-size: 1rem;
-            color: #444;
-            line-height: 1.85;
-            margin-bottom: 1.25rem;
+        /* The anchor figure breaks slightly out of the column */
+        figure.anchor {
+            margin: 3rem 0 3rem;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(820px, calc(100vw - 3rem));
         }
 
-        .advisory .cta {
-            display: inline-block;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #111;
-            text-decoration: none;
-            border-bottom: 1.5px solid #111;
-            padding-bottom: 1px;
-        }
-
-        .advisory .cta:hover { opacity: 0.6; }
-
-        /* --- Footer --- */
-        footer {
-            margin-top: 4rem;
-            padding-bottom: 4rem;
-            font-size: 0.85rem;
-            color: #bbb;
-        }
-
-        footer a {
-            color: #999;
-            text-decoration-color: #ddd;
-            margin-right: 1.5rem;
-        }
-
-        footer a:hover { text-decoration-color: #999; }
-
-        /* --- Figures --- */
-        figure {
-            margin: 3rem 0;
-        }
-
-        figure img {
+        figure.anchor img {
             display: block;
             width: 100%;
             height: auto;
             border-radius: 4px;
             border: 1px solid #e8e3d8;
-            box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05);
         }
 
-        figure figcaption {
+        figure.anchor figcaption {
             font-family: 'Fraunces', Georgia, serif;
             font-style: italic;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             color: #888;
             line-height: 1.55;
             margin-top: 0.85rem;
             text-align: center;
-            padding: 0 0.5rem;
+            padding: 0 1rem;
         }
 
-        figure.hero-figure {
-            margin: 3.5rem 0 0;
+        /* --- Sign-off --- */
+        .signoff {
+            margin-top: 3.5rem;
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: #888;
+            letter-spacing: 0.005em;
         }
 
-        .ccc-card figure {
-            margin: 1.4rem 0 1.6rem;
+        /* --- Footer --- */
+        footer {
+            margin-top: 6rem;
+            padding: 2rem 0 4rem;
+            border-top: 1px solid #ece7e0;
+            font-size: 0.88rem;
+            color: #999;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
         }
 
-        .ccc-card figure img {
-            border: 1px solid #e8e3d8;
+        footer a {
+            color: #888;
+            text-decoration-color: #ddd;
+        }
+
+        footer a:hover {
+            color: #444;
+            text-decoration-color: #888;
         }
 
         /* --- Responsive --- */
-        @media (max-width: 500px) {
-            .hero { padding-top: 8vh; }
-            .hero h1 { font-size: 2.6rem; }
-            .ccc-card { padding: 1.3rem 1.4rem; }
-            figure { margin: 2rem 0; }
+        @media (max-width: 600px) {
+            body { font-size: 17px; }
+            .letterhead { padding-top: 8vh; }
+            .letterhead .name { font-size: 2.4rem; }
+            .letterhead .subtitle { font-size: 1.1rem; }
+            figure.anchor { margin: 2.25rem 0; }
         }
     </style>
 </head>
 <body>
     <div class="container">
 
-        <section class="hero">
-            <h1>Amir Fish</h1>
-            <p>I spent 20 years building AI products at Google and Meta — leading teams, shipping to hundreds of millions of users, and learning what actually works.</p>
-            <p>Now I build things myself and help founders and small businesses do the same.</p>
-            <p>Currently building <a href="https://kneaded.ai">Kneaded.ai</a> and <a href="https://github.com/amirfish1/claude-command-center">Command Center for Claude</a>. Based in Sunnyvale, CA.</p>
+        <header class="letterhead">
+            <h1 class="name">Amir Fish</h1>
+            <p class="subtitle">Field notes from a builder.</p>
+        </header>
 
-            <figure class="hero-figure">
+        <article class="prose">
+
+            <p>Twenty years of shipping AI products at scale — Group PM at Google, then Group PM at Meta, leading teams that put features in front of hundreds of millions of people. I left Meta nearly two years ago because what I'd lost track of was being close to the work.</p>
+
+            <p>So I'm building things again. Mostly by myself, mostly on evenings and weekends. The first thing I shipped was <a href="/pilates">a complete management platform for my wife's Pilates studio</a> — three weekends of work that replaced four hours a week of admin with twenty minutes. The system is specific to her studio in ways no commercial scheduler will ever care about, and that turned out to be the entire point.</p>
+
+            <figure class="anchor">
                 <img src="/images/cyborg-two-terminals-1x.webp"
                      srcset="/images/cyborg-two-terminals-1x.webp 1x, /images/cyborg-two-terminals-2x.webp 2x"
-                     alt="Two laptops on a walnut desk, each running a terminal session, with a leather notebook open between them."
+                     alt="Two laptops on a walnut desk, terminals open on each, a leather notebook between them, a small mug of coffee on the right edge."
                      loading="eager">
                 <figcaption>The day-to-day. Two Claude Code sessions, a notebook between them, and nothing in particular at stake but the work itself.</figcaption>
             </figure>
-        </section>
 
-        <hr>
+            <p>That build became the proof case for <a href="https://kneaded.ai">Kneaded.ai</a>, and the <a href="/small-business-cofounder">thesis under it</a>: AI just made bespoke software cheap enough to ship for a single customer, and the small businesses that figure that out first will leave generic SaaS behind. The other half of what I write about is <a href="/guided-verification">why "human in the loop" UX is usually rubber-stamping</a> — and the version that actually works.</p>
 
-        <section>
-            <div class="section-label">Field Notes</div>
-            <a class="writing-item" href="/spec-is-the-hard-part">
-                <span class="tag">Field Note · Product</span>
-                <h3>The Spec Is The Hard Part</h3>
-                <p>Code stopped being the bottleneck. What's left is the harder problem product orgs weren't trained to solve at scale. Notes from a workshop with seven NVIDIA PMs.</p>
-            </a>
-            <a class="writing-item" href="/parallel-sessions">
-                <span class="tag">Field Note · Operations</span>
-                <h3>Two Fixes for Running 30+ Claude Sessions in Parallel</h3>
-                <p>A markdown commit-coordination protocol and a local search index over every transcript. Both built around CCC. The wins aren't smarter prompts — they're better record-keeping.</p>
-            </a>
-            <a class="writing-item" href="/guided-verification">
-                <span class="tag">Field Note · Product</span>
-                <h3>The Guided Verification Problem</h3>
-                <p>Why "human in the loop" is usually rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google.</p>
-            </a>
-            <a class="writing-item" href="/small-business-cofounder">
-                <span class="tag">Field Note · Thesis</span>
-                <h3>Every Small Business Deserves a Technical Co-Founder</h3>
-                <p>AI makes bespoke software economically viable for the first time. The one-size-fits-all SaaS era is ending.</p>
-            </a>
-            <a class="writing-item" href="/pilates">
-                <span class="tag">Field Note · Build</span>
-                <h3>I Built My Wife's Pilates Studio a Custom Platform</h3>
-                <p>4 hours a week of admin, replaced by something built from scratch. Venmo payments, SMS reminders, WhatsApp booking. Admin time now: 20 minutes.</p>
-            </a>
-            <a class="writing-item" href="/cyborg-workflow">
-                <span class="tag">Field Note · Workflow</span>
-                <h3>The Cyborg Workflow</h3>
-                <p>How I build software now: Claude Code writing logic on one terminal, Claude configuring APIs on another. Two senior engineers, always available.</p>
-            </a>
-        </section>
+            <p>When you start running dozens of Claude Code sessions in parallel, the workflow itself becomes the design problem. I open-sourced <a href="https://github.com/amirfish1/claude-command-center">Command Center for Claude</a> because I needed it — a local kanban for every session running on your Mac. Two field notes go into <a href="/parallel-sessions">the operational fixes that made parallel sessions work</a> and <a href="/cyborg-workflow">the cyborg posture they grew out of</a>. The newest one — <a href="/spec-is-the-hard-part">The Spec Is The Hard Part</a> — is from a workshop with seven NVIDIA PMs about what an AI-native product organization actually needs once code stops being the bottleneck.</p>
 
-        <hr>
+            <p>I take on a few advisory roles at a time for early-stage AI startups. If something here resonated, <a href="mailto:amir@amirfish.com">my email is below</a>. The bar isn't an impressive demo — it's a clear product spec for the right thing.</p>
 
-        <section>
-            <div class="section-label">Building</div>
-            <div class="ccc-card">
-                <span class="ccc-label">Open source · MIT</span>
-                <h3>Command Center for Claude</h3>
-                <p>A local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. Built around the workflow that took me from "two terminals" to thirty parallel sessions without losing track of any of them.</p>
-                <figure>
-                    <img src="/images/ccc-kanban-1x.webp"
-                         srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
-                         alt="Screenshot of the CCC kanban board with planning, working, review, testing, and verified columns and a session detail panel on the right."
-                         loading="lazy">
-                    <figcaption>Every running session in one place — planning, working, review, testing, verified — with a search sidebar that hits every transcript on the machine.</figcaption>
-                </figure>
-                <pre>git clone https://github.com/amirfish1/claude-command-center
-cd claude-command-center && ./run.sh</pre>
-                <div class="links">
-                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
-                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
-                    <a href="/parallel-sessions">Field note →</a>
-                </div>
-                <p class="disclaimer">Not affiliated with Anthropic. Community-built.</p>
-            </div>
-            <div class="building-item" style="margin-top: 2rem;">
-                <strong><a href="https://kneaded.ai">Kneaded.ai</a></strong> <span>— Custom AI software for small businesses. Every local business deserves tools built for exactly how they work.</span>
-            </div>
-            <div class="building-item">
-                <strong><a href="https://plts.xyz">plts.xyz</a></strong> <span>— A complete business management platform for a Pilates studio. Scheduling, payments, reminders, client portal. The proof case behind Kneaded.ai.</span>
-            </div>
-            <div class="building-item">
-                <strong>Finance Tools</strong> <span>— Expense tracking and tax optimization for rental properties and small business. Where guided verification was born.</span>
-            </div>
-        </section>
+            <p class="signoff">— Amir Fish &nbsp;·&nbsp; Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</p>
 
-        <hr>
-
-        <section class="advisory">
-            <div class="section-label">Advisory</div>
-            <p>I take on 2–3 advisory roles at a time for early-stage AI startups. I focus on product strategy, product-market fit, and making sure you're building the right thing — not just an impressive demo.</p>
-            <a href="mailto:amir@amirfish.com" class="cta">Email me to see if there's a fit →</a>
-        </section>
+        </article>
 
         <footer>
             <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
