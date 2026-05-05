@@ -177,7 +177,21 @@
         .right-rail {
             position: sticky; top: 4.5rem; padding-top: 5rem;
             display: flex; flex-direction: column; gap: 2.25rem;
+            /* Independent scroll inside the rail so all marginalia is
+               reachable from any reading position in the article. */
+            max-height: calc(100vh - 4.5rem);
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--rule) transparent;
+            /* Tiny fade at the top/bottom edges suggesting scrollability. */
+            mask-image: linear-gradient(to bottom, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
         }
+        .right-rail::-webkit-scrollbar { width: 4px; }
+        .right-rail::-webkit-scrollbar-track { background: transparent; }
+        .right-rail::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+        .right-rail::-webkit-scrollbar-thumb:hover { background: var(--rule-strong); }
         .marginalia {
             border-left: 0.5px solid var(--rule-strong); padding-left: 1rem;
             font-size: 0.86rem; line-height: 1.55; color: var(--ink-mute);
@@ -266,7 +280,11 @@
         }
         @media (max-width: 900px) {
             .page { grid-template-columns: minmax(0, 1fr); }
-            .right-rail { position: static; padding-top: 0; margin-top: 1.5rem; }
+            .right-rail {
+                position: static; padding-top: 0; margin-top: 1.5rem;
+                max-height: none; overflow-y: visible; padding-right: 0;
+                mask-image: none; -webkit-mask-image: none;
+            }
             main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; }
             .marginalia { font-size: 0.92rem; }
             .top-bar nav { display: none; }
