@@ -46,12 +46,17 @@
         footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
         footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
         footer a:hover { text-decoration-color: #999; }
+        figure { margin: 2.5rem 0; }
+        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
+        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
+        figure.hero-figure { margin: 1.5rem 0 0; }
         @media (max-width: 500px) {
             .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
             .hero .subtitle { font-size: 1.1rem; }
             .closing { padding: 2rem 1.4rem; }
             .closing .cta { display: block; margin: 0.5rem 0; }
+            figure { margin: 2rem 0; }
         }
     </style>
 </head>
@@ -68,6 +73,14 @@
             <p class="subtitle">Most "human-in-the-loop" UX is rubber-stamping. The pattern that actually works looks different — and it's the whole game for AI products.</p>
             <p>I built three versions of the same expense tracker. The first one looked great and was silently wrong. The second one was correct and unusable. The third one is the version I now think every AI product team should be building.</p>
             <p>This is what each version got wrong, what the third version got right, and why I think this pattern matters more than the model you pick.</p>
+
+            <figure class="hero-figure">
+                <img src="/images/guided-verification-hero-1x.webp"
+                     srcset="/images/guided-verification-hero-1x.webp 1x, /images/guided-verification-hero-2x.webp 2x"
+                     alt="A wooden desk strewn with bank statements, a ledger book, a calculator with a coil of receipt tape, a coffee cup and a yellow legal pad covered in handwritten figures."
+                     loading="eager">
+                <figcaption>Tax season, before the tool existed. The data was there. The system to engage with it wasn't.</figcaption>
+            </figure>
         </section>
 
         <hr>
@@ -121,6 +134,14 @@
 
             <p>The flow is ordered: high-uncertainty cards first, easy ones last. Often by the time the user gets through the uncertain ones, the system can confirm-by-default the rest. 100 transactions verified in under 10 minutes. Down from two hours, with the same accuracy as V2.</p>
 
+            <figure>
+                <img src="/images/bym-dashboard-1x.webp"
+                     srcset="/images/bym-dashboard-1x.webp 1x, /images/bym-dashboard-2x.webp 2x"
+                     alt="An admin dashboard showing 'Today's Appointments', a 'Payments — 502 unpaid' row with a 'Resolve with AI' button, and a client list ordered by frequency."
+                     loading="lazy">
+                <figcaption>The pattern in production: the system flags 502 unpaid line items, but it doesn't dump them in a list. The button says <em>Resolve with AI</em> — meaning the system will walk you through them, one decision at a time, in order of uncertainty.</figcaption>
+            </figure>
+
             <div class="pullquote">The key shift: the system takes ownership of the review. The user is responding, not driving.</div>
 
             <p>That sentence is the whole pattern. In V1, the AI did the work and the user was supposed to audit it. In V2, the user did the work and the AI was absent. In V3, the AI does the work <em>and</em> the audit, and the user supplies one bit of judgment per uncertain decision. Their job is to react, not to scan.</p>
@@ -143,6 +164,14 @@
             </ol>
 
             <p>I've started using "guided verification" as the test. If you can't describe how your product does these three things, you don't have a human in the loop. You have a human at the dump.</p>
+
+            <figure>
+                <img src="/images/human-in-the-loop-1x.webp"
+                     srcset="/images/human-in-the-loop-1x.webp 1x, /images/human-in-the-loop-2x.webp 2x"
+                     alt="A single index card on warm-grey paper. Typed text reads 'human in the loop?' followed by a large hand-drawn question mark in red ink."
+                     loading="lazy">
+                <figcaption>The phrase has been carrying a lot of weight. Most teams haven't earned it.</figcaption>
+            </figure>
         </section>
 
         <hr>
