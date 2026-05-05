@@ -68,8 +68,8 @@
 
         .page {
             max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
-            display: grid; grid-template-columns: 200px minmax(0, 1fr) 280px;
-            column-gap: 64px; align-items: start;
+            display: grid; grid-template-columns: 200px minmax(0, 1fr) 240px;
+            column-gap: 56px; align-items: start;
         }
 
         .left-rail { position: sticky; top: 4.5rem; padding-top: 5rem; font-size: 0.92rem; }
@@ -87,7 +87,7 @@
         .left-rail .toc a:hover { color: var(--ink); }
         .left-rail .toc-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-right: 0.45rem; font-variant-numeric: tabular-nums; }
 
-        main { max-width: 520px; padding: 5rem 0 6rem; position: relative; }
+        main { max-width: 680px; padding: 5rem 0 6rem; position: relative; }
 
         .hero { margin-bottom: 4rem; }
         .hero .eyebrow {
@@ -437,9 +437,11 @@
             <section class="essay-section">
                 <h3 class="sub">Another example — routing bugs to the right peer.</h3>
 
-                <p>I'd been running a Claude session against a Hebrew-speaking client's web app, talking with the client through a WhatsApp pipeline. The pipeline itself — Twilio webhook → Supabase Realtime → CCC inject — was built and shipped by a <em>separate</em> peer session that I'd originally spawned via CCC orchestration to do exactly that one job.</p>
+                <p>I'd been running a Claude session against a Hebrew-speaking client's web app, talking with the client through a WhatsApp pipeline. The pipeline itself — Twilio webhook → Supabase Realtime → CCC inject — was built and shipped by a <em>separate</em> peer session, earlier the same morning. Worth pausing on this: the client-app session was the one that had spawned that peer, through a CCC orchestration call, with one specific job — go build the push-driven event bus that the client-app session needed.</p>
 
-                <p>Mid-task, the client-app session noticed two production bugs in the daemon. It was the session being injected into, and it could see them clearly: every WhatsApp message produced two injects instead of one, and each inject landed in the terminal buffer but never pressed <code>Enter</code>, so its own input box quietly accumulated stale text.</p>
+                <p>So the daemon wasn't built by some random other Claude. It was built by infrastructure the client-app session had stood up itself. A session bootstrapping its own substrate.</p>
+
+                <p>Mid-task, that client-app session noticed two production bugs in the daemon. It was the session being injected into, so it could see them clearly: every WhatsApp message produced two injects instead of one, and each inject landed in the terminal buffer but never pressed <code>Enter</code>, so its own input box quietly accumulated stale text.</p>
 
                 <p>It didn't try to fix the daemon itself. Fixing would have lost its own context — David was still waiting on a feature — and risked introducing new bugs in code it had never read. Instead, it pushed a triaged report directly to the peer that had built the daemon, via CCC's inject API. Priority-ordered hypotheses for each root cause, diagnostic steps to verify each one, and a suggested fix that referenced a sibling session's iMessage-inject pattern as the shape to mirror.</p>
             </section>
@@ -456,6 +458,8 @@
                 <p>The daemon-author peer picked it up immediately. Its only reply was <em>"Let me investigate both bugs in parallel."</em> The client-app session went back to David. <em>"Standing by for their reply. Meanwhile this session handles whatever ticks land — even if double-fired, my code is idempotent."</em> Both fixes landed without me in the loop.</p>
 
                 <p>One detail worth naming: the substrate here wasn't the markdown chat file. It was CCC's inject API — a session looking up another session in the registry by name, then writing into its input. Same primitive as the chat, different channel. The taxonomy isn't the point. What matters is that sessions can be visible to each other and route work between themselves, regardless of which transport they use.</p>
+
+                <p>The full loop, then: a session writes its own infrastructure, uses it, notices the infrastructure is broken, and routes a triaged bug report back to the session that built it. Each link in that chain is just sessions talking to sessions through CCC. No human in any of the handoffs. The kanban becomes a directory; the chat becomes a pipe; the inject API becomes a queue. Operations, made legible.</p>
             </section>
 
             <figure class="fig">
