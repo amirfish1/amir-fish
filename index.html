@@ -3,199 +3,690 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amir Fish</title>
+    <title>Amir Fish — Field Notes</title>
     <meta name="description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai — custom AI software for small businesses — and Command Center for Claude. Field notes on AI product work.">
-    <meta property="og:title" content="Amir Fish">
+    <meta property="og:title" content="Amir Fish — Field Notes">
     <meta property="og:description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai and Command Center for Claude. Field notes on AI product work.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://amirfish.ai/">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
+        :root {
+            --paper: #fbf9f8;
+            --ink: #1b1c1c;
+            --ink-soft: #2a2a2a;
+            --ink-mute: #444748;
+            --rule: #c4c7c7;
+            --rule-soft: #e4e2e2;
+            --rule-strong: #747878;
+            --accent: #aa3527;
+            --accent-soft: #c4583f;
+        }
+
         body {
-            font-family: 'DM Sans', -apple-system, sans-serif;
-            font-size: 18px;
-            line-height: 1.85;
-            color: #1a1a1a;
-            background: #fcfcfc;
-            padding: 0 1.5rem;
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--ink);
+            background: var(--paper);
+            font-feature-settings: "kern", "liga", "onum";
         }
 
         a {
-            color: #1a1a1a;
+            color: var(--ink);
             text-decoration: underline;
-            text-underline-offset: 3px;
-            text-decoration-thickness: 1px;
-            text-decoration-color: #c2693a;
+            text-underline-offset: 4px;
+            text-decoration-color: var(--rule);
+            text-decoration-thickness: 0.5px;
+            transition: color 0.15s, text-decoration-color 0.15s;
         }
-
         a:hover {
-            text-decoration-color: #1a1a1a;
-            text-decoration-thickness: 1.5px;
+            color: var(--accent);
+            text-decoration-color: var(--accent);
+            text-decoration-thickness: 1px;
         }
 
-        .container {
-            max-width: 620px;
+        ::selection { background: #ffdad4; color: #410000; }
+
+        /* --- Top bar --- */
+        .top-bar {
+            border-bottom: 0.5px solid var(--rule-soft);
+            background: rgba(251, 249, 248, 0.92);
+            backdrop-filter: blur(6px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .top-bar-inner {
+            max-width: 1280px;
             margin: 0 auto;
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 2rem;
         }
-
-        /* --- Letterhead --- */
-        .letterhead {
-            padding: 14vh 0 0;
-            margin-bottom: 3.5rem;
-        }
-
-        .letterhead .name {
-            font-family: 'Fraunces', Georgia, serif;
+        .top-bar .wordmark {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
             font-weight: 500;
-            font-size: clamp(2.6rem, 6vw, 3.6rem);
-            letter-spacing: -0.035em;
-            line-height: 1;
-            color: #111;
-            margin-bottom: 0.35rem;
+            font-size: 1.15rem;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            text-decoration: none;
         }
-
-        .letterhead .subtitle {
-            font-family: 'Fraunces', Georgia, serif;
-            font-style: italic;
-            font-weight: 400;
-            font-size: 1.25rem;
-            letter-spacing: -0.005em;
+        .top-bar nav {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 0.92rem;
+            display: flex;
+            gap: 2rem;
+        }
+        .top-bar nav a {
             color: #888;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 0.12rem;
+        }
+        .top-bar nav a.active {
+            color: var(--ink);
+            border-bottom-color: var(--ink);
+        }
+        .top-bar nav a:hover { color: var(--ink); }
+
+        /* --- Page grid --- */
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 200px minmax(0, 1fr) 280px;
+            column-gap: 64px;
+            align-items: start;
         }
 
-        /* --- Body prose --- */
-        .prose p {
+        /* --- Left rail --- */
+        .left-rail {
+            position: sticky;
+            top: 4.5rem;
+            padding-top: 5rem;
+            font-size: 0.92rem;
+        }
+        .left-rail .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+        .left-rail .context-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-weight: 500;
+            color: var(--ink);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .left-rail .context-meta {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 0.88rem;
+            color: var(--ink-mute);
+            margin-bottom: 1.6rem;
+            line-height: 1.5;
+        }
+        .left-rail .toc {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            list-style: none;
+        }
+        .left-rail .toc a {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 0.92rem;
+            color: #888;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+        .left-rail .toc a:hover { color: var(--ink); }
+        .left-rail .toc-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-right: 0.45rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* --- Main column --- */
+        main {
+            max-width: 520px;
+            padding: 5rem 0 6rem;
+        }
+
+        .hero {
+            margin-bottom: 4rem;
+        }
+        .hero .eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: var(--accent);
             margin-bottom: 1.5rem;
-            color: #2a2a2a;
+            display: block;
         }
-
-        .prose p:last-child {
-            margin-bottom: 0;
+        .hero h1 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.6rem;
+            font-weight: 400;
+            font-variation-settings: "opsz" 72;
+            letter-spacing: -0.02em;
+            line-height: 1.12;
+            color: var(--ink);
+            margin-bottom: 1.25rem;
         }
-
-        .prose em {
-            font-family: 'Fraunces', Georgia, serif;
+        .hero .subtitle {
+            font-family: 'Newsreader', Georgia, serif;
             font-style: italic;
             font-weight: 400;
-            font-size: 1.05em;
+            font-size: 1.2rem;
+            line-height: 1.55;
+            color: var(--ink-mute);
+            margin-bottom: 1.8rem;
+        }
+        .hero p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--ink-soft);
+            margin-bottom: 1rem;
         }
 
-        /* The anchor figure breaks slightly out of the column */
+        /* Anchor figure */
         figure.anchor {
-            margin: 3rem 0 3rem;
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(820px, calc(100vw - 3rem));
+            margin: 2.5rem 0 3rem;
         }
-
         figure.anchor img {
             display: block;
             width: 100%;
             height: auto;
-            border-radius: 4px;
-            border: 1px solid #e8e3d8;
+            border: 0.5px solid var(--rule);
         }
-
         figure.anchor figcaption {
-            font-family: 'Fraunces', Georgia, serif;
+            font-family: 'Newsreader', Georgia, serif;
             font-style: italic;
-            font-size: 0.95rem;
-            color: #888;
-            line-height: 1.55;
-            margin-top: 0.85rem;
+            font-size: 0.88rem;
+            color: var(--ink-mute);
+            margin-top: 0.8rem;
             text-align: center;
-            padding: 0 1rem;
+            line-height: 1.5;
         }
 
-        /* --- Sign-off --- */
+        /* Index header */
+        .index-head {
+            margin: 3rem 0 2.5rem;
+            border-top: 0.5px solid var(--rule);
+            padding-top: 2rem;
+        }
+        .index-head .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .index-head h2 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            font-variation-settings: "opsz" 60;
+            letter-spacing: -0.018em;
+            line-height: 1.2;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+        }
+        .index-head p {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--ink-mute);
+            line-height: 1.55;
+        }
+
+        /* Each entry in the index */
+        article.entry {
+            position: relative;
+            margin-bottom: 3.25rem;
+        }
+        article.entry .entry-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
+            position: absolute;
+            left: -3rem;
+            top: 0.25rem;
+            user-select: none;
+        }
+        article.entry .entry-meta {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--rule-strong);
+            margin-bottom: 0.7rem;
+            display: block;
+        }
+        article.entry h3 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-variation-settings: "opsz" 60;
+            letter-spacing: -0.015em;
+            line-height: 1.25;
+            margin-bottom: 0.85rem;
+        }
+        article.entry h3 a {
+            color: var(--ink);
+            text-decoration: underline;
+            text-decoration-color: var(--rule);
+            text-decoration-thickness: 0.5px;
+            text-underline-offset: 6px;
+        }
+        article.entry h3 a:hover {
+            color: var(--accent);
+            text-decoration-color: var(--accent);
+            text-decoration-thickness: 1px;
+        }
+        article.entry .preview {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--ink-soft);
+        }
+
+        /* Term of art */
+        .term {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-variant: all-small-caps;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+            font-weight: 500;
+        }
+        sup.cite {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-left: 1px;
+            font-variant-numeric: tabular-nums;
+            line-height: 0;
+        }
+
+        /* Sign-off */
         .signoff {
             margin-top: 3.5rem;
-            font-family: 'Fraunces', Georgia, serif;
+            padding-top: 2rem;
+            border-top: 0.5px solid var(--rule);
+            font-family: 'Newsreader', Georgia, serif;
             font-style: italic;
-            font-size: 1rem;
-            color: #888;
-            letter-spacing: 0.005em;
+            font-size: 0.95rem;
+            color: var(--ink-mute);
+        }
+
+        /* --- Right rail --- */
+        .right-rail {
+            position: sticky;
+            top: 4.5rem;
+            padding-top: 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.25rem;
+        }
+        .marginalia {
+            border-left: 0.5px solid var(--rule-strong);
+            padding-left: 1rem;
+            font-size: 0.86rem;
+            line-height: 1.55;
+            color: var(--ink-mute);
+        }
+        .marginalia .num {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.3rem;
+            display: block;
+            font-variant-numeric: tabular-nums;
+        }
+        .marginalia .term {
+            font-style: italic;
+            font-variant: all-small-caps;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+            font-weight: 500;
+        }
+        .marginalia em { font-style: italic; }
+
+        .marginalia.section-block {
+            border-left: none;
+            padding-left: 0;
+            border-top: 0.5px solid var(--rule);
+            padding-top: 1rem;
+        }
+        .marginalia.section-block .heading {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 0.55rem;
+            display: block;
+        }
+        .marginalia.section-block ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .marginalia.section-block ul li {
+            margin-bottom: 0.5rem;
+            font-size: 0.86rem;
+        }
+        .marginalia.section-block ul li a {
+            text-decoration: none;
+            border-bottom: 0.5px solid var(--rule);
+            color: var(--ink-mute);
+        }
+        .marginalia.section-block ul li a:hover {
+            border-bottom-color: var(--accent);
+            color: var(--accent);
+        }
+        .marginalia.section-block .desc {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 0.82rem;
+            color: #999;
+            display: block;
+            margin-top: 0.15rem;
+            line-height: 1.4;
+        }
+        .marginalia.section-block p {
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+        .marginalia.section-block .cta-line {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-top: 0.6rem;
+            display: block;
+            color: var(--ink);
+            border-bottom: 0.5px solid var(--ink);
+            padding-bottom: 1px;
+            text-decoration: none;
+            width: fit-content;
+        }
+        .marginalia.section-block .cta-line:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
         }
 
         /* --- Footer --- */
         footer {
-            margin-top: 6rem;
-            padding: 2rem 0 4rem;
-            border-top: 1px solid #ece7e0;
-            font-size: 0.88rem;
-            color: #999;
+            border-top: 0.5px solid var(--rule-soft);
+            margin-top: 4rem;
+        }
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
             display: flex;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 1.5rem;
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #999;
         }
-
-        footer a {
+        .footer-inner .colophon {
+            font-style: italic;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        .footer-inner .links {
+            display: flex;
+            gap: 2rem;
+        }
+        .footer-inner a {
             color: #888;
-            text-decoration-color: #ddd;
+            text-decoration: none;
+            border-bottom: 0.5px solid transparent;
         }
-
-        footer a:hover {
-            color: #444;
-            text-decoration-color: #888;
+        .footer-inner a:hover {
+            color: var(--ink);
+            border-bottom-color: #888;
         }
 
         /* --- Responsive --- */
-        @media (max-width: 600px) {
-            body { font-size: 17px; }
-            .letterhead { padding-top: 8vh; }
-            .letterhead .name { font-size: 2.4rem; }
-            .letterhead .subtitle { font-size: 1.1rem; }
-            figure.anchor { margin: 2.25rem 0; }
+        @media (max-width: 1180px) {
+            .page { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 48px; }
+            .left-rail { display: none; }
+            article.entry .entry-num {
+                position: static;
+                display: block;
+                margin-bottom: 0.4rem;
+            }
+        }
+        @media (max-width: 900px) {
+            .page { grid-template-columns: minmax(0, 1fr); }
+            .right-rail {
+                position: static;
+                padding-top: 0;
+                margin-top: 1rem;
+            }
+            main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; }
+            .marginalia { font-size: 0.92rem; }
+            .top-bar nav { display: none; }
+        }
+        @media (max-width: 500px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.05rem; }
+            article.entry h3 { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
 
-        <header class="letterhead">
-            <h1 class="name">Amir Fish</h1>
-            <p class="subtitle">Field notes from a builder.</p>
-        </header>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/" class="active">Index</a>
+                <a href="#building">Building</a>
+                <a href="#advisory">Advisory</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
 
-        <article class="prose">
+    <div class="page">
 
-            <p>Twenty years of shipping AI products at scale — Group PM at Google, then Group PM at Meta, leading teams that put features in front of hundreds of millions of people. I left Meta nearly two years ago because what I'd lost track of was being close to the work.</p>
+        <!-- LEFT RAIL: author context + index TOC -->
+        <aside class="left-rail">
+            <span class="label">Author</span>
+            <div class="context-title">Amir Fish</div>
+            <div class="context-meta">Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</div>
 
-            <p>So I'm building things again. Mostly by myself, mostly on evenings and weekends. The first thing I shipped was <a href="/pilates">a complete management platform for my wife's Pilates studio</a> — three weekends of work that replaced four hours a week of admin with twenty minutes. The system is specific to her studio in ways no commercial scheduler will ever care about, and that turned out to be the entire point.</p>
+            <span class="label" style="margin-top: 1.5rem;">Field Notes</span>
+            <ol class="toc">
+                <li><a href="#fn-01"><span class="toc-num">01</span>The Spec Is The Hard Part</a></li>
+                <li><a href="#fn-02"><span class="toc-num">02</span>30+ Parallel Sessions</a></li>
+                <li><a href="#fn-03"><span class="toc-num">03</span>Guided Verification</a></li>
+                <li><a href="#fn-04"><span class="toc-num">04</span>SMB Co-Founder</a></li>
+                <li><a href="#fn-05"><span class="toc-num">05</span>The Pilates Platform</a></li>
+                <li><a href="#fn-06"><span class="toc-num">06</span>Cyborg Workflow</a></li>
+            </ol>
+        </aside>
+
+        <!-- MAIN COLUMN -->
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Notes · Spring 2026</span>
+                <h1>Amir Fish.</h1>
+                <p class="subtitle">Twenty years building AI products at Google and Meta. Now solo — building <span class="term">Kneaded.ai</span> for small businesses, <span class="term">CCC</span> for parallel agents, and notes on what works in between.</p>
+                <p>I left Meta nearly two years ago because I'd lost track of being close to the work. Most of what I write here is what I've learned since — building software for a single customer, running dozens of Claude Code sessions in parallel, and the UX patterns that turn AI output into something a real person can trust.</p>
+            </header>
 
             <figure class="anchor">
                 <img src="/images/cyborg-two-terminals-1x.webp"
                      srcset="/images/cyborg-two-terminals-1x.webp 1x, /images/cyborg-two-terminals-2x.webp 2x"
                      alt="Two laptops on a walnut desk, terminals open on each, a leather notebook between them, a small mug of coffee on the right edge."
                      loading="eager">
-                <figcaption>The day-to-day. Two Claude Code sessions, a notebook between them, and nothing in particular at stake but the work itself.</figcaption>
+                <figcaption>The day-to-day. Two Claude Code sessions, a notebook between them.</figcaption>
             </figure>
 
-            <p>That build became the proof case for <a href="https://kneaded.ai">Kneaded.ai</a>, and the <a href="/small-business-cofounder">thesis under it</a>: AI just made bespoke software cheap enough to ship for a single customer, and the small businesses that figure that out first will leave generic SaaS behind. The other half of what I write about is <a href="/guided-verification">why "human in the loop" UX is usually rubber-stamping</a> — and the version that actually works.</p>
+            <div class="index-head">
+                <span class="label">Index</span>
+                <h2>Six field notes, in order of recency.</h2>
+                <p>Short essays on AI product work — written for builders, not buyers. Each one tries to leave you with one operational idea you didn't have when you started reading.</p>
+            </div>
 
-            <p>When you start running dozens of Claude Code sessions in parallel, the workflow itself becomes the design problem. I open-sourced <a href="https://github.com/amirfish1/claude-command-center">Command Center for Claude</a> because I needed it — a local kanban for every session running on your Mac. Two field notes go into <a href="/parallel-sessions">the operational fixes that made parallel sessions work</a> and <a href="/cyborg-workflow">the cyborg posture they grew out of</a>. The newest one — <a href="/spec-is-the-hard-part">The Spec Is The Hard Part</a> — is from a workshop with seven NVIDIA PMs about what an AI-native product organization actually needs once code stops being the bottleneck.</p>
+            <article class="entry" id="fn-01">
+                <span class="entry-num">01</span>
+                <span class="entry-meta">Field Note · Product · Spring 2026</span>
+                <h3><a href="/spec-is-the-hard-part">The Spec Is The Hard Part.</a></h3>
+                <p class="preview">Notes from a workshop with seven NVIDIA PMs. Code stopped being the bottleneck — and what's left is the harder problem product orgs weren't trained to solve at scale. The shape of an AI-native <span class="term">product operating system</span><sup class="cite">1</sup>: six plain-text files, two composable layers, codification plus multiplication.</p>
+            </article>
 
-            <p>I take on a few advisory roles at a time for early-stage AI startups. If something here resonated, <a href="mailto:amir@amirfish.com">my email is below</a>. The bar isn't an impressive demo — it's a clear product spec for the right thing.</p>
+            <article class="entry" id="fn-02">
+                <span class="entry-num">02</span>
+                <span class="entry-meta">Field Note · Operations · Spring 2026</span>
+                <h3><a href="/parallel-sessions">Two Fixes for Running 30+ Claude Sessions in Parallel.</a></h3>
+                <p class="preview">A markdown commit-coordination protocol and a local search index over every transcript on the machine. Both built around <span class="term">CCC</span><sup class="cite">2</sup>. The wins aren't smarter prompts — they're better record-keeping. <em>The kanban becomes a directory; the chat becomes a pipe.</em></p>
+            </article>
+
+            <article class="entry" id="fn-03">
+                <span class="entry-num">03</span>
+                <span class="entry-meta">Field Note · Product · 2026</span>
+                <h3><a href="/guided-verification">The Guided Verification Problem.</a></h3>
+                <p class="preview">Why <span class="term">human in the loop</span><sup class="cite">3</sup> is usually rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google. The third version is the one every team should be building from the start.</p>
+            </article>
+
+            <article class="entry" id="fn-04">
+                <span class="entry-num">04</span>
+                <span class="entry-meta">Field Note · Thesis · 2026</span>
+                <h3><a href="/small-business-cofounder">Every Small Business Deserves a Technical Co-Founder.</a></h3>
+                <p class="preview">AI just made bespoke software cheap enough to ship for a single customer. The one-size-fits-all SaaS era is quietly ending. The studios and bakeries and plumbers that figure that out first are going to leave generic software behind — and the build cost is now an order of magnitude lower than the SaaS it replaces.</p>
+            </article>
+
+            <article class="entry" id="fn-05">
+                <span class="entry-num">05</span>
+                <span class="entry-meta">Field Note · Build · 2026</span>
+                <h3><a href="/pilates">I Built My Wife's Pilates Studio a Custom Platform.</a></h3>
+                <p class="preview">Three weekends of work replaced Acuity, Square, an SMS service, and a Sunday-night spreadsheet. Venmo payments at zero processing fees. <span class="term">Pays-through</span><sup class="cite">4</sup> reconciliation no commercial scheduler will ever ship. Admin time: four hours a week, then twenty minutes. The proof case for everything I'm building now.</p>
+            </article>
+
+            <article class="entry" id="fn-06">
+                <span class="entry-num">06</span>
+                <span class="entry-meta">Field Note · Workflow · 2026</span>
+                <h3><a href="/cyborg-workflow">The Cyborg Workflow.</a></h3>
+                <p class="preview">How I build software now: Claude Code writing the application logic on one terminal, Claude in a browser configuring the third-party APIs on another. Two simultaneous threads of work I'm orchestrating, not executing. The setup that scaled to thirty parallel sessions before <span class="term">CCC</span> had to step in.</p>
+            </article>
 
             <p class="signoff">— Amir Fish &nbsp;·&nbsp; Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</p>
 
-        </article>
+        </main>
 
-        <footer>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
-            <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
-            <a href="https://www.linkedin.com/in/afish/" target="_blank">LinkedIn</a>
-            <a href="mailto:amir@amirfish.com">Email</a>
-        </footer>
+        <!-- RIGHT RAIL: glossary, building, advisory -->
+        <aside class="right-rail">
+
+            <div class="marginalia">
+                <span class="num">1</span>
+                <span class="term">Product Operating System.</span> A foundation of plain-text files (overview, KPIs, raw inputs, ledger, style guides, org reality) that an AI agent — or a teammate — can act on without the PM standing over their shoulder.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">2</span>
+                <span class="term">CCC.</span> Command Center for Claude. Open-source local kanban for every Claude Code session running on your Mac. <a href="https://github.com/amirfish1/claude-command-center">github.com/amirfish1/claude-command-center</a>
+            </div>
+
+            <div class="marginalia">
+                <span class="num">3</span>
+                <span class="term">Human in the loop.</span> The phrase has been carrying a lot of weight. Most teams haven't earned it. See <a href="/guided-verification">field note 03</a>.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">4</span>
+                <span class="term">Pays-through.</span> One Venmo account covers two clients (a husband and a wife). The system reconciles automatically. No commercial scheduler models this — it's too specific.
+            </div>
+
+            <div class="marginalia section-block" id="building">
+                <span class="heading">Currently Building</span>
+                <ul>
+                    <li>
+                        <a href="https://kneaded.ai">Kneaded.ai</a>
+                        <span class="desc">Custom AI software for small businesses.</span>
+                    </li>
+                    <li>
+                        <a href="https://github.com/amirfish1/claude-command-center" target="_blank">Command Center for Claude</a>
+                        <span class="desc">Open-source · MIT. The kanban that scaled past two terminals.</span>
+                    </li>
+                    <li>
+                        <a href="https://plts.xyz">plts.xyz</a>
+                        <span class="desc">The Pilates studio platform behind it all.</span>
+                    </li>
+                    <li>
+                        <a href="/pilates">Finance Tools</a>
+                        <span class="desc">Where guided verification was born.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="marginalia section-block" id="advisory">
+                <span class="heading">Advisory</span>
+                <p>I take on 2–3 advisory roles at a time for early-stage AI startups. Product strategy, product-market fit, building the right thing — not just an impressive demo.</p>
+                <a href="mailto:amir@amirfish.com" class="cta-line">Email to see if there's a fit →</a>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Method</span>
+                <p>Each field note tries to leave the reader with one operational idea that wasn't theirs before they started reading. No conclusions, no abstracts, no SEO outros. Builders writing for builders.</p>
+            </div>
+
+        </aside>
 
     </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+                <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
+                <a href="https://www.linkedin.com/in/afish/" target="_blank">LinkedIn</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
