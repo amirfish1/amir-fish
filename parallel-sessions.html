@@ -339,7 +339,46 @@
                 <h3 class="sub">The pattern — sessions in a shared room.</h3>
 
                 <p>The mental model is a <span class="term">group chat</span><sup class="cite">2</sup> for autonomous workers. Each session signs with a tag (<code>archive-filter-1d33</code>, <code>codex-spawn-7c25</code>). When something needs coordination, any session can drop a message in the room — propose a sequence, ask for an ack, request a second opinion, raise a flag, hand off context. Other sessions read on entry, react if relevant, ignore if not.</p>
+            </section>
 
+            <figure class="fig">
+                <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; background: var(--paper); border: 0.5px solid var(--rule); display: block;" aria-label="Four Claude Code sessions arranged around a central GROUP_CHAT.md file. Each session reads from and writes to the shared file, illustrating the 'sessions in a shared room' mental model.">
+                    <defs>
+                        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#747878"></path>
+                        </marker>
+                    </defs>
+                    <!-- center: GROUP_CHAT.md -->
+                    <rect x="310" y="140" width="180" height="80" rx="3" fill="#fbf9f8" stroke="#aa3527" stroke-width="1"></rect>
+                    <text x="400" y="172" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="18" fill="#1b1c1c">a shared room</text>
+                    <text x="400" y="195" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#444748">GROUP_CHAT.md</text>
+                    <!-- 4 session nodes -->
+                    <rect x="40" y="50" width="200" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="140" y="78" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1b1c1c">archive-filter-1d33</text>
+                    <rect x="560" y="50" width="200" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="660" y="78" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1b1c1c">codex-spawn-7c25</text>
+                    <rect x="40" y="266" width="200" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="140" y="294" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1b1c1c">history-search-c1ed</text>
+                    <rect x="560" y="266" width="200" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="660" y="294" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1b1c1c">office-manager</text>
+                    <!-- arrows: each session ↔ center -->
+                    <line x1="240" y1="80" x2="312" y2="155" stroke="#747878" stroke-width="0.7" marker-end="url(#arr)"></line>
+                    <line x1="312" y1="160" x2="240" y2="84" stroke="#747878" stroke-width="0.7" stroke-dasharray="2 3" marker-end="url(#arr)"></line>
+                    <line x1="560" y1="80" x2="488" y2="155" stroke="#747878" stroke-width="0.7" marker-end="url(#arr)"></line>
+                    <line x1="488" y1="160" x2="560" y2="84" stroke="#747878" stroke-width="0.7" stroke-dasharray="2 3" marker-end="url(#arr)"></line>
+                    <line x1="240" y1="280" x2="312" y2="208" stroke="#747878" stroke-width="0.7" marker-end="url(#arr)"></line>
+                    <line x1="312" y1="204" x2="240" y2="276" stroke="#747878" stroke-width="0.7" stroke-dasharray="2 3" marker-end="url(#arr)"></line>
+                    <line x1="560" y1="280" x2="488" y2="208" stroke="#747878" stroke-width="0.7" marker-end="url(#arr)"></line>
+                    <line x1="488" y1="204" x2="560" y2="276" stroke="#747878" stroke-width="0.7" stroke-dasharray="2 3" marker-end="url(#arr)"></line>
+                    <!-- legend -->
+                    <line x1="40" y1="335" x2="65" y2="335" stroke="#747878" stroke-width="0.7"></line>
+                    <text x="72" y="339" font-family="Inter, sans-serif" font-size="10" fill="#747878">writes</text>
+                    <line x1="125" y1="335" x2="150" y2="335" stroke="#747878" stroke-width="0.7" stroke-dasharray="2 3"></line>
+                    <text x="157" y="339" font-family="Inter, sans-serif" font-size="10" fill="#747878">reads</text>
+                </svg>
+            </figure>
+
+            <section class="essay-section">
                 <p>Three coordination patterns I now use it for, every day:</p>
 
                 <ol>
@@ -363,6 +402,38 @@
                 <p>Two sessions, neither one knowing about the other ahead of time, coordinated through a shared substrate. Any session can ask CCC who else is alive, what they're working on, and route work or questions to them.</p>
             </section>
 
+            <figure class="fig">
+                <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; background: var(--paper); border: 0.5px solid var(--rule); display: block;" aria-label="Cross-session task delegation flow. The working session asks CCC for the office-manager session ID, then injects a high-priority message which the office-manager picks up on its next turn.">
+                    <defs>
+                        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#aa3527"></path>
+                        </marker>
+                    </defs>
+                    <!-- 3 columns -->
+                    <rect x="40" y="100" width="180" height="68" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="130" y="129" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">working session</text>
+                    <text x="130" y="148" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">"find my office manager"</text>
+                    <rect x="310" y="100" width="180" height="68" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="400" y="129" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">CCC registry</text>
+                    <text x="400" y="148" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">/api/conversations</text>
+                    <rect x="580" y="100" width="180" height="68" rx="2" fill="none" stroke="#aa3527" stroke-width="1"></rect>
+                    <text x="670" y="129" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">office-manager</text>
+                    <text x="670" y="148" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">long-running session</text>
+                    <!-- step 1: ask CCC -->
+                    <line x1="220" y1="125" x2="308" y2="125" stroke="#aa3527" stroke-width="0.8" marker-end="url(#arr2)"></line>
+                    <text x="264" y="115" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="500">1. lookup</text>
+                    <!-- step 2: CCC returns id -->
+                    <line x1="308" y1="145" x2="222" y2="145" stroke="#aa3527" stroke-width="0.8" marker-end="url(#arr2)"></line>
+                    <text x="264" y="160" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="500">2. session_id</text>
+                    <!-- step 3: inject -->
+                    <path d="M 220 110 Q 400 50, 580 110" stroke="#aa3527" stroke-width="0.8" fill="none" marker-end="url(#arr2)"></path>
+                    <text x="400" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="500">3. /api/inject — "this is your top priority now"</text>
+                    <!-- step 4: picks up next turn -->
+                    <path d="M 760 168 Q 770 220, 720 220 L 620 220" stroke="#aa3527" stroke-width="0.8" fill="none" marker-end="url(#arr2)"></path>
+                    <text x="670" y="245" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="500">4. picks up on next turn</text>
+                </svg>
+            </figure>
+
             <hr class="divider">
 
             <section class="essay-section" id="s2">
@@ -384,7 +455,53 @@
                 </ul>
 
                 <p>Both run locally. Sub-second results across thousands of session files. The query language supports phrase quoting, prefix wildcards, time windows, project filters, and role filters.</p>
+            </section>
 
+            <figure class="fig">
+                <svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; background: var(--paper); border: 0.5px solid var(--rule); display: block;" aria-label="claude-index architecture: Claude and Codex transcript files are ingested into a SQLite store with FTS5 keyword and Ollama vector embedding columns. Queries combine both via Reciprocal Rank Fusion to rank results that surface in CCC's sidebar.">
+                    <defs>
+                        <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#747878"></path>
+                        </marker>
+                    </defs>
+                    <!-- top: two source paths -->
+                    <rect x="100" y="30" width="240" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="220" y="48" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="13" fill="#1b1c1c">Claude transcripts</text>
+                    <text x="220" y="65" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">~/.claude/projects/*.jsonl</text>
+                    <rect x="460" y="30" width="240" height="44" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="580" y="48" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="13" fill="#1b1c1c">Codex transcripts</text>
+                    <text x="580" y="65" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">~/.codex/sessions/*.jsonl</text>
+                    <!-- arrows down to ingest -->
+                    <line x1="220" y1="74" x2="220" y2="115" stroke="#747878" stroke-width="0.7" marker-end="url(#arr3)"></line>
+                    <line x1="580" y1="74" x2="580" y2="115" stroke="#747878" stroke-width="0.7" marker-end="url(#arr3)"></line>
+                    <text x="400" y="100" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#747878" font-style="italic">ingest (file watcher + incremental)</text>
+                    <!-- middle: SQLite with two columns -->
+                    <rect x="100" y="125" width="600" height="150" rx="2" fill="#fbf9f8" stroke="#1b1c1c" stroke-width="0.5"></rect>
+                    <text x="400" y="148" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">SQLite store</text>
+                    <line x1="400" y1="168" x2="400" y2="265" stroke="#c4c7c7" stroke-width="0.5" stroke-dasharray="2 3"></line>
+                    <!-- left side: FTS5 -->
+                    <text x="250" y="190" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="600" letter-spacing="1.4">KEYWORD</text>
+                    <text x="250" y="215" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="13" fill="#1b1c1c">FTS5 (BM25)</text>
+                    <text x="250" y="235" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">exact strings, slugs,</text>
+                    <text x="250" y="250" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">commit hashes, paths</text>
+                    <!-- right side: Vectors -->
+                    <text x="550" y="190" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="600" letter-spacing="1.4">SEMANTIC</text>
+                    <text x="550" y="215" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="13" fill="#1b1c1c">Vectors (Ollama)</text>
+                    <text x="550" y="235" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">paraphrases, fuzzy</text>
+                    <text x="550" y="250" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">topic recall</text>
+                    <!-- arrow down: RRF -->
+                    <line x1="400" y1="275" x2="400" y2="315" stroke="#747878" stroke-width="0.7" marker-end="url(#arr3)"></line>
+                    <text x="412" y="298" font-family="Inter, sans-serif" font-size="11" fill="#aa3527" font-weight="600" letter-spacing="1.2">RRF</text>
+                    <text x="446" y="298" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="11" fill="#747878">Reciprocal Rank Fusion</text>
+                    <!-- bottom: ranked results in CCC -->
+                    <rect x="100" y="325" width="600" height="80" rx="2" fill="none" stroke="#aa3527" stroke-width="1"></rect>
+                    <text x="400" y="350" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">CCC sidebar</text>
+                    <text x="400" y="372" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#444748">type a topic → ranked results, sub-second</text>
+                    <text x="400" y="390" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#888">recency × relevance, with snippets</text>
+                </svg>
+            </figure>
+
+            <section class="essay-section">
                 <p>Wired into CCC's sidebar — type a topic, results pop up live without opening a terminal:</p>
             </section>
 
