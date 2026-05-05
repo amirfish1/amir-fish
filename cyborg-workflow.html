@@ -56,12 +56,17 @@
         footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
         footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
         footer a:hover { text-decoration-color: #999; }
+        figure { margin: 2.5rem 0; }
+        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
+        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
+        figure.hero-figure { margin: 1.5rem 0 0; }
         @media (max-width: 500px) {
             .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
             .hero .subtitle { font-size: 1.1rem; }
             .ccc-card { padding: 1.3rem 1.4rem; }
             .closing { padding: 2rem 1.4rem; }
+            figure { margin: 2rem 0; }
         }
     </style>
 </head>
@@ -78,6 +83,14 @@
             <p class="subtitle">One terminal writes the code. Another terminal configures the APIs. Two Claudes in parallel changes what one person can build in an evening.</p>
             <p>For a long time, the bottleneck on solo building wasn't writing code. It was the seams. Wiring up Stripe webhooks. Configuring Venmo. Reading docs for Twilio. Setting up Vercel. Each one a thirty-minute context-switch from whatever you were actually trying to ship.</p>
             <p>The setup I run now collapses that. It's not a tool. It's a posture.</p>
+
+            <figure class="hero-figure">
+                <img src="/images/cyborg-two-terminals-1x.webp"
+                     srcset="/images/cyborg-two-terminals-1x.webp 1x, /images/cyborg-two-terminals-2x.webp 2x"
+                     alt="Two laptops on a walnut desk, terminals open on each, a leather notebook between them, a small mug of coffee on the right edge."
+                     loading="eager">
+                <figcaption>The actual setup. One laptop runs Claude Code on the codebase. The other runs Claude in a browser, working dashboards. The notebook is for me, when I lose track.</figcaption>
+            </figure>
         </section>
 
         <hr>
@@ -119,6 +132,14 @@
             <p>Five sessions all want to commit to the same <code>main</code> branch. Two sessions both touched the same file. One session needs to know what another session learned three days ago, and grepping <code>~/.claude/projects/*.jsonl</code> takes too long to maintain flow.</p>
 
             <p>That's the problem CCC solves. It started as a kanban for tracking which Claude is doing what, and it grew the two pieces I needed once the fleet got real: a markdown-based commit-coordination protocol so sessions stop racing each other into the git index, and a local search index over every transcript so I can ask <em>"what did I decide about that thing two weeks ago?"</em> and get an answer in milliseconds. <a href="/parallel-sessions">Long-form on those two fixes here.</a></p>
+
+            <figure>
+                <img src="/images/ccc-kanban-1x.webp"
+                     srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
+                     alt="The CCC kanban with planning, working, review, testing, and verified columns spread across multiple repos, with a session detail panel showing the active conversation on the right."
+                     loading="lazy">
+                <figcaption>From two terminals to thirty. The kanban is the thing that made the difference legible.</figcaption>
+            </figure>
 
             <div class="ccc-card">
                 <span class="ccc-label">If you run more than one Claude</span>
