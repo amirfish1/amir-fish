@@ -253,11 +253,49 @@
 
         footer a:hover { text-decoration-color: #999; }
 
+        /* --- Figures --- */
+        figure {
+            margin: 3rem 0;
+        }
+
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #e8e3d8;
+            box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05);
+        }
+
+        figure figcaption {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 0.92rem;
+            color: #888;
+            line-height: 1.55;
+            margin-top: 0.85rem;
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        figure.hero-figure {
+            margin: 3.5rem 0 0;
+        }
+
+        .ccc-card figure {
+            margin: 1.4rem 0 1.6rem;
+        }
+
+        .ccc-card figure img {
+            border: 1px solid #e8e3d8;
+        }
+
         /* --- Responsive --- */
         @media (max-width: 500px) {
             .hero { padding-top: 8vh; }
             .hero h1 { font-size: 2.6rem; }
             .ccc-card { padding: 1.3rem 1.4rem; }
+            figure { margin: 2rem 0; }
         }
     </style>
 </head>
@@ -269,6 +307,14 @@
             <p>I spent 20 years building AI products at Google and Meta — leading teams, shipping to hundreds of millions of users, and learning what actually works.</p>
             <p>Now I build things myself and help founders and small businesses do the same.</p>
             <p>Currently building <a href="https://kneaded.ai">Kneaded.ai</a> and <a href="https://github.com/amirfish1/claude-command-center">Command Center for Claude</a>. Based in Sunnyvale, CA.</p>
+
+            <figure class="hero-figure">
+                <img src="/images/cyborg-two-terminals-1x.webp"
+                     srcset="/images/cyborg-two-terminals-1x.webp 1x, /images/cyborg-two-terminals-2x.webp 2x"
+                     alt="Two laptops on a walnut desk, each running a terminal session, with a leather notebook open between them."
+                     loading="eager">
+                <figcaption>The day-to-day. Two Claude Code sessions, a notebook between them, and nothing in particular at stake but the work itself.</figcaption>
+            </figure>
         </section>
 
         <hr>
@@ -315,6 +361,13 @@
                 <span class="ccc-label">Open source · MIT</span>
                 <h3>Command Center for Claude</h3>
                 <p>A local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. Built around the workflow that took me from "two terminals" to thirty parallel sessions without losing track of any of them.</p>
+                <figure>
+                    <img src="/images/ccc-kanban-1x.webp"
+                         srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
+                         alt="Screenshot of the CCC kanban board with planning, working, review, testing, and verified columns and a session detail panel on the right."
+                         loading="lazy">
+                    <figcaption>Every running session in one place — planning, working, review, testing, verified — with a search sidebar that hits every transcript on the machine.</figcaption>
+                </figure>
                 <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
                 <div class="links">
