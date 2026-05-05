@@ -4,192 +4,307 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Cyborg Workflow — Amir Fish</title>
-    <meta name="description" content="How I build software now: Claude Code writing logic on one terminal, Claude configuring third-party APIs on another. Two senior engineers, always available.">
+    <meta name="description" content="One terminal writes the code. Another terminal configures the APIs. Two Claudes in parallel changes what one person can build in an evening.">
     <meta property="og:title" content="The Cyborg Workflow">
-    <meta property="og:description" content="One terminal writes the code, another terminal configures the APIs. Two Claudes running in parallel changes the shape of what one person can build.">
+    <meta property="og:description" content="Two terminals, two Claudes. The setup that scales solo building from one feature an evening to a complete platform in three weekends.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://amirfish.ai/cyborg-workflow">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
-        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
-        a:hover { text-decoration-color: #111; }
-        .container { max-width: 650px; margin: 0 auto; }
-        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
-        .top-nav a { color: #999; text-decoration-color: #ddd; }
-        .top-nav a:hover { color: #444; text-decoration-color: #999; }
-        .hero { padding: 8vh 0 0; }
-        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
-        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
-        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
-        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        .ccc-card { border: 1px solid #e5e5e5; border-radius: 4px; padding: 1.6rem 1.8rem; margin: 2.5rem 0; background: #fff; }
-        .ccc-card .ccc-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 0.6rem; display: block; }
-        .ccc-card h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.25rem; font-weight: 500; margin-bottom: 0.6rem; }
-        .ccc-card p { font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem; }
-        .ccc-card pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: #f5f4f1; padding: 0.8rem 1rem; border-radius: 3px; color: #333; overflow-x: auto; margin-bottom: 1rem; }
-        .ccc-card .links { font-size: 0.9rem; color: #666; }
-        .ccc-card .links a { color: #c2693a; text-decoration-color: #e5c5b3; margin-right: 1.2rem; }
-        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
-        .ccc-card .disclaimer { font-size: 0.85rem; color: #999; font-style: italic; margin-top: 1rem; }
-        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
-        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
-        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
-        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
-        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
-        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
-        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
-        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
-        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
-        .closing .install { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #fff; border: 1px solid #e5e5e5; padding: 0.8rem 1rem; border-radius: 3px; color: #333; display: inline-block; margin-bottom: 1.5rem; }
-        .closing .star-cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; }
-        .closing .star-cta:hover { opacity: 0.6; }
-        .related { margin: 3rem 0; }
-        .related .section-label { margin-bottom: 1.25rem; }
-        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
-        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
-        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
-        footer a:hover { text-decoration-color: #999; }
-        figure { margin: 2.5rem 0; }
-        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
-        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
-        figure.hero-figure { margin: 1.5rem 0 0; }
+        :root { --paper: #fbf9f8; --ink: #1b1c1c; --ink-soft: #2a2a2a; --ink-mute: #444748; --rule: #c4c7c7; --rule-soft: #e4e2e2; --rule-strong: #747878; --accent: #aa3527; --accent-soft: #c4583f; }
+        body { font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--ink); background: var(--paper); font-feature-settings: "kern", "liga", "onum"; }
+        a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--rule); text-decoration-thickness: 0.5px; transition: color 0.15s, text-decoration-color 0.15s; }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+        ::selection { background: #ffdad4; color: #410000; }
+        .top-bar { border-bottom: 0.5px solid var(--rule-soft); background: rgba(251,249,248,0.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 50; }
+        .top-bar-inner { max-width: 1280px; margin: 0 auto; padding: 1.1rem 1.5rem; display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+        .top-bar .wordmark { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+        .top-bar nav { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; display: flex; gap: 2rem; }
+        .top-bar nav a { color: #888; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 0.12rem; }
+        .top-bar nav a.active { color: var(--ink); border-bottom-color: var(--ink); }
+        .top-bar nav a:hover { color: var(--ink); }
+        .page { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: grid; grid-template-columns: 200px minmax(0, 1fr) 280px; column-gap: 64px; align-items: start; }
+        .left-rail { position: sticky; top: 4.5rem; padding-top: 5rem; font-size: 0.92rem; }
+        .left-rail .label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; color: var(--accent); margin-bottom: 0.4rem; display: block; }
+        .left-rail .context-title { font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: var(--ink); font-size: 1rem; margin-bottom: 1.6rem; }
+        .left-rail .toc { display: flex; flex-direction: column; gap: 0.7rem; list-style: none; }
+        .left-rail .toc a { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; color: #888; text-decoration: none; line-height: 1.4; }
+        .left-rail .toc a:hover { color: var(--ink); }
+        .left-rail .toc-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-right: 0.45rem; font-variant-numeric: tabular-nums; }
+        main { max-width: 520px; padding: 5rem 0 6rem; position: relative; }
+        .hero { margin-bottom: 4rem; }
+        .hero .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin-bottom: 1.5rem; display: block; }
+        .hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: 2.5rem; font-weight: 400; font-variation-settings: "opsz" 72; letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); margin-bottom: 1.5rem; }
+        .hero .subtitle { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.18rem; line-height: 1.55; color: var(--ink-mute); margin-bottom: 2rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; }
+        section.essay-section { margin-bottom: 3.5rem; position: relative; }
+        section.essay-section .section-number { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; position: absolute; left: -3rem; top: 0.25rem; user-select: none; }
+        section.essay-section .section-date { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--rule-strong); margin-bottom: 0.75rem; display: block; }
+        section.essay-section h2 { font-family: 'Newsreader', Georgia, serif; font-size: 1.8rem; font-weight: 400; font-variation-settings: "opsz" 60; letter-spacing: -0.018em; line-height: 1.2; color: var(--ink); margin-bottom: 1.4rem; }
+        main p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.1rem; }
+        main p strong { font-weight: 600; color: var(--ink); }
+        main em, main i { font-style: italic; }
+        .term { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        sup.cite { font-family: 'Inter', sans-serif; font-size: 0.65em; color: var(--accent); font-weight: 600; margin-left: 1px; font-variant-numeric: tabular-nums; line-height: 0; cursor: default; }
+        main ol, main ul { margin: 0.5rem 0 1.4rem 1.5rem; color: var(--ink-soft); }
+        main ol li, main ul li { margin-bottom: 0.5rem; font-size: 1.0625rem; line-height: 1.7; padding-left: 0.3rem; }
+        main ol li::marker { font-variant-numeric: oldstyle-nums; color: var(--accent); }
+        main ul li::marker { color: var(--accent); }
+        .pullquote { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; line-height: 1.45; color: var(--ink); border-left: 2px solid var(--accent); padding: 0.4rem 0 0.4rem 1.4rem; margin: 2.25rem 0; }
+        main code { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; background: #f1ece5; padding: 0.06rem 0.32rem; color: #444; }
+        figure.fig { margin: 2.5rem 0; }
+        figure.fig img { display: block; width: 100%; height: auto; border: 0.5px solid var(--rule); }
+        figure.fig figcaption { display: none; }
+        hr.divider { border: none; border-top: 0.5px solid var(--rule-soft); margin: 3rem 0; }
+        .right-rail { position: sticky; top: 4.5rem; padding-top: 5rem; display: flex; flex-direction: column; gap: 2.25rem; }
+        .marginalia { border-left: 0.5px solid var(--rule-strong); padding-left: 1rem; font-size: 0.86rem; line-height: 1.55; color: var(--ink-mute); }
+        .marginalia .num { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; display: block; font-variant-numeric: tabular-nums; }
+        .marginalia .term { font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        .marginalia em { font-style: italic; }
+        .marginalia .fig-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; margin-bottom: 0.35rem; display: block; }
+        .marginalia.section-block { border-left: none; padding-left: 0; border-top: 0.5px solid var(--rule); padding-top: 1rem; }
+        .marginalia.section-block .heading { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 500; margin-bottom: 0.55rem; display: block; }
+        .marginalia.section-block ul { list-style: none; margin: 0; padding: 0; }
+        .marginalia.section-block ul li { margin-bottom: 0.5rem; font-size: 0.86rem; }
+        .marginalia.section-block ul li a { text-decoration: none; border-bottom: 0.5px solid var(--rule); color: var(--ink-mute); }
+        .marginalia.section-block ul li a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+        .cta-block { margin: 3.5rem 0; padding: 2.5rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+        .cta-block .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--accent); margin-bottom: 0.9rem; display: block; }
+        .cta-block h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-variation-settings: "opsz" 60; font-size: 1.65rem; letter-spacing: -0.018em; line-height: 1.22; color: var(--ink); margin-bottom: 1rem; }
+        .cta-block p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.25rem; }
+        .cta-block pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.55; background: #f5f3f0; padding: 0.95rem 1.05rem; border: 0.5px solid var(--rule-soft); color: var(--ink-soft); overflow-x: auto; margin-bottom: 1.4rem; white-space: pre-wrap; word-break: break-word; }
+        .cta-block .cta-links { display: flex; gap: 1.6rem 2rem; flex-wrap: wrap; }
+        .cta-block .cta-links a { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.05rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+        .cta-block .cta-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .cta-block .meta-line { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.9rem; color: #999; margin-top: 1.1rem; }
+        .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
+        .closing h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--ink); }
+        .closing p { font-size: 0.95rem; color: var(--ink-mute); margin-bottom: 1.2rem; }
+        .closing .cta { display: inline-block; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.02rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; margin: 0 0.9rem; }
+        .closing .cta:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        footer { border-top: 0.5px solid var(--rule-soft); margin-top: 4rem; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; font-family: 'Newsreader', Georgia, serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.18em; color: #999; }
+        .footer-inner .colophon { font-style: italic; text-transform: none; letter-spacing: 0.02em; color: #999; font-size: 0.85rem; }
+        .footer-inner .links { display: flex; gap: 2rem; }
+        .footer-inner a { color: #888; text-decoration: none; border-bottom: 0.5px solid transparent; }
+        .footer-inner a:hover { color: var(--ink); border-bottom-color: #888; }
+        @media (max-width: 1180px) {
+            .page { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 48px; }
+            .left-rail { display: none; }
+            section.essay-section .section-number { position: static; display: block; margin-bottom: 0.5rem; }
+        }
+        @media (max-width: 900px) {
+            .page { grid-template-columns: minmax(0, 1fr); }
+            .right-rail { position: static; padding-top: 0; margin-top: 1.5rem; }
+            main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; }
+            .marginalia { font-size: 0.92rem; }
+            .top-bar nav { display: none; }
+        }
         @media (max-width: 500px) {
-            .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
-            .hero .subtitle { font-size: 1.1rem; }
-            .ccc-card { padding: 1.3rem 1.4rem; }
-            .closing { padding: 2rem 1.4rem; }
-            figure { margin: 2rem 0; }
+            .hero .subtitle { font-size: 1.05rem; }
+            section.essay-section h2 { font-size: 1.55rem; }
+            main p, main ol li, main ul li { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
 
-        <nav class="top-nav">
-            <a href="/">← amirfish.ai</a>
-        </nav>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/">Index</a>
+                <a href="/#advisory">Advisory</a>
+                <a href="/#ccc">CCC</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
 
-        <section class="hero">
-            <span class="tag-eyebrow">Field Note · Workflow</span>
-            <h1>The Cyborg Workflow</h1>
-            <p class="subtitle">One terminal writes the code. Another terminal configures the APIs. Two Claudes in parallel changes what one person can build in an evening.</p>
-            <p>For a long time, the bottleneck on solo building wasn't writing code. It was the seams. Wiring up Stripe webhooks. Configuring Venmo. Reading docs for Twilio. Setting up Vercel. Each one a thirty-minute context-switch from whatever you were actually trying to ship.</p>
-            <p>The setup I run now collapses that. It's not a tool. It's a posture.</p>
+    <div class="page">
 
-            <figure class="hero-figure">
+        <aside class="left-rail">
+            <span class="label">Field Note · 06</span>
+            <div class="context-title">The Cyborg Workflow</div>
+            <ol class="toc">
+                <li><a href="#s1"><span class="toc-num">01</span>Two Terminals</a></li>
+                <li><a href="#s2"><span class="toc-num">02</span>The Bottleneck Isn't Code</a></li>
+                <li><a href="#s3"><span class="toc-num">03</span>Two Becomes Thirty</a></li>
+                <li><a href="#s4"><span class="toc-num">04</span>One Person, Small Team</a></li>
+                <li><a href="#ccc"><span class="toc-num">·</span>Try CCC</a></li>
+            </ol>
+        </aside>
+
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Note · Workflow · Spring 2026</span>
+                <h1>The Cyborg Workflow.</h1>
+                <p class="subtitle">One terminal writes the code. Another terminal configures the APIs. Two Claudes in parallel changes what one person can build in an evening.</p>
+                <p>For a long time, the bottleneck on solo building wasn't writing code. It was the seams. Wiring up Stripe webhooks. Configuring Venmo. Reading docs for Twilio. Setting up Vercel. Each one a thirty-minute context-switch from whatever you were actually trying to ship.</p>
+                <p>The setup I run now collapses that. It's not a tool. It's a posture.</p>
+            </header>
+
+            <figure class="fig">
                 <img src="/images/cyborg-two-terminals-1x.webp"
                      srcset="/images/cyborg-two-terminals-1x.webp 1x, /images/cyborg-two-terminals-2x.webp 2x"
                      alt="Two laptops on a walnut desk, terminals open on each, a leather notebook between them, a small mug of coffee on the right edge."
                      loading="eager">
-                <figcaption>The actual setup. One laptop runs Claude Code on the codebase. The other runs Claude in a browser, working dashboards. The notebook is for me, when I lose track.</figcaption>
             </figure>
-        </section>
 
-        <hr>
+            <section class="essay-section" id="s1">
+                <span class="section-number">01</span>
+                <span class="section-date">The Setup</span>
+                <h2>Two Terminals, Two Claudes.</h2>
 
-        <section>
-            <span class="section-label">The Setup</span>
-            <h2>Two Terminals, Two Claudes.</h2>
+                <p>On my left, <span class="term">Claude Code</span><sup class="cite">1</sup> in a terminal, working on the Next.js app — writing the booking flow, the credit logic, the API routes. On my right, <span class="term">Claude in a Chrome extension</span><sup class="cite">2</sup>, configuring the Venmo developer console and the Twilio dashboard and the Vercel environment variables. Both running at the same time. Both doing real work.</p>
 
-            <p>On my left, Claude Code in a terminal, working on the Next.js app — writing the booking flow, the credit logic, the API routes. On my right, Claude in a Chrome browser extension, configuring the Venmo developer console and the Twilio dashboard and the Vercel environment variables. Both running at the same time. Both doing real work.</p>
+                <p>Claude on the left writes the webhook handler. Claude on the right registers the webhook URL with the third party. Claude on the left writes a feature flag. Claude on the right toggles it in the dashboard. The handoff happens in seconds, by me, just by looking from one terminal to the other.</p>
 
-            <p>Claude on the left writes the webhook handler. Claude on the right registers the webhook URL with the third party. Claude on the left writes a feature flag. Claude on the right toggles it in the dashboard. The handoff happens in seconds, by me, just by looking from one terminal to the other.</p>
+                <div class="pullquote">It feels like having two senior engineers paired with me. One on the codebase, one on the operations tail.</div>
 
-            <div class="pullquote">It feels like having two senior engineers paired with me. One on the codebase, one on the operations tail.</div>
+                <p>That's the actual experience. Not faster typing. Not better autocomplete. <em>Two simultaneous threads of work that I'm orchestrating, not executing.</em></p>
+            </section>
 
-            <p>That's the actual experience. Not faster typing. Not better autocomplete. <em>Two simultaneous threads of work that I'm orchestrating, not executing.</em></p>
-        </section>
+            <hr class="divider">
 
-        <hr>
+            <section class="essay-section" id="s2">
+                <span class="section-number">02</span>
+                <span class="section-date">Why It Matters</span>
+                <h2>The Bottleneck Isn't Code.</h2>
 
-        <section>
-            <span class="section-label">Why It Matters</span>
-            <h2>The Bottleneck Isn't Code.</h2>
+                <p>Anyone who's shipped a real consumer-facing app knows the math: writing the application logic is maybe a third of the work. Another third is wiring it to third-party services. The last third is the <span class="term">operational tail</span><sup class="cite">3</sup> — environment configuration, dashboards, dashboards-of-dashboards, cron settings, webhook secrets, API keys.</p>
 
-            <p>Anyone who's shipped a real consumer-facing app knows the math: writing the application logic is maybe a third of the work. Another third is wiring it to third-party services. The last third is the operational tail — environment configuration, dashboards, dashboards-of-dashboards, cron settings, webhook secrets, API keys.</p>
+                <p>AI got really good at the first third in 2024. Most people I talk to about Claude Code are still asking it to do <em>only</em> the first third — they fall back to manual work for the wiring and the operations. Which means they're still bottlenecked on the same two-thirds of the work as before.</p>
 
-            <p>AI got really good at the first third in 2024. Most people I talk to about Claude Code are still asking it to do <em>only</em> the first third — they fall back to manual work for the wiring and the operations. Which means they're still bottlenecked on the same two-thirds of the work as before.</p>
+                <p>The cyborg workflow is the realization that browser-using AI extends the productive surface to the operational tail. The dashboards are just web UIs. A model that can navigate a webpage can configure Twilio. The fact that nobody's officially "supposed" to use a browser-using assistant for this is irrelevant — once you've felt the speed difference, going back is unthinkable.</p>
+            </section>
 
-            <p>The cyborg workflow is the realization that browser-using AI extends the productive surface to the operational tail. The dashboards are just web UIs. A model that can navigate a webpage can configure Twilio. The fact that nobody's officially "supposed" to use a browser-using assistant for this is irrelevant — once you've felt the speed difference, going back is unthinkable.</p>
-        </section>
+            <hr class="divider">
 
-        <hr>
+            <section class="essay-section" id="s3">
+                <span class="section-number">03</span>
+                <span class="section-date">The Scaling Problem</span>
+                <h2>Two Becomes Thirty.</h2>
 
-        <section>
-            <span class="section-label">The Scaling Problem</span>
-            <h2>Two Becomes Thirty.</h2>
+                <p>What I started with was two terminals. What I ended up with, six months later, was a fleet — sometimes thirty parallel Claude Code sessions running across multiple repos. The cyborg workflow scales linearly until it doesn't, and the place where it breaks is coordination.</p>
 
-            <p>What I started with was two terminals. What I ended up with, six months later, was a fleet — sometimes thirty parallel Claude Code sessions running across multiple repos. The cyborg workflow scales linearly until it doesn't, and the place where it breaks is coordination.</p>
+                <p>Five sessions all want to commit to the same <code>main</code> branch. Two sessions both touched the same file. One session needs to know what another session learned three days ago, and grepping <code>~/.claude/projects/*.jsonl</code> takes too long to maintain flow.</p>
 
-            <p>Five sessions all want to commit to the same <code>main</code> branch. Two sessions both touched the same file. One session needs to know what another session learned three days ago, and grepping <code>~/.claude/projects/*.jsonl</code> takes too long to maintain flow.</p>
+                <p>That's the problem <span class="term">CCC</span><sup class="cite">4</sup> solves. It started as a kanban for tracking which Claude is doing what, and it grew the two pieces I needed once the fleet got real: a markdown-based commit-coordination protocol so sessions stop racing each other into the git index, and a local search index over every transcript so I can ask <em>"what did I decide about that thing two weeks ago?"</em> and get an answer in milliseconds. <a href="/parallel-sessions">Long-form on those two fixes here.</a></p>
+            </section>
 
-            <p>That's the problem CCC solves. It started as a kanban for tracking which Claude is doing what, and it grew the two pieces I needed once the fleet got real: a markdown-based commit-coordination protocol so sessions stop racing each other into the git index, and a local search index over every transcript so I can ask <em>"what did I decide about that thing two weeks ago?"</em> and get an answer in milliseconds. <a href="/parallel-sessions">Long-form on those two fixes here.</a></p>
-
-            <figure>
+            <figure class="fig">
                 <img src="/images/ccc-kanban-1x.webp"
                      srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
-                     alt="The CCC kanban with planning, working, review, testing, and verified columns spread across multiple repos, with a session detail panel showing the active conversation on the right."
+                     alt="The CCC kanban with planning, working, review, testing, and verified columns spread across multiple repos, with a session detail panel on the right."
                      loading="lazy">
-                <figcaption>From two terminals to thirty. The kanban is the thing that made the difference legible.</figcaption>
             </figure>
 
-            <div class="ccc-card">
-                <span class="ccc-label">If you run more than one Claude</span>
-                <h3>Command Center for Claude</h3>
-                <p>An open-source local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. Built around the cyborg workflow at scale.</p>
+            <hr class="divider">
+
+            <section class="essay-section" id="s4">
+                <span class="section-number">04</span>
+                <span class="section-date">The Generalization</span>
+                <h2>One Person Is Now A Small Team.</h2>
+
+                <p>The cyborg workflow isn't a productivity hack. It's a structural shift in what a single experienced operator can ship. The Pilates studio platform — three weekends. The expense tracker — a long weekend. The marketing analyzer — an afternoon. None of these would have been weekend-builds five years ago. None of them would even have been three-month-builds for a non-engineer.</p>
+
+                <p>That changes the cast of who can build software for what. It pulls the threshold for "worth building" down by an order of magnitude. The implications for small businesses, in particular, are the thing I'm spending most of my time on now — <a href="/small-business-cofounder">long-form here</a>.</p>
+
+                <p>The short version: if your job is to build, and you're still doing one thing at a time, you're leaving most of the leverage on the table.</p>
+            </section>
+
+            <section class="cta-block" id="ccc">
+                <span class="eyebrow">Open Source · MIT</span>
+                <h3>Try CCC.</h3>
+                <p>The fleet-scale tooling I use, open-source. Two-line install on macOS:</p>
                 <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
-                <div class="links">
+                <div class="cta-links">
                     <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
                     <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/parallel-sessions">Field note →</a>
                 </div>
-                <p class="disclaimer">Not affiliated with Anthropic. Community-built. MIT.</p>
+                <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
+            </section>
+
+            <div class="closing">
+                <h3>Three doors</h3>
+                <p>If this resonated, the most useful next step is one of these:</p>
+                <a href="/" class="cta">More Field Notes →</a>
+                <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="cta">Star CCC →</a>
             </div>
-        </section>
 
-        <hr>
+        </main>
 
-        <section>
-            <span class="section-label">The Generalization</span>
-            <h2>One Person Is Now A Small Team.</h2>
+        <aside class="right-rail">
 
-            <p>The cyborg workflow isn't a productivity hack. It's a structural shift in what a single experienced operator can ship. The Pilates studio platform — three weekends. The expense tracker — a long weekend. The marketing analyzer — an afternoon. None of these would have been weekend-builds five years ago. None of them would even have been three-month-builds for a non-engineer.</p>
+            <div class="marginalia">
+                <span class="fig-num">Fig. 1</span>
+                <em>The actual setup. One laptop runs Claude Code on the codebase. The other runs Claude in a browser, working dashboards. The notebook is for me, when I lose track.</em>
+            </div>
 
-            <p>That changes the cast of who can build software for what. It pulls the threshold for "worth building" down by an order of magnitude. The implications for small businesses, in particular, are the thing I'm spending most of my time on now — <a href="/small-business-cofounder">long-form here</a>.</p>
+            <div class="marginalia">
+                <span class="num">1</span>
+                <span class="term">Claude Code.</span> Anthropic's terminal-native coding agent. Reads/writes your repo, runs commands, has access to your filesystem.
+            </div>
 
-            <p>The short version: if your job is to build, and you're still doing one thing at a time, you're leaving most of the leverage on the table.</p>
-        </section>
+            <div class="marginalia">
+                <span class="num">2</span>
+                <span class="term">Claude in a Chrome extension.</span> A browser-using version of Claude that can navigate web UIs the way a person would — clicks, fills forms, reads dashboards. The companion to Claude Code on the operational tail.
+            </div>
 
-        <div class="related">
-            <span class="section-label">Related</span>
-            <a href="/parallel-sessions">→ Two Fixes for Running 30+ Claude Sessions in Parallel</a>
-            <a href="/spec-is-the-hard-part">→ The Spec Is The Hard Part</a>
-            <a href="/pilates">→ The Pilates Studio Custom Platform</a>
-        </div>
+            <div class="marginalia">
+                <span class="num">3</span>
+                <span class="term">Operational tail.</span> The third of work that isn't writing code or wiring APIs. Dashboards, env vars, dashboards-of-dashboards, secret management, cron, webhook URLs.
+            </div>
 
-        <div class="closing">
-            <h2>Try CCC</h2>
-            <p>The fleet-scale tooling I use, open-source. Two-line install on macOS:</p>
-            <div class="install">git clone https://github.com/amirfish1/claude-command-center && cd claude-command-center && ./run.sh</div>
-            <br>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="star-cta">Drop a star on GitHub →</a>
-            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">If you install it, I'd love to hear how. Open an issue, comment on LinkedIn, or just say hi.</p>
-        </div>
+            <div class="marginalia">
+                <span class="num">4</span>
+                <span class="term">CCC.</span> Command Center for Claude. The kanban + commit-coordination + local transcript index that turned 30+ parallel sessions into a workable workflow.
+            </div>
 
-        <footer>
-            <a href="/">amirfish.ai</a>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
-            <a href="mailto:amir@amirfish.com">Email</a>
-        </footer>
+            <div class="marginalia">
+                <span class="fig-num">Fig. 2</span>
+                <em>From two terminals to thirty. The kanban is the thing that made the difference legible.</em>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Method</span>
+                <p>Practiced daily for the last twelve months across my own builds — the Pilates studio platform, the expense tracker, CCC itself. Not benchmarked against a synthetic baseline; the comparison is "before and after I started doing this."</p>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Related Field Notes</span>
+                <ul>
+                    <li><a href="/parallel-sessions">→ Two Fixes for 30+ Parallel Sessions</a></li>
+                    <li><a href="/spec-is-the-hard-part">→ The Spec Is The Hard Part</a></li>
+                    <li><a href="/pilates">→ The Pilates Studio Platform</a></li>
+                </ul>
+            </div>
+
+        </aside>
 
     </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="/">All Field Notes</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
