@@ -287,12 +287,56 @@
             margin-top: 2rem;
         }
 
+        /* --- Figures --- */
+        figure {
+            margin: 2.5rem 0;
+        }
+
+        figure img,
+        figure video {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #e8e3d8;
+            box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05);
+        }
+
+        figure figcaption {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 0.92rem;
+            color: #888;
+            line-height: 1.55;
+            margin-top: 0.85rem;
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        figure.hero-figure {
+            margin: 1.5rem 0 0;
+        }
+
+        /* --- Pull-quote (Stitch-style left-rule) --- */
+        .pullquote {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            line-height: 1.5;
+            color: #333;
+            border-left: 2px solid #c2693a;
+            padding: 0.4rem 0 0.4rem 1.5rem;
+            margin: 2.5rem 0;
+        }
+
         @media (max-width: 500px) {
             .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
             .hero .subtitle { font-size: 1.1rem; }
             .ccc-card { padding: 1.3rem 1.4rem; }
             .closing { padding: 2rem 1.4rem; }
+            figure { margin: 2rem 0; }
+            .pullquote { font-size: 1.15rem; }
         }
     </style>
 </head>
@@ -309,6 +353,14 @@
             <p class="subtitle">Both have the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
             <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, two things were dragging the workflow to a crawl. Both have fixes now. This is what they are and how they work.</p>
             <p>If you're running more than ten parallel sessions, you've probably hit at least one of these.</p>
+
+            <figure class="hero-figure">
+                <img src="/images/ccc-kanban-1x.webp"
+                     srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
+                     alt="CCC kanban board, dark theme, with planning, working, review, testing, and verified columns spread across multiple repos."
+                     loading="eager">
+                <figcaption>One screenshot, one Tuesday. Ten sessions across two repos. Without the kanban, none of them know the others exist.</figcaption>
+            </figure>
 
             <div class="ccc-card">
                 <span class="ccc-label">Both fixes live inside CCC</span>
@@ -354,6 +406,8 @@ cd claude-command-center && ./run.sh</pre>
 
             <p>What I learned: the mechanism wasn't really about commits. It was about making coordination <em>legible</em>. Once sessions had a place to be visible to each other, all sorts of useful things they couldn't previously do became possible.</p>
 
+            <div class="pullquote">The kanban becomes a directory. The chat becomes a pipe.</div>
+
             <h3 class="sub">A side example — cross-session task delegation</h3>
 
             <p>Same primitive, broader use. I had a long-running session on my machine called <em>"my office manager"</em> — it tracks tasks, reminders, and project state across all my work. One day a separate session needed to push something onto its agenda.</p>
@@ -386,11 +440,12 @@ cd claude-command-center && ./run.sh</pre>
 
             <p>Wired into CCC's sidebar — type a topic, results pop up live without opening a terminal:</p>
 
-            <figure style="margin: 1.5rem 0;">
-                <video src="/images/claude-index-search.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: 4px; border: 1px solid #e5e5e5;">
-                    Your browser doesn't support inline video. <a href="/images/claude-index-search.mp4">Download the demo</a>.
-                </video>
-                <figcaption style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.85rem; color: #888; text-align: center; margin-top: 0.6rem;">Two seconds: keystroke to results.</figcaption>
+            <figure>
+                <img src="/images/ccc-search-1x.webp"
+                     srcset="/images/ccc-search-1x.webp 1x, /images/ccc-search-2x.webp 2x"
+                     alt="CCC kanban with the search detail panel open on the right, showing matched session messages with snippets."
+                     loading="lazy">
+                <figcaption>Type a topic, results pop up in the sidebar. Sub-second on the index across thousands of session files.</figcaption>
             </figure>
 
             <p>The index also covers Codex transcripts (<code>~/.codex/sessions/*.jsonl</code>) under the same schema — one search, both runtimes.</p>
