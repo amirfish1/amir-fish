@@ -466,7 +466,7 @@
 
             <figure class="fig">
                 <img src="/images/group-chat-bug-routing.png"
-                     alt="A bug report being delivered cross-session: one Claude session reports two production bugs in a WhatsApp-Supabase daemon to the peer that built it. Priority-ordered hypotheses, diagnostic steps, suggested fix referencing an iMessage-inject pattern. The peer replies 'Let me investigate both bugs in parallel.'"
+                     alt="The client-app session's view at the moment it dispatched the bug report. Top: my casual prompt asking it to debug. Middle: the actual curl call to CCC's /api/inject-input endpoint, returning {ok: true, pid: 50895}. Bottom: the triage delivered to the peer (priority-ordered hypotheses, suggested fix referencing Chuck's iMessage-inject pattern), followed by the session's reasoning that it can keep working in the meantime because its own code is idempotent. Session tag: hebrew-library-app-cloud."
                      loading="lazy">
             </figure>
 
