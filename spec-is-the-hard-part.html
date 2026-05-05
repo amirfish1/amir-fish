@@ -82,6 +82,15 @@
         .cta-block .cta-links a { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.05rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
         .cta-block .cta-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
         .cta-block .meta-line { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.9rem; color: #999; margin-top: 1.1rem; }
+        .cta-block .video-preview { display: block; position: relative; margin: 0 0 0.9rem; border: 0.5px solid var(--rule); overflow: hidden; background: #000; line-height: 0; }
+        .cta-block .video-preview img { display: block; width: 100%; height: auto; transition: opacity 0.2s; }
+        .cta-block .video-preview .play { position: absolute; top: 50%; left: 50%; width: 78px; height: 78px; margin: -39px 0 0 -39px; border-radius: 50%; background: rgba(0,0,0,0.55); border: 1.5px solid rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.2s; }
+        .cta-block .video-preview .play::before { content: ""; width: 0; height: 0; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent rgba(255,255,255,0.95); margin-left: 4px; }
+        .cta-block .video-preview:hover img { opacity: 0.92; }
+        .cta-block .video-preview:hover .play { background: rgba(170, 53, 39, 0.95); transform: scale(1.05); }
+        .cta-block .video-caption { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.92rem; color: var(--ink-mute); text-align: center; margin: 0.7rem 0 1.4rem; }
+        .cta-block .video-caption a { color: var(--ink-mute); text-decoration: none; border-bottom: 0.5px solid var(--rule); padding-bottom: 1px; }
+        .cta-block .video-caption a:hover { color: var(--accent); border-bottom-color: var(--accent); }
         .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
         .closing h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--ink); }
         .closing p { font-size: 0.95rem; color: var(--ink-mute); margin-bottom: 1.2rem; }
@@ -280,6 +289,14 @@
             <section class="cta-block">
                 <span class="eyebrow">Open Source · MIT</span>
                 <h3>If you're already running this at scale.</h3>
+                <a href="https://youtu.be/_WRf0hH6yhg" target="_blank" class="video-preview" aria-label="Watch the Command Center for Claude demo on YouTube">
+                    <img src="/images/ccc-video-cover-1x.webp"
+                         srcset="/images/ccc-video-cover-1x.webp 1x, /images/ccc-video-cover-2x.webp 2x"
+                         alt="Command Center for Claude — open-source v2 cover. Manage hundreds of Claude Code sessions concurrently with ease."
+                         loading="lazy">
+                    <span class="play" aria-hidden="true"></span>
+                </a>
+                <p class="video-caption"><a href="https://youtu.be/_WRf0hH6yhg" target="_blank">Watch the 2:46 demo on YouTube →</a></p>
                 <p>Command Center for Claude is the local kanban that emerged once "two terminals, two Claudes" turned into thirty parallel sessions and the coordination cost started to dominate.</p>
                 <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
