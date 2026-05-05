@@ -50,6 +50,13 @@
         footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
         footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
         footer a:hover { text-decoration-color: #999; }
+        figure { margin: 2.5rem 0; }
+        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
+        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
+        figure.hero-figure { margin: 1.5rem 0 0; }
+        figure.two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; align-items: start; }
+        figure.two-up img { width: 100%; }
+        figure.two-up figcaption { grid-column: 1 / -1; }
         @media (max-width: 500px) {
             .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
@@ -57,6 +64,8 @@
             .closing { padding: 2rem 1.4rem; }
             .closing .cta { display: block; margin: 0.5rem 0; }
             .stat-row { grid-template-columns: 1fr; gap: 0; }
+            figure { margin: 2rem 0; }
+            figure.two-up { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -78,6 +87,13 @@
                 <div class="stat"><span class="num">4 hr → 20 min</span><span class="label">Weekly admin time</span></div>
                 <div class="stat"><span class="num">$0</span><span class="label">Payment processing fees</span></div>
             </div>
+
+            <figure class="hero-figure">
+                <img src="/images/pilates-studio-hero.webp"
+                     alt="A Pilates reformer with a steel half-cadillac frame, sitting in front of a bright window in a clean studio."
+                     loading="eager">
+                <figcaption>The actual studio. One reformer, four classes a day, six days a week, eighty-some clients on rotation.</figcaption>
+            </figure>
         </section>
 
         <hr>
@@ -114,6 +130,24 @@
             </ul>
 
             <p>None of these are hard pieces of software. Each one is maybe a hundred lines of logic. The reason no SaaS ships them isn't difficulty — it's that they're specific to one studio's operating quirks, and SaaS companies build for the median customer. There is no median customer for any of these features.</p>
+
+            <figure>
+                <img src="/images/bym-dashboard-1x.webp"
+                     srcset="/images/bym-dashboard-1x.webp 1x, /images/bym-dashboard-2x.webp 2x"
+                     alt="The Pilates studio admin dashboard, showing today's appointments, a 502-line unpaid-payments row with a 'Resolve with AI' button, and a client list with frequencies."
+                     loading="lazy">
+                <figcaption>The first thing she sees in the morning. The 502 unpaid line items aren't a backlog — they're a queue the system will walk her through, one decision at a time.</figcaption>
+            </figure>
+
+            <figure class="two-up">
+                <img src="/images/pilates-studio-1.webp"
+                     alt="Two reformers reflected in a mirror in the studio's training room."
+                     loading="lazy">
+                <img src="/images/pilates-studio-2.webp"
+                     alt="A second view of the studio: equipment, natural light, the reformer angled toward the window."
+                     loading="lazy">
+                <figcaption>The studio. None of the software is visible from here, which is the point.</figcaption>
+            </figure>
         </section>
 
         <hr>
