@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Mindset, Shipped — AI Automation Workshop</title>
+<meta name="description" content="Claude Code for PMs · Workshop deck by Amir Fish">
+<meta property="og:title" content="Product Mindset, Shipped">
+<meta property="og:description" content="Claude Code for PMs — an AI Automation workshop">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    background: #2a2a2a;
+    padding: 40px 20px;
+    color: #111;
+  }
+  .slide {
+    width: 1280px;
+    height: 720px;
+    margin: 0 auto 40px;
+    background: #fff;
+    padding: 72px 80px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide-number {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    font-size: 13px;
+    color: #999;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .kicker {
+    font-size: 13px;
+    color: #6b46c1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: #111;
+  }
+  h1 .emph { color: #6b46c1; }
+  .subtitle {
+    font-size: 22px;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+  /* Slide 4 - two column table */
+  .compare-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .compare-table .header {
+    padding: 20px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .compare-table .header.today { background: #f5f5f5; color: #888; }
+  .compare-table .header.want { background: #ede9fe; color: #6b46c1; }
+  .compare-table .row {
+    padding: 18px 24px;
+    font-size: 20px;
+    border-top: 1px solid #eaeaea;
+  }
+  .compare-table .row.today { color: #777; }
+  .compare-table .row.want { background: #faf8ff; color: #111; font-weight: 500; }
+
+  /* Slide 5 - 3 reasons */
+  .reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+  .reason {
+    padding: 28px 24px;
+    border-radius: 12px;
+    background: #faf8ff;
+    border-left: 4px solid #6b46c1;
+  }
+  .reason .num {
+    font-size: 13px;
+    font-weight: 700;
+    color: #6b46c1;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .reason .headline {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: #111;
+  }
+  .reason .body {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #555;
+  }
+  .callout {
+    margin-top: auto;
+    padding: 20px 28px;
+    background: #111;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .callout strong { color: #c4b5fd; font-style: normal; }
+
+  /* Slide 6 - folder tree */
+  .tree-wrap {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 32px 40px;
+    color: #e5e5e5;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .tree {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 16px;
+    line-height: 1.7;
+    white-space: pre;
+    width: 100%;
+  }
+  .tree .folder { color: #a78bfa; }
+  .tree .file { color: #e5e5e5; }
+  .tree .comment { color: #888; font-style: italic; }
+  .slide-6-footer {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* Slide 7 - 3 layers */
+  .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; flex: 1; }
+  .layer {
+    padding: 28px 24px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+  }
+  .layer.skills { border-top: 6px solid #6b46c1; }
+  .layer.agents { border-top: 6px solid #059669; }
+  .layer.workflows { border-top: 6px solid #dc2626; }
+  .layer .name {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #111;
+  }
+  .layer .tagline {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+  .layer dl { flex: 1; }
+  .layer dt {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 0.1em;
+    margin-top: 14px;
+  }
+  .layer dd {
+    font-size: 15px;
+    line-height: 1.45;
+    color: #333;
+    margin-top: 4px;
+  }
+  .layer code {
+    background: #f5f5f5;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    color: #6b46c1;
+  }
+  .layer.agents code { color: #059669; }
+  .layer.workflows code { color: #dc2626; }
+
+  /* Tactical block - 8 tips grid */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+  .tip {
+    padding: 20px 18px;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 10px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .tip .tip-num {
+    font-size: 38px;
+    font-weight: 800;
+    color: #6b46c1;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .tip .tip-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .tip .tip-desc {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+  }
+  .tip code {
+    background: #ede9fe;
+    color: #6b46c1;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+  }
+
+  /* Push-back deep dive */
+  .pushback-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    flex: 1;
+  }
+  .pushback-screenshot {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 24px 26px;
+    color: #e5e5e5;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pushback-screenshot .user-turn {
+    color: #a3e635;
+    margin-bottom: 16px;
+  }
+  .pushback-screenshot .claude-turn {
+    color: #fbbf24;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .pushback-screenshot .reason {
+    color: #e5e5e5;
+    padding-left: 14px;
+    border-left: 2px solid #525252;
+    margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+  }
+  .pushback-screenshot .reason strong { color: #fbbf24; }
+  .pushback-points {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: center;
+  }
+  .pushback-points .point {
+    padding: 16px 20px;
+    background: #faf8ff;
+    border-left: 4px solid #6b46c1;
+    border-radius: 6px;
+  }
+  .pushback-points .point-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+  }
+  .pushback-points .point-body {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* Anti-patterns table */
+  .anti-table {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1.5fr;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .anti-table .th {
+    background: #faf8ff;
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b46c1;
+  }
+  .anti-table .td {
+    padding: 14px 18px;
+    font-size: 15px;
+    color: #333;
+    border-top: 1px solid #eaeaea;
+    line-height: 1.5;
+  }
+  .anti-table .td.pattern { font-weight: 600; color: #111; }
+  .anti-table .td.fix { color: #059669; font-weight: 500; }
+
+  /* Stitch demo slide */
+  .stitch-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    flex: 1;
+  }
+  .stitch-left, .stitch-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .stitch-feature {
+    padding: 16px 20px;
+    border-left: 4px solid #6b46c1;
+    background: #faf8ff;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .stitch-feature-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 3px;
+  }
+  .stitch-feature-body {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+  }
+  .stitch-image-placeholder {
+    background: linear-gradient(135deg, #6b46c1 0%, #a78bfa 100%);
+    border-radius: 12px;
+    padding: 30px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+    min-height: 300px;
+  }
+
+  /* === ANIMATIONS === */
+
+  /* Base reveal animation */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulseCallout {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(107, 70, 193, 0); }
+    40% { box-shadow: 0 0 0 8px rgba(107, 70, 193, 0.18); }
+    80% { box-shadow: 0 0 0 0 rgba(107, 70, 193, 0); }
+  }
+  @keyframes flowChip {
+    0% { opacity: 0; transform: translateX(-16px); }
+    60% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  /* When a slide becomes visible (scrolled into view), animate children in sequence.
+     We approximate this: every .slide animates its immediate content children using
+     staggered nth-child delays. Using IntersectionObserver is cleaner but we're avoiding JS. */
+
+  .slide > * { animation: riseIn 520ms ease-out both; }
+  .slide > *:nth-child(1) { animation-delay: 60ms; }
+  .slide > *:nth-child(2) { animation-delay: 140ms; }
+  .slide > *:nth-child(3) { animation-delay: 220ms; }
+  .slide > *:nth-child(4) { animation-delay: 300ms; }
+  .slide > *:nth-child(5) { animation-delay: 380ms; }
+
+  /* Stagger inside 3-column and grid layouts */
+  .layers > *:nth-child(1),
+  .tips-grid > *:nth-child(1),
+  .reasons > *:nth-child(1) { animation: riseIn 480ms ease-out 200ms both; }
+  .layers > *:nth-child(2),
+  .tips-grid > *:nth-child(2),
+  .reasons > *:nth-child(2) { animation: riseIn 480ms ease-out 320ms both; }
+  .layers > *:nth-child(3),
+  .tips-grid > *:nth-child(3),
+  .reasons > *:nth-child(3) { animation: riseIn 480ms ease-out 440ms both; }
+  .tips-grid > *:nth-child(4) { animation: riseIn 480ms ease-out 560ms both; }
+  .tips-grid > *:nth-child(5) { animation: riseIn 480ms ease-out 680ms both; }
+  .tips-grid > *:nth-child(6) { animation: riseIn 480ms ease-out 800ms both; }
+  .tips-grid > *:nth-child(7) { animation: riseIn 480ms ease-out 920ms both; }
+  .tips-grid > *:nth-child(8) { animation: riseIn 480ms ease-out 1040ms both; }
+
+  /* Callout pulse — happens after the slide settles */
+  .callout { animation: pulseCallout 1800ms ease-out 900ms 1 both, riseIn 520ms ease-out 600ms both; }
+
+  /* Compare table rows cascade */
+  .compare-table .row { animation: riseIn 400ms ease-out both; }
+  .compare-table .row:nth-child(3) { animation-delay: 300ms; }
+  .compare-table .row:nth-child(4) { animation-delay: 420ms; }
+  .compare-table .row:nth-child(5) { animation-delay: 540ms; }
+  .compare-table .row:nth-child(6) { animation-delay: 660ms; }
+  .compare-table .row:nth-child(7) { animation-delay: 780ms; }
+  .compare-table .row:nth-child(8) { animation-delay: 900ms; }
+  .compare-table .row:nth-child(9) { animation-delay: 1020ms; }
+  .compare-table .row:nth-child(10) { animation-delay: 1140ms; }
+  .compare-table .row:nth-child(11) { animation-delay: 1260ms; }
+  .compare-table .row:nth-child(12) { animation-delay: 1380ms; }
+
+  /* Respect motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .slide { box-shadow: none; margin: 0; page-break-after: always; }
+    * { animation: none !important; }
+  }
+
+  /* ---------- Presenter / Playback mode additions ---------- */
+  body.present-mode {
+    background: #000;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  body.present-mode .slide {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform-origin: center center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  body.present-mode .slide.slide--active {
+    display: block;
+  }
+  /* Replay riseIn animations on slide entry in present mode */
+  body.present-mode .slide.slide--active .animate-in,
+  body.present-mode .slide.slide--active h1,
+  body.present-mode .slide.slide--active h2,
+  body.present-mode .slide.slide--active h3 {
+    /* no-op selector placeholder — actual replay handled via reflow trick in JS */
+  }
+
+  /* Presenter overlay */
+  #presenter-overlay { display: none; }
+  body.present-mode #presenter-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #presenter-overlay .pp-counter {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+    background: rgba(0,0,0,0.35);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  #presenter-overlay .pp-hint {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    color: rgba(255,255,255,0.75);
+    font-size: 11px;
+    background: rgba(0,0,0,0.35);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: opacity 0.6s ease;
+  }
+  #presenter-overlay .pp-hint.dim { opacity: 0.2; }
+  #presenter-overlay .pp-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0%;
+    background: #6b46c1;
+    transition: width 0.25s ease;
+  }
+  #presenter-overlay .pp-help {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15,15,20,0.95);
+    color: #eee;
+    padding: 22px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(107,70,193,0.5);
+    display: none;
+    pointer-events: auto;
+  }
+  #presenter-overlay .pp-help.visible { display: block; }
+  #presenter-overlay .pp-help kbd {
+    background: #2a2a35;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    color: #ddd;
+  }
+  #presenter-overlay .pp-help h4 {
+    margin: 0 0 10px 0;
+    color: #b794f4;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1 · Title -->
+<section class="slide" style="padding:0; background-image:linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.70) 45%, rgba(0,0,0,0.30) 75%, rgba(0,0,0,0.05) 100%), url('screenshots/cover-archival.png'); background-size:cover; background-position:right center; color:#fff;">
+  <div class="slide-number" style="color:rgba(255,255,255,0.55);">Slide 1 · Title</div>
+  <div style="padding:72px 80px; display:flex; flex-direction:column; justify-content:center; flex:1; max-width:58%;">
+    <div class="kicker" style="color:#c4b5fd;">Workshop · Claude Code · Product Leadership</div>
+    <h1 style="color:#fff; text-shadow:0 2px 20px rgba(0,0,0,0.5);">Product Mindset, <span style="color:#c4b5fd;">Shipped.</span></h1>
+    <p class="subtitle" style="font-size:22px; line-height:1.5; color:rgba(255,255,255,0.92); text-shadow:0 1px 8px rgba(0,0,0,0.6);">
+      Product thinking and execution have always been <strong style="color:#fff;">unwritten</strong>; we want to <strong style="color:#c4b5fd;">codify them</strong> so you can scale, accelerate, and focus on <strong style="color:#c4b5fd;">what matters</strong>.
+    </p>
+    <div style="margin-top: 22px; font-size: 13px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform:uppercase;">
+      Claude Code for PMs · April 2026
+    </div>
+    <div style="margin-top: 18px; font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.6;">
+      <strong style="color:#fff;">Amir Fish</strong> — AI Builder · Ex-Google &amp; Meta GPM (17 yrs)
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2 · The Problem -->
+<section class="slide">
+  <div class="slide-number">Slide 2 · The Problem</div>
+  <div class="kicker">Product discipline</div>
+  <h1>What good looks like — <span class="emph">and what's in the way.</span></h1>
+  <p class="subtitle">Left: what any product team wants. Right: what's blocking teams today.</p>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; flex:1;">
+
+      <!-- LEFT: What good looks like (org-level goals) -->
+      <div style="background:#f0fdf4; border-radius:12px; padding:26px 28px; border-left:6px solid #059669;">
+        <div style="font-size:13px; font-weight:700; color:#059669; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">What good looks like</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:2px;">Move fast</div>
+            <div style="font-size:13px; color:#555; line-height:1.45;">No queueing behind other teams' cycles.</div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:2px;">Focus on the work, not the admin</div>
+            <div style="font-size:13px; color:#555; line-height:1.45;">Spend time on the problem, not the PowerPoint.</div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:2px;">Build high-quality products</div>
+            <div style="font-size:13px; color:#555; line-height:1.45;">With research, framing, and judgment baked in.</div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:2px;">Build the <em>right</em> things</div>
+            <div style="font-size:13px; color:#555; line-height:1.45;">Not just what's easiest to build.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: What's in the way (matched structure to left + verbatim evidence) -->
+      <div style="background:#fef2f2; border-radius:12px; padding:26px 28px; border-left:6px solid #dc2626;">
+        <div style="font-size:13px; font-weight:700; color:#dc2626; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">What's in the way</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:3px;">Manual workflows eat the week</div>
+            <div style="font-size:13px; color:#555; line-height:1.4;"><em>"Nothing is automated."</em></div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:3px;">Context is scattered everywhere</div>
+            <div style="font-size:13px; color:#555; line-height:1.4;"><em>"Keeping on top of everything — meetings, Slack, Teams, emails."</em></div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:3px;">Redoing work that should already exist</div>
+            <div style="font-size:13px; color:#555; line-height:1.4;"><em>"Recreating Figma takes a lot of time. Requirements aren't clear."</em></div>
+          </div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:#111; margin-bottom:3px;">Product thinking doesn't scale past the PM</div>
+            <div style="font-size:13px; color:#555; line-height:1.4;"><em>"I don't have the vocabulary to use an AI agent effectively."</em></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="callout" style="margin-top:20px;"><strong>The answer:</strong> systems, not sessions. Files, not chat. Tools anyone can invoke — <em>even when the PM isn't in the room.</em></div>
+  </div>
+</section>
+
+<!-- SLIDE 3 · The Foundation -->
+<section class="slide">
+  <div class="slide-number">Slide 3 · The Foundation</div>
+  <div class="kicker">Using markdown files — the easiest format for machines to digest</div>
+  <h1><span class="emph">Encoding</span> your org's knowledge.</h1>
+  <div class="content">
+    <!-- OUTER "Foundation · Organizational Knowledge Base" BOX wrapping everything -->
+    <div style="background:#f5f3ff; border:2px dashed #a78bfa; border-radius:14px; padding:20px 22px; flex:1; display:flex; flex-direction:column;">
+      <div style="font-size:12px; color:#6b46c1; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; text-align:center; margin-bottom:14px;">Foundation · Organizational Knowledge Base</div>
+
+      <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:20px; flex:1; min-height:0;">
+        <!-- Left: 7 category cards (Strategy + Decisions merged) -->
+        <div style="display:flex; flex-direction:column; gap:5px;">
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Strategy &amp; decisions</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">Vision, bets, and a dated ledger of what you chose and why — including review-meeting decisions.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Goals and KPIs</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">3/6/12-month targets with the numbers that tell you if it's working.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Products</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">One file per product — capabilities, key users, current state, roadmap.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Personas</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">Who the users are, what they care about, how they behave.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Research</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">Raw inputs: interviews, competitive scans, customer signals.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Org structure</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">Who works with whom, key stakeholders, how decisions actually happen.</div>
+          </div>
+          <div style="padding:7px 13px; background:#fff; border-left:4px solid #6b46c1; border-radius:6px;">
+            <div style="font-size:12px; font-weight:700; color:#111;">Style guides</div>
+            <div style="font-size:11px; color:#555; line-height:1.35;">PRD format, meeting notes, VP review — the quality bar in writing.</div>
+          </div>
+        </div>
+        <!-- Right: rich folder tree (Apple product examples) -->
+        <div style="background:#1a1a1a; border-radius:10px; padding:16px 20px; display:flex; align-items:flex-start; overflow:hidden;">
+          <div class="tree" style="font-size:11px; line-height:1.6; color:#e5e5e5;"><span class="folder">my-product/</span>
+├── <span class="folder">strategy/</span>
+│   ├── <span class="file">vision.md</span>
+│   ├── <span class="file">bets.md</span>
+│   └── <span class="folder">decisions/</span>
+│       ├── <span class="file">2026-04-q2-review.md</span>
+│       └── <span class="file">2026-04-vp-design.md</span>
+├── <span class="file">goals-kpis.md</span>
+├── <span class="folder">products/</span>
+│   ├── <span class="file">iPhone-17-Pro-Max.md</span>
+│   ├── <span class="file">iPhone-17.md</span>
+│   ├── <span class="file">AirPods-Pro-3.md</span>
+│   └── <span class="file">Apple-Watch-10.md</span>
+├── <span class="folder">personas/</span>
+│   ├── <span class="file">upgrade-buyer.md</span>
+│   └── <span class="file">first-time-user.md</span>
+├── <span class="folder">research/interviews/</span>
+├── <span class="folder">style-guides/</span>
+│   ├── <span class="file">prd-format.md</span>
+│   ├── <span class="file">meeting-notes.md</span>
+│   └── <span class="file">vp-review-format.md</span>
+└── <span class="file">org-structure.md</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- SLIDE 4 · The Ideal -->
+<section class="slide">
+  <div class="slide-number">Slide 4 · The Ideal</div>
+  <div class="kicker">The vision</div>
+  <h1>An AI-based <span class="emph">Product Playbook.</span></h1>
+  <p class="subtitle">An <strong>execution layer</strong> (skills, agents, workflows) on top of your <strong>organizational knowledge base</strong>. Invokable by anyone — <em>even teams without a PM.</em></p>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;">
+
+      <!-- SKILLS column -->
+      <div style="background:#faf8ff; border-top:6px solid #6b46c1; border-radius:12px; padding:14px 18px; display:flex; flex-direction:column;">
+        <div style="font-size:19px; font-weight:800; color:#111;">Skills</div>
+        <div style="font-size:11px; color:#6b46c1; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:8px;">On-demand · one job · the PRD lifecycle</div>
+        <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #6b46c1;">
+            <div style="font-family:monospace; font-size:13px; color:#6b46c1; font-weight:700;">/prd-writer &nbsp;·&nbsp; /prd-critique</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Drafts a PRD, then stress-tests it like a skeptical PM</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #6b46c1;">
+            <div style="font-family:monospace; font-size:13px; color:#6b46c1; font-weight:700;">/brainstorm</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Superpowers brainstorming — stay on course</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #6b46c1;">
+            <div style="font-family:monospace; font-size:13px; color:#6b46c1; font-weight:700;">/collect-feedback</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Structures a request for team input</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #6b46c1;">
+            <div style="font-family:monospace; font-size:13px; color:#6b46c1; font-weight:700;">/synthesize-feedback</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Clusters responses into themes &amp; conflicts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENTS column -->
+      <div style="background:#f0fdf4; border-top:6px solid #059669; border-radius:12px; padding:14px 18px; display:flex; flex-direction:column;">
+        <div style="font-size:19px; font-weight:800; color:#111;">Agents</div>
+        <div style="font-size:11px; color:#059669; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:8px;">Persistent · hold a PM lens</div>
+        <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #059669;">
+            <div style="font-family:monospace; font-size:13px; color:#059669; font-weight:700;">@skeptical-pm</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">"What would a VP push back on?"</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #059669;">
+            <div style="font-family:monospace; font-size:13px; color:#059669; font-weight:700;">@customer-voice</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">What would real users actually say?</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #059669;">
+            <div style="font-family:monospace; font-size:13px; color:#059669; font-weight:700;">@data-realist</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Prove every claim with real numbers</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #059669;">
+            <div style="font-family:monospace; font-size:13px; color:#059669; font-weight:700;">@design-critic</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">User-first lens on any mockup</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOWS column -->
+      <div style="background:#fef2f2; border-top:6px solid #dc2626; border-radius:12px; padding:14px 18px; display:flex; flex-direction:column;">
+        <div style="font-size:19px; font-weight:800; color:#111;">Workflows</div>
+        <div style="font-size:11px; color:#dc2626; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:8px;">Chained · run on cadence</div>
+        <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #dc2626;">
+            <div style="font-family:monospace; font-size:13px; color:#dc2626; font-weight:700;">/daily-brief</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Outlook + Teams + Jira → one MD</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #dc2626;">
+            <div style="display:flex; align-items:center; gap:6px;"><div style="font-family:monospace; font-size:13px; color:#dc2626; font-weight:700;">/product-a-to-z</div><span style="font-size:9px; background:#6b46c1; color:#fff; padding:1px 5px; border-radius:3px; letter-spacing:0.06em;">FOR TEAMS</span></div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Step-by-step launch path — for any team</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #dc2626;">
+            <div style="font-family:monospace; font-size:13px; color:#dc2626; font-weight:700;">/launch-prep</div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Pre-launch checklist, all systems</div>
+          </div>
+          <div style="background:#fff; padding:7px 11px; border-radius:6px; border-left:3px solid #dc2626; box-shadow:0 0 0 2px #fecaca;">
+            <div style="display:flex; align-items:center; gap:6px;"><div style="font-family:monospace; font-size:13px; color:#dc2626; font-weight:700;">/innovations-watch</div><span style="font-size:9px; background:#dc2626; color:#fff; padding:1px 5px; border-radius:3px; letter-spacing:0.06em;">DEMO</span></div>
+            <div style="font-size:11px; color:#555; margin-top:1px;">Scans mailing list · flags what's relevant</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- FOUNDATION LAYER: the org knowledge base below the execution layer -->
+    <div style="background:#f5f3ff; border:2px dashed #a78bfa; border-radius:12px; padding:16px 22px; margin-top:14px; text-align:center;">
+      <div style="font-size:12px; color:#6b46c1; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px;">Foundation · Organizational Knowledge Base</div>
+      <div style="font-size:14px; color:#333; line-height:1.5;">
+        <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">strategy/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">goals-kpis/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">products/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">personas/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">decisions/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">research/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">org-structure/</code> · <code style="background:#fff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:13px;">style-guides/</code>
+      </div>
+      <div style="font-size:12px; color:#6b46c1; margin-top:6px; font-style:italic;">The markdown files the execution layer reads from and writes to.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 · Anatomy of a Skill -->
+<section class="slide">
+  <div class="slide-number">Slide 5 · Anatomy of a Skill</div>
+  <div class="kicker">Backup — the demo you're about to run, broken down</div>
+  <h1>What's actually inside <span class="emph">a skill?</span></h1>
+  <p class="subtitle">Four 2-minute interactive demos that lay the groundwork.</p>
+  <div class="content">
+    <div style="padding:28px 32px; background:#faf8ff; border:2px solid #ede9fe; border-radius:14px; margin-bottom:22px;">
+      <div style="font-size:12px; font-weight:700; color:#6b46c1; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px;">A skill, reduced to its parts</div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <div style="padding:14px 22px; background:#111; color:#fff; border-radius:10px; text-align:center; min-width:200px;">
+          <div style="font-size:11px; color:#c4b5fd; letter-spacing:0.1em; font-weight:700; margin-bottom:4px;">PART 1</div>
+          <div style="font-size:17px; font-weight:700;">System Prompt</div>
+          <div style="font-size:12px; color:#a78bfa; margin-top:3px; font-style:italic;">the skill itself</div>
+        </div>
+        <div style="font-size:28px; color:#6b46c1; font-weight:300;">+</div>
+        <div style="padding:14px 22px; background:#fff; color:#111; border:2px solid #6b46c1; border-radius:10px; text-align:center; min-width:200px;">
+          <div style="font-size:11px; color:#6b46c1; letter-spacing:0.1em; font-weight:700; margin-bottom:4px;">PART 2</div>
+          <div style="font-size:17px; font-weight:700;">User Input</div>
+          <div style="font-size:12px; color:#888; margin-top:3px; font-style:italic;">what anyone types</div>
+        </div>
+        <div style="font-size:28px; color:#6b46c1; font-weight:300;">=</div>
+        <div style="padding:14px 22px; background:#059669; color:#fff; border-radius:10px; text-align:center; min-width:200px;">
+          <div style="font-size:11px; color:#d1fae5; letter-spacing:0.1em; font-weight:700; margin-bottom:4px;">RESULT</div>
+          <div style="font-size:17px; font-weight:700;">Output</div>
+          <div style="font-size:12px; color:#a7f3d0; margin-top:3px; font-style:italic;">the shipped artifact</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;">
+      <div style="padding:16px 18px; border:1.5px solid #e5e5e5; border-top:4px solid #6b46c1; border-radius:8px; background:#fff;">
+        <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">01</div>
+        <div style="font-size:15px; font-weight:700; color:#111; margin-bottom:4px;">Prompt engineering</div>
+        <div style="font-size:12px; color:#555; line-height:1.4;">Zero-shot · few-shot · chain-of-thought — same question, very different answers.</div>
+      </div>
+      <div style="padding:16px 18px; border:1.5px solid #e5e5e5; border-top:4px solid #6b46c1; border-radius:8px; background:#fff;">
+        <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">02</div>
+        <div style="font-size:15px; font-weight:700; color:#111; margin-bottom:4px;">Task decomposition</div>
+        <div style="font-size:12px; color:#555; line-height:1.4;">Hard task → ordered sub-tasks → execute each. How agents stay reliable.</div>
+      </div>
+      <div style="padding:16px 18px; border:1.5px solid #e5e5e5; border-top:4px solid #6b46c1; border-radius:8px; background:#fff;">
+        <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">03</div>
+        <div style="font-size:15px; font-weight:700; color:#111; margin-bottom:4px;">ReAct (Reason + Act)</div>
+        <div style="font-size:12px; color:#555; line-height:1.4;">Think → act → observe → repeat. The loop Claude Code runs under the hood.</div>
+      </div>
+      <div style="padding:16px 18px; border:2px solid #6b46c1; border-top:4px solid #6b46c1; border-radius:8px; background:#faf8ff;">
+        <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">04 · THE PAYOFF</div>
+        <div style="font-size:15px; font-weight:700; color:#111; margin-bottom:4px;">🧩 Anatomy of a skill</div>
+        <div style="font-size:12px; color:#555; line-height:1.4;">Edit a real system prompt live. Pick a preset. Watch output change.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 · Use Cases -->
+<section class="slide">
+  <div class="slide-number">Slide 6 · Use Cases in Action</div>
+  <div class="kicker">Files + Layers = Shipped</div>
+  <h1>Now you can actually <span class="emph">ship things.</span></h1>
+  <p class="subtitle">Four patterns, one architecture. Each example = <strong>files</strong> + a <strong>layer</strong> + a <strong>result you ship.</strong></p>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px; flex:1;">
+
+      <!-- Use case 1: Non-PM team ships first proposal -->
+      <div style="border:2px solid #e5e5e5; border-radius:12px; padding:20px 22px; display:flex; flex-direction:column; background:#fff;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:10px;">
+          <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.1em; text-transform:uppercase;">01</div>
+          <div style="font-size:20px; font-weight:800; color:#111;">A team without a PM ships a proposal</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; row-gap:6px; column-gap:10px; font-size:13px; line-height:1.4;">
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">FILES</div>
+          <div style="color:#333;"><code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">launch-guide.md</code>, <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">templates/prd.md</code></div>
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">LAYER</div>
+          <div style="color:#333;"><code style="background:#fee2e2;color:#dc2626;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">/product-a-to-z</code> walks idea → approval → review → launch</div>
+          <div style="font-weight:700; color:#6b46c1; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">SHIP</div>
+          <div style="color:#111; font-weight:500;">An eng team clears leadership review on a proposal — without booking a PM's time.</div>
+        </div>
+      </div>
+
+      <!-- Use case 2: Data work -->
+      <div style="border:2px solid #e5e5e5; border-radius:12px; padding:20px 22px; display:flex; flex-direction:column; background:#fff;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:10px;">
+          <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.1em; text-transform:uppercase;">02</div>
+          <div style="font-size:20px; font-weight:800; color:#111;">Data work</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; row-gap:6px; column-gap:10px; font-size:13px; line-height:1.4;">
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">FILES</div>
+          <div style="color:#333;"><code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">research/interviews/</code>, <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">clustering-rules.md</code></div>
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">LAYER</div>
+          <div style="color:#333;"><code style="background:#ede9fe;color:#6b46c1;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">/cluster-feedback</code> skill</div>
+          <div style="font-weight:700; color:#6b46c1; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">SHIP</div>
+          <div style="color:#111; font-weight:500;">200 messy tickets → themes + quotes, in 90 seconds. No pandas, no code.</div>
+        </div>
+      </div>
+
+      <!-- Use case 3: Prototyping -->
+      <div style="border:2px solid #e5e5e5; border-radius:12px; padding:20px 22px; display:flex; flex-direction:column; background:#fff;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:10px;">
+          <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.1em; text-transform:uppercase;">03</div>
+          <div style="font-size:20px; font-weight:800; color:#111;">Prototyping</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; row-gap:6px; column-gap:10px; font-size:13px; line-height:1.4;">
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">FILES</div>
+          <div style="color:#333;"><code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">personas/</code>, <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">design-principles.md</code></div>
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">LAYER</div>
+          <div style="color:#333;"><code style="background:#ede9fe;color:#6b46c1;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">/screenshot-to-component</code> skill</div>
+          <div style="font-weight:700; color:#6b46c1; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">SHIP</div>
+          <div style="color:#111; font-weight:500;">Figma screenshot → working HTML you can open in a browser. Designers: this is your lane.</div>
+        </div>
+      </div>
+
+      <!-- Use case 4: Workflow automation -->
+      <div style="border:2px solid #e5e5e5; border-radius:12px; padding:20px 22px; display:flex; flex-direction:column; background:#fff;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:10px;">
+          <div style="font-size:11px; font-weight:700; color:#6b46c1; letter-spacing:0.1em; text-transform:uppercase;">04</div>
+          <div style="font-size:20px; font-weight:800; color:#111;">Workflow automation</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; row-gap:6px; column-gap:10px; font-size:13px; line-height:1.4;">
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">FILES</div>
+          <div style="color:#333;"><code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">triage-rules.md</code>, <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">team-routing.md</code></div>
+          <div style="font-weight:700; color:#999; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">LAYER</div>
+          <div style="color:#333;"><code style="background:#fee2e2;color:#dc2626;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;">/triage-weekly</code> workflow (Jira + Teams)</div>
+          <div style="font-weight:700; color:#6b46c1; text-transform:uppercase; font-size:10px; letter-spacing:0.1em; padding-top:2px;">SHIP</div>
+          <div style="color:#111; font-weight:500;">Monday: 30 bugs classified, deduped, routed. The "manual grind" pain — gone.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- SLIDE 7 · Example Output -->
+<section class="slide">
+  <div class="slide-number">Slide 7 · Example Output</div>
+  <div class="kicker">What the Playbook generates — a concrete example</div>
+  <h1>Three systems → <span class="emph">one file.</span></h1>
+  <p class="subtitle">Example of a workflow output: the scattered-context problem, collapsed into a morning briefing.</p>
+  <div class="content">
+    <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+      <div style="display:grid; grid-template-columns: 1fr 80px 1fr; gap: 24px; align-items:center; width:100%;">
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="padding:18px 22px; border:2px solid #6b46c1; background:#faf8ff; border-radius:10px; text-align:center;">
+            <div style="font-size:13px; color:#6b46c1; font-weight:700; letter-spacing:0.08em;">SOURCE 1</div>
+            <div style="font-size:20px; font-weight:700; color:#111; margin-top:4px;">Outlook</div>
+          </div>
+          <div style="padding:18px 22px; border:2px solid #6b46c1; background:#faf8ff; border-radius:10px; text-align:center;">
+            <div style="font-size:13px; color:#6b46c1; font-weight:700; letter-spacing:0.08em;">SOURCE 2</div>
+            <div style="font-size:20px; font-weight:700; color:#111; margin-top:4px;">Teams</div>
+          </div>
+          <div style="padding:18px 22px; border:2px solid #6b46c1; background:#faf8ff; border-radius:10px; text-align:center;">
+            <div style="font-size:13px; color:#6b46c1; font-weight:700; letter-spacing:0.08em;">SOURCE 3</div>
+            <div style="font-size:20px; font-weight:700; color:#111; margin-top:4px;">Jira</div>
+          </div>
+        </div>
+        <div style="text-align:center; font-size:42px; color:#6b46c1; font-weight:300;">→</div>
+        <div style="padding:40px 30px; background:#111; color:#fff; border-radius:12px; text-align:center;">
+          <div style="font-size:13px; color:#c4b5fd; letter-spacing:0.1em; font-weight:700;">ONE FILE</div>
+          <div style="font-size:26px; font-weight:800; margin-top:10px; font-family:'SF Mono',Menlo,monospace; color:#a3e635;">daily-brief.md</div>
+          <div style="font-size:13px; color:#888; margin-top:10px; font-style:italic;">Priorities · Blockers · Follow-ups</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">This is what a <code style="background:#fff3;color:#c4b5fd;padding:2px 6px;border-radius:3px;font-family:monospace;">/daily-brief</code> workflow produces — built from a few files, runs every morning.</div>
+  </div>
+</section>
+
+<!-- SLIDE 8 · Bonus Demo -->
+<section class="slide">
+  <div class="slide-number">Slide 8 · Bonus Demo</div>
+  <div class="kicker">Elaborating on tip #8</div>
+  <h1>Google Stitch — <span class="emph">prompt to polished UI.</span></h1>
+  <p class="subtitle">A bonus demo for the design-to-code folks. Complementary to Claude Code, not a replacement.</p>
+  <div class="content">
+    <div class="stitch-body">
+      <div class="stitch-left">
+        <div class="stitch-feature">
+          <div class="stitch-feature-title">Prompt → full UI mockup</div>
+          <div class="stitch-feature-body">Describe a screen in plain English. Stitch generates a real mobile or web UI with realistic data.</div>
+        </div>
+        <div class="stitch-feature">
+          <div class="stitch-feature-title">Variants on demand</div>
+          <div class="stitch-feature-body">Don't like v1? Generate 5 variations of the same screen. Mix styles, layouts, themes.</div>
+        </div>
+        <div class="stitch-feature">
+          <div class="stitch-feature-title">Design system capture</div>
+          <div class="stitch-feature-body">Apply a consistent style tokens across every screen. Your brand, not generic Material.</div>
+        </div>
+        <div class="stitch-feature">
+          <div class="stitch-feature-title">Export to code</div>
+          <div class="stitch-feature-body">HTML + CSS out the other end — drop into Claude Code to wire up the logic.</div>
+        </div>
+      </div>
+      <div class="stitch-right">
+        <div style="border-radius:12px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.15); background:#fff; height:100%; display:flex; align-items:center; justify-content:center;">
+          <img src="screenshots/stitch.png" alt="Google Stitch example — prompt-generated UI mockup" style="width:100%; height:auto; display:block;">
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:22px;"><strong>Why this is here:</strong> Multiple of you named Figma ↔ code as your bottleneck. Stitch + Claude Code is the fastest path from "idea" to "something to look at."</div>
+  </div>
+</section>
+
+<!-- Presenter overlay (only visible in present mode) -->
+<div id="presenter-overlay" aria-hidden="true">
+  <div class="pp-progress"></div>
+  <div class="pp-counter">1 / 1</div>
+  <div class="pp-hint">? for help &middot; e for edit</div>
+  <div class="pp-help" role="dialog" aria-label="Keyboard shortcuts">
+    <h4>Keyboard shortcuts</h4>
+    <div><kbd>&rarr;</kbd> / <kbd>Space</kbd> / <kbd>PgDn</kbd> / <kbd>n</kbd> &nbsp; Next slide</div>
+    <div><kbd>&larr;</kbd> / <kbd>PgUp</kbd> / <kbd>p</kbd> &nbsp; Previous slide</div>
+    <div><kbd>Home</kbd> / <kbd>End</kbd> &nbsp; First / last slide</div>
+    <div><kbd>f</kbd> &nbsp; Toggle fullscreen &nbsp; <kbd>Esc</kbd> Exit fullscreen</div>
+    <div><kbd>e</kbd> &nbsp; Switch to edit mode</div>
+    <div><kbd>?</kbd> &nbsp; Toggle this help</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const INTRINSIC_W = 1280;
+  const INTRINSIC_H = 720;
+
+  const url = new URL(window.location.href);
+  const hasPresentParam = url.searchParams.get('present') === '1';
+  const hashMatch = (window.location.hash || '').match(/^#(\d+)$/);
+  const presentMode = hasPresentParam || !!hashMatch;
+
+  function allSlides() {
+    return Array.from(document.querySelectorAll('section.slide'));
+  }
+  function visibleSlides() {
+    // Only filter out slides we explicitly hid via inline style.
+    // (Computed style is useless here because present-mode CSS hides all non-active slides.)
+    return allSlides().filter(s => {
+      const inline = (s.getAttribute('style') || '').replace(/\s+/g, '').toLowerCase();
+      return !inline.includes('display:none');
+    });
+  }
+
+  if (!presentMode) {
+    // Edit mode — bind a minimal handler so `e` or `p` flips back to present mode.
+    document.addEventListener('keydown', function(ev) {
+      const t = ev.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      const k = ev.key;
+      if (k === 'e' || k === 'E' || k === 'p' || k === 'P') {
+        ev.preventDefault();
+        const u = new URL(window.location.href);
+        u.searchParams.set('present', '1');
+        window.location.href = u.toString();
+      }
+    });
+    return;
+  }
+
+  document.body.classList.add('present-mode');
+
+  const overlay = document.getElementById('presenter-overlay');
+  const counterEl = overlay.querySelector('.pp-counter');
+  const progressEl = overlay.querySelector('.pp-progress');
+  const hintEl = overlay.querySelector('.pp-hint');
+  const helpEl = overlay.querySelector('.pp-help');
+
+  let slides = visibleSlides();
+  let currentIdx = 0;
+
+  // Determine starting slide: hash #N (1-based among visible) or first
+  if (hashMatch) {
+    const n = parseInt(hashMatch[1], 10);
+    if (!isNaN(n) && n >= 1 && n <= slides.length) currentIdx = n - 1;
+  }
+
+  function scaleSlide(slide) {
+    if (!slide) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scale = Math.min(vw / INTRINSIC_W, vh / INTRINSIC_H);
+    slide.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+
+  function replayAnimations(slide) {
+    if (!slide) return;
+    // Force reflow so CSS animations restart
+    const animated = slide.querySelectorAll('*');
+    slide.style.animation = 'none';
+    // Temporarily strip animation by toggling class
+    slide.classList.remove('slide--active');
+    // Force reflow
+    void slide.offsetWidth;
+    slide.classList.add('slide--active');
+    slide.style.animation = '';
+    // Also reflow children to restart their animation-delay cycles
+    animated.forEach(el => {
+      const cs = window.getComputedStyle(el);
+      if (cs.animationName && cs.animationName !== 'none') {
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = '';
+      }
+    });
+  }
+
+  function show(idx) {
+    slides = visibleSlides();
+    if (slides.length === 0) return;
+    if (idx < 0) idx = 0;
+    if (idx >= slides.length) idx = slides.length - 1;
+    currentIdx = idx;
+    slides.forEach(s => s.classList.remove('slide--active'));
+    const slide = slides[idx];
+    slide.classList.add('slide--active');
+    scaleSlide(slide);
+    replayAnimations(slide);
+    counterEl.textContent = (idx + 1) + ' / ' + slides.length;
+    progressEl.style.width = (slides.length <= 1 ? 100 : ((idx) / (slides.length - 1)) * 100) + '%';
+    // Update hash silently
+    try {
+      history.replaceState(null, '', '#' + (idx + 1));
+    } catch (e) {}
+  }
+
+  function next() { show(currentIdx + 1); }
+  function prev() { show(currentIdx - 1); }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || function(){}).call(document.documentElement);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+    }
+  }
+
+  function toEditMode() {
+    const u = new URL(window.location.href);
+    u.searchParams.delete('present');
+    u.hash = '';
+    window.location.href = u.toString();
+  }
+
+  function toggleHelp() {
+    helpEl.classList.toggle('visible');
+  }
+
+  document.addEventListener('keydown', function(ev) {
+    // Ignore if typing in an input
+    const t = ev.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+
+    const k = ev.key;
+    if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'n' || k === 'N') {
+      ev.preventDefault(); next();
+    } else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'p' || k === 'P') {
+      ev.preventDefault(); prev();
+    } else if (k === 'Home') {
+      ev.preventDefault(); show(0);
+    } else if (k === 'End') {
+      ev.preventDefault(); show(slides.length - 1);
+    } else if (k === 'f' || k === 'F') {
+      ev.preventDefault(); toggleFullscreen();
+    } else if (k === 'Escape') {
+      if (helpEl.classList.contains('visible')) {
+        helpEl.classList.remove('visible');
+      } else if (document.fullscreenElement) {
+        document.exitFullscreen && document.exitFullscreen();
+      }
+    } else if (k === 'e' || k === 'E') {
+      ev.preventDefault(); toEditMode();
+    } else if (k === '?' || (k === '/' && ev.shiftKey)) {
+      ev.preventDefault(); toggleHelp();
+    }
+  });
+
+  // Hash navigation support
+  window.addEventListener('hashchange', function() {
+    const m = (window.location.hash || '').match(/^#(\d+)$/);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (!isNaN(n)) show(n - 1);
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    const slide = slides[currentIdx];
+    if (slide) scaleSlide(slide);
+  });
+
+  // Hint fade
+  let hintTimer = setTimeout(function() { hintEl.classList.add('dim'); }, 4000);
+  document.addEventListener('mousemove', function() {
+    hintEl.classList.remove('dim');
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(function() { hintEl.classList.add('dim'); }, 4000);
+  });
+
+  // Initial show
+  show(currentIdx);
+})();
+</script>
+</body>
+</html>
