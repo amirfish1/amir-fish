@@ -4,241 +4,339 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Spec Is The Hard Part — Amir Fish</title>
-    <meta name="description" content="Code stopped being the bottleneck. The bottleneck is now writing a spec clear enough that a model — or a team — can execute it. Notes from a workshop with seven NVIDIA PMs.">
+    <meta name="description" content="Code stopped being the bottleneck. What's left is the harder problem product orgs weren't trained to solve at scale. Notes from a workshop with seven NVIDIA PMs.">
     <meta property="og:title" content="The Spec Is The Hard Part">
-    <meta property="og:description" content="The next product-org capability isn't 'use AI more.' It's an AI-native operating system: plain text files that codify how work gets done, so anyone or anything can run it.">
+    <meta property="og:description" content="If models can write the implementation, what does an AI-native product organization need? Six plain-text files. Two composable layers. Codification plus multiplication.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://amirfish.ai/spec-is-the-hard-part">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
-        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
-        a:hover { text-decoration-color: #111; }
-        .container { max-width: 650px; margin: 0 auto; }
-        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
-        .top-nav a { color: #999; text-decoration-color: #ddd; }
-        .top-nav a:hover { color: #444; text-decoration-color: #999; }
-        .hero { padding: 8vh 0 0; }
-        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
-        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
-        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
-        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        .ccc-card { border: 1px solid #e5e5e5; border-radius: 4px; padding: 1.6rem 1.8rem; margin: 2.5rem 0; background: #fff; }
-        .ccc-card .ccc-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 0.6rem; display: block; }
-        .ccc-card h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.25rem; font-weight: 500; margin-bottom: 0.6rem; }
-        .ccc-card p { font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem; }
-        .ccc-card pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: #f5f4f1; padding: 0.8rem 1rem; border-radius: 3px; color: #333; overflow-x: auto; margin-bottom: 1rem; }
-        .ccc-card .links { font-size: 0.9rem; color: #666; }
-        .ccc-card .links a { color: #c2693a; text-decoration-color: #e5c5b3; margin-right: 1.2rem; }
-        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
-        .ccc-card .disclaimer { font-size: 0.85rem; color: #999; font-style: italic; margin-top: 1rem; }
-        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
-        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
-        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
-        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
-        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
-        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
-        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
-        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
-        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
-        .closing .install { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #fff; border: 1px solid #e5e5e5; padding: 0.8rem 1rem; border-radius: 3px; color: #333; display: inline-block; margin-bottom: 1.5rem; }
-        .closing .star-cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; }
-        .closing .star-cta:hover { opacity: 0.6; }
-        .related { margin: 3rem 0; }
-        .related .section-label { margin-bottom: 1.25rem; }
-        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
-        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
-        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
-        footer a:hover { text-decoration-color: #999; }
-        figure { margin: 2.5rem 0; }
-        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
-        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
-        figure.hero-figure { margin: 1.5rem 0 0; }
-        @media (max-width: 500px) {
-            .hero { padding-top: 5vh; }
-            .hero h1 { font-size: 2rem; }
-            .hero .subtitle { font-size: 1.1rem; }
-            .ccc-card { padding: 1.3rem 1.4rem; }
-            .closing { padding: 2rem 1.4rem; }
-            figure { margin: 2rem 0; }
-        }
+        :root { --paper: #fbf9f8; --ink: #1b1c1c; --ink-soft: #2a2a2a; --ink-mute: #444748; --rule: #c4c7c7; --rule-soft: #e4e2e2; --rule-strong: #747878; --accent: #aa3527; --accent-soft: #c4583f; }
+        body { font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--ink); background: var(--paper); font-feature-settings: "kern", "liga", "onum"; }
+        a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--rule); text-decoration-thickness: 0.5px; transition: color 0.15s, text-decoration-color 0.15s; }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+        ::selection { background: #ffdad4; color: #410000; }
+        .top-bar { border-bottom: 0.5px solid var(--rule-soft); background: rgba(251,249,248,0.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 50; }
+        .top-bar-inner { max-width: 1280px; margin: 0 auto; padding: 1.1rem 1.5rem; display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+        .top-bar .wordmark { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+        .top-bar nav { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; display: flex; gap: 2rem; }
+        .top-bar nav a { color: #888; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 0.12rem; }
+        .top-bar nav a.active { color: var(--ink); border-bottom-color: var(--ink); }
+        .top-bar nav a:hover { color: var(--ink); }
+        .page { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: grid; grid-template-columns: 200px minmax(0, 1fr) 280px; column-gap: 64px; align-items: start; }
+        .left-rail { position: sticky; top: 4.5rem; padding-top: 5rem; font-size: 0.92rem; }
+        .left-rail .label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; color: var(--accent); margin-bottom: 0.4rem; display: block; }
+        .left-rail .context-title { font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: var(--ink); font-size: 1rem; margin-bottom: 1.6rem; }
+        .left-rail .toc { display: flex; flex-direction: column; gap: 0.7rem; list-style: none; }
+        .left-rail .toc a { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; color: #888; text-decoration: none; line-height: 1.4; }
+        .left-rail .toc a:hover { color: var(--ink); }
+        .left-rail .toc-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-right: 0.45rem; font-variant-numeric: tabular-nums; }
+        main { max-width: 520px; padding: 5rem 0 6rem; position: relative; }
+        .hero { margin-bottom: 4rem; }
+        .hero .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin-bottom: 1.5rem; display: block; }
+        .hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: 2.5rem; font-weight: 400; font-variation-settings: "opsz" 72; letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); margin-bottom: 1.5rem; }
+        .hero .subtitle { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.18rem; line-height: 1.55; color: var(--ink-mute); margin-bottom: 2rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; }
+        section.essay-section { margin-bottom: 3.5rem; position: relative; }
+        section.essay-section .section-number { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; position: absolute; left: -3rem; top: 0.25rem; user-select: none; }
+        section.essay-section .section-date { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--rule-strong); margin-bottom: 0.75rem; display: block; }
+        section.essay-section h2 { font-family: 'Newsreader', Georgia, serif; font-size: 1.8rem; font-weight: 400; font-variation-settings: "opsz" 60; letter-spacing: -0.018em; line-height: 1.2; color: var(--ink); margin-bottom: 1.4rem; }
+        main p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.1rem; }
+        main p strong { font-weight: 600; color: var(--ink); }
+        main em, main i { font-style: italic; }
+        .term { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        sup.cite { font-family: 'Inter', sans-serif; font-size: 0.65em; color: var(--accent); font-weight: 600; margin-left: 1px; font-variant-numeric: tabular-nums; line-height: 0; cursor: default; }
+        main ol, main ul { margin: 0.5rem 0 1.4rem 1.5rem; color: var(--ink-soft); }
+        main ol li, main ul li { margin-bottom: 0.5rem; font-size: 1.0625rem; line-height: 1.7; padding-left: 0.3rem; }
+        main ol li::marker { font-variant-numeric: oldstyle-nums; color: var(--accent); }
+        main ul li::marker { color: var(--accent); }
+        .pullquote { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; line-height: 1.45; color: var(--ink); border-left: 2px solid var(--accent); padding: 0.4rem 0 0.4rem 1.4rem; margin: 2.25rem 0; }
+        main code { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; background: #f1ece5; padding: 0.06rem 0.32rem; color: #444; }
+        figure.fig { margin: 2.5rem 0; }
+        figure.fig img { display: block; width: 100%; height: auto; border: 0.5px solid var(--rule); }
+        figure.fig figcaption { display: none; }
+        hr.divider { border: none; border-top: 0.5px solid var(--rule-soft); margin: 3rem 0; }
+        .right-rail { position: sticky; top: 4.5rem; padding-top: 5rem; display: flex; flex-direction: column; gap: 2.25rem; }
+        .marginalia { border-left: 0.5px solid var(--rule-strong); padding-left: 1rem; font-size: 0.86rem; line-height: 1.55; color: var(--ink-mute); }
+        .marginalia .num { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; display: block; font-variant-numeric: tabular-nums; }
+        .marginalia .term { font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        .marginalia em { font-style: italic; }
+        .marginalia .fig-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; margin-bottom: 0.35rem; display: block; }
+        .marginalia.section-block { border-left: none; padding-left: 0; border-top: 0.5px solid var(--rule); padding-top: 1rem; }
+        .marginalia.section-block .heading { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 500; margin-bottom: 0.55rem; display: block; }
+        .marginalia.section-block ul { list-style: none; margin: 0; padding: 0; }
+        .marginalia.section-block ul li { margin-bottom: 0.5rem; font-size: 0.86rem; }
+        .marginalia.section-block ul li a { text-decoration: none; border-bottom: 0.5px solid var(--rule); color: var(--ink-mute); }
+        .marginalia.section-block ul li a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+        .cta-block { margin: 3.5rem 0; padding: 2.5rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+        .cta-block .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--accent); margin-bottom: 0.9rem; display: block; }
+        .cta-block h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-variation-settings: "opsz" 60; font-size: 1.65rem; letter-spacing: -0.018em; line-height: 1.22; color: var(--ink); margin-bottom: 1rem; }
+        .cta-block p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.25rem; }
+        .cta-block pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.55; background: #f5f3f0; padding: 0.95rem 1.05rem; border: 0.5px solid var(--rule-soft); color: var(--ink-soft); overflow-x: auto; margin-bottom: 1.4rem; white-space: pre-wrap; word-break: break-word; }
+        .cta-block .cta-links { display: flex; gap: 1.6rem 2rem; flex-wrap: wrap; }
+        .cta-block .cta-links a { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.05rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+        .cta-block .cta-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .cta-block .meta-line { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.9rem; color: #999; margin-top: 1.1rem; }
+        .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
+        .closing h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--ink); }
+        .closing p { font-size: 0.95rem; color: var(--ink-mute); margin-bottom: 1.2rem; }
+        .closing .cta { display: inline-block; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.02rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; margin: 0 0.9rem; }
+        .closing .cta:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        footer { border-top: 0.5px solid var(--rule-soft); margin-top: 4rem; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; font-family: 'Newsreader', Georgia, serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.18em; color: #999; }
+        .footer-inner .colophon { font-style: italic; text-transform: none; letter-spacing: 0.02em; color: #999; font-size: 0.85rem; }
+        .footer-inner .links { display: flex; gap: 2rem; }
+        .footer-inner a { color: #888; text-decoration: none; border-bottom: 0.5px solid transparent; }
+        .footer-inner a:hover { color: var(--ink); border-bottom-color: #888; }
+        @media (max-width: 1180px) { .page { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 48px; } .left-rail { display: none; } section.essay-section .section-number { position: static; display: block; margin-bottom: 0.5rem; } }
+        @media (max-width: 900px) { .page { grid-template-columns: minmax(0, 1fr); } .right-rail { position: static; padding-top: 0; margin-top: 1.5rem; } main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; } .marginalia { font-size: 0.92rem; } .top-bar nav { display: none; } }
+        @media (max-width: 500px) { .hero h1 { font-size: 2rem; } .hero .subtitle { font-size: 1.05rem; } section.essay-section h2 { font-size: 1.55rem; } main p, main ol li, main ul li { font-size: 1rem; } }
     </style>
 </head>
 <body>
-    <div class="container">
 
-        <nav class="top-nav">
-            <a href="/">← amirfish.ai</a>
-        </nav>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/">Index</a>
+                <a href="/#advisory">Advisory</a>
+                <a href="/#ccc">CCC</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
 
-        <section class="hero">
-            <span class="tag-eyebrow">Field Note · Product</span>
-            <h1>The Spec Is The Hard Part</h1>
-            <p class="subtitle">Code stopped being the bottleneck. What's left is the harder problem nobody trained product orgs to solve at scale.</p>
-            <p>I co-hosted an AI Automation workshop for seven NVIDIA product managers a couple of weeks ago, with NVIDIA's Eran Arkin. Most of the room was already using Claude Code daily. I went in expecting questions about prompts. The questions I got were different, and the difference is the whole point of this note.</p>
+    <div class="page">
 
-            <figure class="hero-figure">
+        <aside class="left-rail">
+            <span class="label">Field Note · 01</span>
+            <div class="context-title">The Spec Is The Hard Part</div>
+            <ol class="toc">
+                <li><a href="#s1"><span class="toc-num">01</span>The Setup</a></li>
+                <li><a href="#s2"><span class="toc-num">02</span>The Question</a></li>
+                <li><a href="#s3"><span class="toc-num">03</span>The Diagnosis</a></li>
+                <li><a href="#s4"><span class="toc-num">04</span>The Pattern</a></li>
+                <li><a href="#s5"><span class="toc-num">05</span>The Implication</a></li>
+                <li><a href="#s6"><span class="toc-num">06</span>Who I'm Talking To</a></li>
+            </ol>
+        </aside>
+
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Note · Product · Spring 2026</span>
+                <h1>The Spec Is The Hard Part.</h1>
+                <p class="subtitle">Code stopped being the bottleneck. What's left is the harder problem nobody trained product orgs to solve at scale.</p>
+                <p>I co-hosted an AI Automation workshop for seven NVIDIA product managers a couple of weeks ago, with NVIDIA's Eran Arkin. Most of the room was already using Claude Code daily. I went in expecting questions about prompts. The questions I got were different, and the difference is the whole point of this note.</p>
+            </header>
+
+            <figure class="fig">
                 <img src="/images/spec-handwritten-1x.webp"
                      srcset="/images/spec-handwritten-1x.webp 1x, /images/spec-handwritten-2x.webp 2x"
-                     alt="A yellow legal pad with handwritten product spec notes — bullet points, arrows, items crossed out, one phrase circled in different ink. A black mechanical pencil rests across the lower edge."
+                     alt="A yellow legal pad with handwritten product spec notes — bullet points, arrows, items crossed out, one phrase circled in different ink."
                      loading="eager">
-                <figcaption>The interesting part of the workflow. The model can write the implementation. It still can't write this for you.</figcaption>
             </figure>
-        </section>
 
-        <hr>
+            <section class="essay-section" id="s1">
+                <span class="section-number">01</span>
+                <span class="section-date">The Setup</span>
+                <h2>What Good Looks Like For A Product Org.</h2>
 
-        <section>
-            <span class="section-label">The Setup</span>
-            <h2>What Good Looks Like For A Product Org.</h2>
+                <p>We didn't open by talking about AI. We opened by writing what every product team I've ever met says they want:</p>
 
-            <p>We didn't open by talking about AI. We opened by writing what every product team I've ever met says they want:</p>
+                <ul>
+                    <li><strong>Build the right things</strong> — not just what's easiest to build.</li>
+                    <li><strong>Quality output</strong> — designs that bake in user understanding, research, and judgment.</li>
+                    <li><strong>Focus on the work</strong> — the problem, not the PowerPoint.</li>
+                    <li><strong>Move fast</strong> — not queue behind three other teams' cycles.</li>
+                </ul>
 
-            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.5rem;"><strong>Build the right things</strong> — not just what's easiest to build.</li>
-                <li style="margin-bottom: 0.5rem;"><strong>Quality output</strong> — designs that bake in user understanding, research, and judgment.</li>
-                <li style="margin-bottom: 0.5rem;"><strong>Focus on the work</strong> — the problem, not the PowerPoint.</li>
-                <li><strong>Move fast</strong> — not queue behind three other teams' cycles.</li>
-            </ul>
+                <p>Then we wrote what was actually in their way, in their own words:</p>
 
-            <p>Then we wrote what was actually in their way, in their own words:</p>
+                <ul>
+                    <li><em>"Staying on top of everything — meetings, Slack, Teams, emails."</em></li>
+                    <li><em>"Nothing is automated."</em></li>
+                    <li><em>"I don't have the vocabulary to use an AI agent effectively."</em></li>
+                    <li><em>"Recreating content takes a lot of time. Requirements aren't always clear."</em></li>
+                </ul>
 
-            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.5rem;"><em>"Staying on top of everything — meetings, Slack, Teams, emails."</em></li>
-                <li style="margin-bottom: 0.5rem;"><em>"Nothing is automated."</em></li>
-                <li style="margin-bottom: 0.5rem;"><em>"I don't have the vocabulary to use an AI agent effectively."</em></li>
-                <li><em>"Recreating content takes a lot of time. Requirements aren't always clear."</em></li>
-            </ul>
+                <p>Those are verbatim from the room. They were already using AI. They were still describing the same problems product teams have always had.</p>
+            </section>
 
-            <p>Those are verbatim from the room. They were already using AI. They were still describing the same problems product teams have always had.</p>
-        </section>
+            <hr class="divider">
 
-        <hr>
+            <section class="essay-section" id="s2">
+                <span class="section-number">02</span>
+                <span class="section-date">The Question</span>
+                <h2>The Question That Reframed The Workshop.</h2>
 
-        <section>
-            <span class="section-label">The Question</span>
-            <h2>The Question That Reframed The Workshop.</h2>
+                <p>Halfway through, one of the PMs asked the question that's been rattling in my head since:</p>
 
-            <p>Halfway through, one of the PMs asked the question that's been rattling in my head since:</p>
+                <div class="pullquote">"If we each write these rules — the prompts, the workflows, the playbooks — how do they get shared across the org?"</div>
 
-            <div class="pullquote">"If we each write these rules — the prompts, the workflows, the playbooks — how do they get shared across the org?"</div>
+                <p>Notice what's not in that question. Not <em>"how do I get a better answer from Claude?"</em>. Not <em>"which model should we use?"</em>. The question is structural. It's about how a hundred-person product org turns one PM's good prompt into the rest of the org's leverage.</p>
 
-            <p>Notice what's not in that question. Not <em>"how do I get a better answer from Claude?"</em>. Not <em>"which model should we use?"</em>. The question is structural. It's about how a hundred-person product org turns one PM's good prompt into the rest of the org's leverage.</p>
+                <p>I think this is the question. Most companies are still optimizing the wrong layer.</p>
+            </section>
 
-            <p>I think this is the question. Most companies are still optimizing the wrong layer.</p>
-        </section>
+            <hr class="divider">
 
-        <hr>
+            <section class="essay-section" id="s3">
+                <span class="section-number">03</span>
+                <span class="section-date">The Diagnosis</span>
+                <h2>Code Isn't The Hard Part Anymore.</h2>
 
-        <section>
-            <span class="section-label">The Diagnosis</span>
-            <h2>Code Isn't The Hard Part Anymore.</h2>
+                <p>I wrote this on a panel a couple weeks earlier and it's the lens I keep coming back to: <strong>the spec is now the hard part, not the code.</strong> Models can write the implementation. The unsolved problem is writing requirements clear enough — and durable enough, and shared enough — that a model or a team can act on them without the PM standing over its shoulder.</p>
 
-            <p>I wrote this on a panel a couple weeks earlier and it's the lens I keep coming back to: <strong>the spec is now the hard part, not the code.</strong> Models can write the implementation. The unsolved problem is writing requirements clear enough — and durable enough, and shared enough — that a model or a team can act on them without the PM standing over its shoulder.</p>
+                <p>Which means the bottleneck for product orgs has moved one layer up. The discipline that used to live in a PM's head — <em>"this product is for these users, the goals are these numbers, here's how we usually write a PRD, here's the org map for getting it shipped"</em> — that discipline used to be sufficient when it stayed in the PM's head. It isn't anymore. Now it has to be readable by something that isn't the PM.</p>
+            </section>
 
-            <p>Which means the bottleneck for product orgs has moved one layer up. The discipline that used to live in a PM's head — <em>"this product is for these users, the goals are these numbers, here's how we usually write a PRD, here's the org map for getting it shipped"</em> — that discipline used to be sufficient when it stayed in the PM's head. It isn't anymore. Now it has to be readable by something that isn't the PM.</p>
-        </section>
+            <hr class="divider">
 
-        <hr>
+            <section class="essay-section" id="s4">
+                <span class="section-number">04</span>
+                <span class="section-date">The Pattern</span>
+                <h2>The Folder Is The System, Not The Editor.</h2>
 
-        <section>
-            <span class="section-label">The Pattern</span>
-            <h2>The Folder Is The System, Not The Editor.</h2>
+                <p>What an AI-native product organization actually needs isn't a fancier IDE or a better chat UI. It's a foundation of plain-text files — boring, machine-digestible, source-controlled — that answer the questions a PM asks themselves before any work begins.</p>
 
-            <p>What an AI-native product organization actually needs isn't a fancier IDE or a better chat UI. It's a foundation of plain-text files — boring, machine-digestible, source-controlled — that answer the questions a PM asks themselves before any work begins.</p>
+                <p>Six files, in my current draft of the <span class="term">product operating system</span><sup class="cite">1</sup>:</p>
 
-            <p>Six files, in my current draft of the pattern:</p>
+                <ol>
+                    <li><strong>Product Overview.</strong> A clear, generic definition of what the product is. (Done at scale across all products, you accumulate a library.)</li>
+                    <li><strong>Goals & KPIs.</strong> Current 3-, 6-, 12-month targets, in plain English and hard numbers.</li>
+                    <li><strong>Raw Inputs.</strong> Unfiltered context from clients, support, sales, marketing.</li>
+                    <li><strong>The Ledger.</strong> Past decisions, reviews, and crucial learnings about <em>what not to do.</em></li>
+                    <li><strong>Style Guides.</strong> The exact standard for how your team writes a PRD, a test plan, meeting notes.</li>
+                    <li><strong>Org Reality.</strong> The unwritten map of who works with whom, which VPs to loop in, how decisions actually get made.</li>
+                </ol>
 
-            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.7rem;"><strong>Product Overview.</strong> A clear, generic definition of what the product is. (Done at scale across all products, you accumulate a library.)</li>
-                <li style="margin-bottom: 0.7rem;"><strong>Goals & KPIs.</strong> Current 3-, 6-, 12-month targets, in plain English and hard numbers.</li>
-                <li style="margin-bottom: 0.7rem;"><strong>Raw Inputs.</strong> Unfiltered context from clients, support, sales, marketing.</li>
-                <li style="margin-bottom: 0.7rem;"><strong>The Ledger.</strong> Past decisions, reviews, and crucial learnings about <em>what not to do.</em></li>
-                <li style="margin-bottom: 0.7rem;"><strong>Style Guides.</strong> The exact standard for how your team writes a PRD, a test plan, meeting notes.</li>
-                <li><strong>Org Reality.</strong> The unwritten map of who works with whom, which VPs to loop in, how decisions actually get made.</li>
-            </ol>
+                <p>Once that foundation exists, two things become composable on top of it:</p>
 
-            <p>Once that foundation exists, two things become composable on top of it:</p>
+                <ul>
+                    <li><span class="term">Skills</span><sup class="cite">2</sup> codify <em>how</em> specific work gets done — the equivalent of a well-written runbook, executable by a model.</li>
+                    <li><span class="term">Agents</span><sup class="cite">3</sup> (invocable lenses like <code>@skeptical-pm</code>, <code>@customer-voice</code>, <code>@data-realist</code>) scale <em>how much</em> gets done.</li>
+                </ul>
 
-            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.6rem;"><strong>Skills</strong> codify <em>how</em> specific work gets done — the equivalent of a well-written runbook, executable by a model.</li>
-                <li><strong>Agents</strong> (invocable lenses like <code>@skeptical-pm</code>, <code>@customer-voice</code>, <code>@data-realist</code>) scale <em>how much</em> gets done.</li>
-            </ul>
+                <p>Codification plus multiplication. That's the shape.</p>
+            </section>
 
-            <p>Codification plus multiplication. That's the shape.</p>
-
-            <figure>
+            <figure class="fig">
                 <img src="/images/ccc-kanban-1x.webp"
                      srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
                      alt="The CCC kanban board showing planning, working, review, testing, and verified columns across multiple repos, with a session detail panel on the right."
                      loading="lazy">
-                <figcaption>What it looks like once codification meets multiplication. Each card here is a session running against a shared spec. The kanban is the surface where the org's work becomes legible.</figcaption>
             </figure>
-        </section>
 
-        <hr>
+            <hr class="divider">
 
-        <section>
-            <span class="section-label">The Implication</span>
-            <h2>This Is A Project, Not A Tool Choice.</h2>
+            <section class="essay-section" id="s5">
+                <span class="section-number">05</span>
+                <span class="section-date">The Implication</span>
+                <h2>This Is A Project, Not A Tool Choice.</h2>
 
-            <p>The thing I want to be honest about: a system like this isn't built in an afternoon and rolled out at all-hands. The PMs who asked the sharing question were already three steps ahead — they understood that codifying their own work was the easy part. The hard part is making it so that a marketing manager, a designer, a data scientist can plug into the same system without being PMs themselves.</p>
+                <p>The thing I want to be honest about: a system like this isn't built in an afternoon and rolled out at all-hands. The PMs who asked the sharing question were already three steps ahead — they understood that codifying their own work was the easy part. The hard part is making it so that a marketing manager, a designer, a data scientist can plug into the same system without being PMs themselves.</p>
 
-            <p>That's a real organizational project. It's designed, experimented with, expanded; leadership has to be brought along at every step. It looks more like rolling out a new operating model than installing a new tool.</p>
+                <p>That's a real organizational project. It's designed, experimented with, expanded; leadership has to be brought along at every step. It looks more like rolling out a new operating model than installing a new tool.</p>
 
-            <p>And the companies that figure this out — the ones that build a real shared operating layer for product work, not just give everyone a Claude license — are going to be the ones whose product orgs feel an order of magnitude faster three years from now.</p>
+                <p>And the companies that figure this out — the ones that build a real shared operating layer for product work, not just give everyone a Claude license — are going to be the ones whose product orgs feel an order of magnitude faster three years from now.</p>
+            </section>
 
-            <div class="ccc-card">
-                <span class="ccc-label">If you're already running this at scale</span>
-                <h3>Command Center for Claude</h3>
-                <p>Open-source local kanban for every Claude Code session on your Mac. The thing I built when "two terminals, two Claudes" turned into thirty parallel sessions and the coordination cost started to dominate.</p>
+            <hr class="divider">
+
+            <section class="essay-section" id="s6">
+                <span class="section-number">06</span>
+                <span class="section-date">If This Is You</span>
+                <h2>Who I'm Talking To.</h2>
+
+                <p>If you're a product leader whose team is already using Claude Code, and you can feel the gap between "individual sparks" and "shared operating infrastructure" — that's the conversation I'm spending most of my time on right now. Email's at the bottom. Whether or not it turns into anything formal, I find these conversations the best way to pressure-test the pattern in public.</p>
+            </section>
+
+            <section class="cta-block">
+                <span class="eyebrow">Open Source · MIT</span>
+                <h3>If you're already running this at scale.</h3>
+                <p>Command Center for Claude is the local kanban that emerged once "two terminals, two Claudes" turned into thirty parallel sessions and the coordination cost started to dominate.</p>
                 <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
-                <div class="links">
+                <div class="cta-links">
                     <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
                     <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/parallel-sessions">Field note →</a>
                 </div>
-                <p class="disclaimer">Not affiliated with Anthropic. Community-built. MIT.</p>
+                <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
+            </section>
+
+            <div class="closing">
+                <h3>Three doors</h3>
+                <p>If this resonated, the most useful next step is one of these:</p>
+                <a href="/" class="cta">More Field Notes →</a>
+                <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="cta">Star CCC →</a>
             </div>
-        </section>
 
-        <hr>
+        </main>
 
-        <section>
-            <span class="section-label">If This Is You</span>
-            <h2>Who I'm Talking To.</h2>
+        <aside class="right-rail">
 
-            <p>If you're a product leader whose team is already using Claude Code, and you can feel the gap between "individual sparks" and "shared operating infrastructure" — that's the conversation I'm spending most of my time on right now. Email's at the bottom. Whether or not it turns into anything formal, I find these conversations the best way to pressure-test the pattern in public.</p>
-        </section>
+            <div class="marginalia">
+                <span class="fig-num">Fig. 1</span>
+                <em>The interesting part of the workflow. The model can write the implementation. It still can't write this for you.</em>
+            </div>
 
-        <div class="related">
-            <span class="section-label">Related</span>
-            <a href="/cyborg-workflow">→ The Cyborg Workflow</a>
-            <a href="/parallel-sessions">→ Two Fixes for Running 30+ Claude Sessions in Parallel</a>
-            <a href="/guided-verification">→ The Guided Verification Problem</a>
-        </div>
+            <div class="marginalia">
+                <span class="num">1</span>
+                <span class="term">Product operating system.</span> A foundation of plain-text files — overview, KPIs, raw inputs, ledger, style guides, org reality — that an agent or a teammate can act on without the PM standing over their shoulder.
+            </div>
 
-        <div class="closing">
-            <h2>Try CCC</h2>
-            <p>The infrastructure I built once "two terminals" turned into thirty:</p>
-            <div class="install">git clone https://github.com/amirfish1/claude-command-center && cd claude-command-center && ./run.sh</div>
-            <br>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="star-cta">Drop a star on GitHub →</a>
-            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">If you install it, I'd love to hear how. Open an issue, comment on LinkedIn, or just say hi.</p>
-        </div>
+            <div class="marginalia">
+                <span class="num">2</span>
+                <span class="term">Skills.</span> Reusable, runbook-style instructions for specific kinds of work. <em>"How we write a PRD here."</em> <em>"How we triage a P0."</em> Executable by a model, also readable by a human.
+            </div>
 
-        <footer>
-            <a href="/">amirfish.ai</a>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
-            <a href="mailto:amir@amirfish.com">Email</a>
-        </footer>
+            <div class="marginalia">
+                <span class="num">3</span>
+                <span class="term">Agents.</span> Invocable lenses tuned to a perspective — <code>@skeptical-pm</code>, <code>@customer-voice</code>, <code>@data-realist</code>. Scale <em>how much</em> review and reflection happens, not just how much output.
+            </div>
+
+            <div class="marginalia">
+                <span class="fig-num">Fig. 2</span>
+                <em>What it looks like once codification meets multiplication. Each card here is a session running against a shared spec.</em>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Source</span>
+                <p>Drawn from the NVIDIA product workshop (Spring 2026, with Eran Arkin) and a panel a couple of weeks earlier. Quotes from the room are verbatim and used with the participants' consent.</p>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Related Field Notes</span>
+                <ul>
+                    <li><a href="/cyborg-workflow">→ The Cyborg Workflow</a></li>
+                    <li><a href="/parallel-sessions">→ Two Fixes for 30+ Parallel Sessions</a></li>
+                    <li><a href="/guided-verification">→ The Guided Verification Problem</a></li>
+                </ul>
+            </div>
+
+        </aside>
 
     </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="/">All Field Notes</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
