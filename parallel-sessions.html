@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Fixes for 30+ Parallel Claude Sessions — Amir Fish</title>
+    <meta name="description" content="Two operational fixes for running dozens of Claude Code sessions in parallel: a markdown-based commit-coordination protocol, and a local search index over every transcript. Both built around CCC (Command Center for Claude).">
+    <meta property="og:title" content="Two Fixes for 30+ Parallel Claude Sessions">
+    <meta property="og:description" content="When you orchestrate dozens of agents, the real wins aren't smarter prompts. They're better record-keeping.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.amirfish.com/parallel-sessions">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #111;
+            background: #fcfcfc;
+            padding: 0 1.5rem;
+        }
+
+        a {
+            color: #111;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: #ccc;
+        }
+
+        a:hover { text-decoration-color: #111; }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* --- Top nav (light) --- */
+        .top-nav {
+            padding: 2.5rem 0 0;
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .top-nav a {
+            color: #999;
+            text-decoration-color: #ddd;
+        }
+
+        .top-nav a:hover { color: #444; text-decoration-color: #999; }
+
+        /* --- Hero --- */
+        .hero {
+            padding: 8vh 0 0;
+        }
+
+        .tag-eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #c2693a;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: clamp(2.4rem, 5.5vw, 3.4rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .hero .subtitle {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: #444;
+            margin-bottom: 1.25rem;
+        }
+
+        /* --- CCC banner card --- */
+        .ccc-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 1.6rem 1.8rem;
+            margin: 2.5rem 0;
+            background: #fff;
+        }
+
+        .ccc-card .ccc-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #c2693a;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .ccc-card h3 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+        }
+
+        .ccc-card p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .ccc-card pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: #f5f4f1;
+            padding: 0.8rem 1rem;
+            border-radius: 3px;
+            color: #333;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .ccc-card .links {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .ccc-card .links a {
+            color: #c2693a;
+            text-decoration-color: #e5c5b3;
+            margin-right: 1.2rem;
+        }
+
+        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
+
+        /* --- Section --- */
+        hr {
+            border: none;
+            border-top: 1px solid #e5e5e5;
+            margin: 4rem 0;
+        }
+
+        .section-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #999;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        section h2 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            margin-bottom: 1.5rem;
+        }
+
+        section h3.sub {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #333;
+            margin: 2rem 0 0.75rem;
+        }
+
+        section p {
+            font-size: 1rem;
+            line-height: 1.85;
+            color: #444;
+            margin-bottom: 1.25rem;
+        }
+
+        section pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: #f5f4f1;
+            padding: 0.9rem 1.1rem;
+            border-radius: 3px;
+            color: #333;
+            overflow-x: auto;
+            line-height: 1.6;
+            margin: 1.25rem 0;
+        }
+
+        section code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            background: #f5f4f1;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            color: #444;
+        }
+
+        /* --- Closing CTA --- */
+        .closing {
+            background: #faf8f4;
+            border-radius: 6px;
+            padding: 2.5rem 2rem;
+            margin: 4rem 0 2rem;
+            text-align: center;
+        }
+
+        .closing h2 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .closing p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .closing .install {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            padding: 0.8rem 1rem;
+            border-radius: 3px;
+            color: #333;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .closing .star-cta {
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #111;
+            text-decoration: none;
+            border-bottom: 1.5px solid #111;
+            padding-bottom: 1px;
+        }
+
+        .closing .star-cta:hover { opacity: 0.6; }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            padding-bottom: 4rem;
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        footer a {
+            color: #999;
+            text-decoration-color: #ddd;
+            margin-right: 1.5rem;
+        }
+
+        footer a:hover { text-decoration-color: #999; }
+
+        /* --- Disclaimer --- */
+        .disclaimer {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 500px) {
+            .hero { padding-top: 5vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.1rem; }
+            .ccc-card { padding: 1.3rem 1.4rem; }
+            .closing { padding: 2rem 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="top-nav">
+            <a href="/">← amirfish.com</a>
+        </nav>
+
+        <section class="hero">
+            <span class="tag-eyebrow">Field Note · Operations</span>
+            <h1>Two Fixes for Running 30+ Claude Sessions in Parallel</h1>
+            <p class="subtitle">Both have the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
+            <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, two things were dragging the workflow to a crawl. Both have fixes now. This is what they are and how they work.</p>
+            <p>If you're running more than ten parallel sessions, you've probably hit at least one of these.</p>
+
+            <div class="ccc-card">
+                <span class="ccc-label">Both fixes live inside CCC</span>
+                <h3>Command Center for Claude</h3>
+                <p>An open-source local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. The two fixes below are integrated; you don't have to wire them yourself.</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                </div>
+                <p class="disclaimer">Not affiliated with Anthropic. Community-built. MIT.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Problem 1</span>
+            <h2>Sessions Fighting Over Commits</h2>
+
+            <p>Five sessions on the same <code>main</code> branch, each wanting to commit their own work. They'd burn cycles checking <code>git status</code>, second-guessing whether files were theirs, sometimes clobbering each other anyway. The git index is a single shared file. Between the moment one session runs <code>git add</code> and the moment it runs <code>git commit</code>, a sibling session can stage their own work into the same index — and the commit happily picks up whatever is staged at commit time.</p>
+
+            <p>Pre-commit checks don't help: there's an unbounded race window between the check and the commit. I observed it bite twice in one day across two repos.</p>
+
+            <h3 class="sub">The fix — a shared markdown chat file</h3>
+
+            <p>A <code>GROUP_CHAT.md</code> file lives in every working directory. All sessions read and write to it. Before committing, each session posts something like:</p>
+
+            <pre>## 2026-05-04 — Proposal from `worktree-rebase-7c25`
+
+Stakeholders: `archive-filter`, `pr-link-test`, `cwd-routing`.
+
+### Proposed sequence
+1. **`worktree-rebase-7c25`** — codex spawn engine
+   - Stage: `git add server.py static/index.html`
+   - Commit: `feat(ui): codex spawn — engine routing`
+2. **Push:** `git push origin main` after step 1.</pre>
+
+            <p>Sibling sessions reply with <code>✅ ack</code> or <code>Counter:</code>. The first session to start posts <code>▶ starting step 1</code>. After committing, it posts <code>✅ step 1 done</code>. The protocol is just a markdown convention, enforced by a <code>/group-chat</code> slash-command skill that handles the role logic (proposer / acker / executor / observer).</p>
+
+            <p>Three things make it work:</p>
+
+            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.6rem;"><strong>Stage by explicit path only.</strong> Never <code>git add -A</code> — it'll sweep in another session's in-flight edits.</li>
+                <li style="margin-bottom: 0.6rem;"><strong>Commit with <code>git commit --only &lt;paths&gt;</code>.</strong> Atomic. The race window collapses to zero — only the listed paths land in the commit, regardless of what else is staged.</li>
+                <li><strong>Make coordination visible.</strong> The point isn't the file. It's that sessions can't accidentally race over invisible state.</li>
+            </ol>
+
+            <p>No daemon, no IPC, no central server. Just a markdown file and a convention. Multiple sessions on the same Mac, on the same clone, on the same branch — they negotiate, they don't clobber.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Problem 2</span>
+            <h2>Retrieving Across Sessions</h2>
+
+            <p>I work on multiple products. The same topics surface across many sessions. <em>"What did I decide about the customization-layer thesis last week?"</em> used to take minutes of <code>grep</code> over <code>~/.claude/projects/*.jsonl</code>. With dozens of session files spread across multiple projects, even ripgrep couldn't keep that fast.</p>
+
+            <p>That delay broke flow. By the time I'd found the relevant earlier conversation, the current session had already moved on or made the same mistake.</p>
+
+            <h3 class="sub">The fix — a local search index over every transcript</h3>
+
+            <p><code>claude-index</code> is a SQLite-backed index that ingests every Claude Code transcript on the machine. Two flavors of search live on top:</p>
+
+            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.6rem;"><strong>Keyword (FTS5).</strong> For exact strings — file paths, error messages, commit hashes, slugs. Fast, deterministic, perfect when you know the words.</li>
+                <li style="margin-bottom: 0.6rem;"><strong>Semantic (vector embeddings via Ollama).</strong> For <em>"find that thing about hyper-personalization"</em> when you don't remember the exact words. Hybrid Reciprocal Rank Fusion combines both signals.</li>
+            </ul>
+
+            <p>Both run locally. Sub-second results across thousands of session files. The query language supports phrase quoting, prefix wildcards, time windows, project filters, and role filters.</p>
+
+            <p>Wired into CCC's sidebar — type a topic, matches surface live without opening a terminal:</p>
+
+            <pre>// inside CCC: type "tax prep hub" in the search bar
+// → returns the 3 sessions where you discussed it,
+//   ranked by recency × relevance, with snippets.</pre>
+
+            <p>The index also covers Codex transcripts (<code>~/.codex/sessions/*.jsonl</code>) under the same schema — one search, both runtimes.</p>
+
+            <p>What changed in practice: retrieval went from "I'll grep this later" to "I just looked it up." That shift collapsed the cost of cross-session memory enough that I started leaning on it for decisions I used to make from gut.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">Common Thread</span>
+            <h2>Operations, Not Magic</h2>
+
+            <p>Both fixes do the same thing: turn implicit, hard-to-see state into legible, queryable artifacts. Sessions chatting in markdown. Memory in a SQLite index. Nothing fancy.</p>
+
+            <p>When you're orchestrating dozens of agents, the real wins aren't smarter prompts or better models. They're better record-keeping. The implicit, ambient knowledge an individual developer carries in their head doesn't scale to thirty parallel sessions — but markdown files and search indexes do.</p>
+
+            <p>If you're running more than ten parallel Claude Code sessions, both of these will save you time. If you're running fewer, file them away — at some point the overhead of coordination starts to dominate the cost of work, and you'll want them ready.</p>
+        </section>
+
+        <div class="closing">
+            <h2>Try CCC</h2>
+            <p>Both fixes ship with CCC. Two-line install on macOS:</p>
+            <div class="install">git clone https://github.com/amirfish1/claude-command-center && cd claude-command-center && ./run.sh</div>
+            <br>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="star-cta">Drop a star on GitHub →</a>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">If you install it, I'd love to hear how. Open an issue, comment on the LinkedIn post, or just say hi.</p>
+        </div>
+
+        <footer>
+            <a href="/">amirfish.com</a>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
+
+    </div>
+</body>
+</html>
