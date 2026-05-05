@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Fixes for Running 30+ Claude Sessions in Parallel — Amir Fish</title>
-    <meta name="description" content="A markdown commit-coordination protocol and a local search index over every transcript. Both built around CCC. The wins aren't smarter prompts — they're better record-keeping.">
-    <meta property="og:title" content="Two Fixes for Running 30+ Claude Sessions in Parallel">
+    <title>Three Fixes for Running 30+ Claude Sessions in Parallel — Amir Fish</title>
+    <meta name="description" content="A group-chat protocol for sessions, a semantic search index over every transcript, and a unified event bus that wakes sessions from external chats. All three built around CCC.">
+    <meta property="og:title" content="Three Fixes for Running 30+ Claude Sessions in Parallel">
     <meta property="og:description" content="When you orchestrate dozens of agents, the real wins aren't smarter prompts. They're better record-keeping.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://amirfish.ai/parallel-sessions">
@@ -253,6 +253,15 @@
             font-family: 'Newsreader', Georgia, serif; font-style: italic;
             font-size: 0.9rem; color: #999; margin-top: 1.1rem;
         }
+        .cta-block .video-preview { display: block; position: relative; margin: 0 0 0.9rem; border: 0.5px solid var(--rule); overflow: hidden; background: #000; line-height: 0; }
+        .cta-block .video-preview img { display: block; width: 100%; height: auto; transition: opacity 0.2s; }
+        .cta-block .video-preview .play { position: absolute; top: 50%; left: 50%; width: 78px; height: 78px; margin: -39px 0 0 -39px; border-radius: 50%; background: rgba(0,0,0,0.55); border: 1.5px solid rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.2s; }
+        .cta-block .video-preview .play::before { content: ""; width: 0; height: 0; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent rgba(255,255,255,0.95); margin-left: 4px; }
+        .cta-block .video-preview:hover img { opacity: 0.92; }
+        .cta-block .video-preview:hover .play { background: rgba(170, 53, 39, 0.95); transform: scale(1.05); }
+        .cta-block .video-caption { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.92rem; color: var(--ink-mute); text-align: center; margin: 0.7rem 0 1.4rem; }
+        .cta-block .video-caption a { color: var(--ink-mute); text-decoration: none; border-bottom: 0.5px solid var(--rule); padding-bottom: 1px; }
+        .cta-block .video-caption a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
         /* Three doors closing */
         .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
@@ -315,11 +324,12 @@
 
         <aside class="left-rail">
             <span class="label">Field Note · 02</span>
-            <div class="context-title">Two Fixes for 30+ Parallel Sessions</div>
+            <div class="context-title">Three Fixes for 30+ Parallel Sessions</div>
             <ol class="toc">
                 <li><a href="#s1"><span class="toc-num">01</span>The Group Chat</a></li>
                 <li><a href="#s2"><span class="toc-num">02</span>The Local Index</a></li>
-                <li><a href="#s3"><span class="toc-num">03</span>Operations, Not Magic</a></li>
+                <li><a href="#s3"><span class="toc-num">03</span>Wired to the World</a></li>
+                <li><a href="#s4"><span class="toc-num">04</span>Operations, Not Magic</a></li>
                 <li><a href="#ccc"><span class="toc-num">·</span>Try CCC</a></li>
             </ol>
         </aside>
@@ -328,9 +338,9 @@
 
             <header class="hero">
                 <span class="eyebrow">Field Note · Operations · Spring 2026</span>
-                <h1>Two Fixes for Running 30+ Claude Sessions in Parallel.</h1>
-                <p class="subtitle">Both have the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
-                <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, two things were dragging the workflow to a crawl. Both have fixes now. This is what they are and how they work.</p>
+                <h1>Three Fixes for Running 30+ Claude Sessions in Parallel.</h1>
+                <p class="subtitle">Three problems, the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
+                <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, three things were dragging the workflow to a crawl: sessions stepping on each other; finding what I'd already decided last week; and getting a session to wake up when a client texted. All three have fixes now. This is what they are and how they work.</p>
                 <p>If you're running more than ten parallel sessions, you've probably hit at least one of these.</p>
             </header>
 
@@ -484,6 +494,15 @@
                 <p>I'd been running a Claude session against a Hebrew-speaking client's web app, talking with the client through a WhatsApp pipeline. The pipeline itself — Twilio webhook → Supabase Realtime → CCC inject — was built and shipped by a <em>separate</em> peer session, earlier the same morning. Worth pausing on this: the client-app session was the one that had spawned that peer, through a CCC orchestration call, with one specific job — go build the push-driven event bus that the client-app session needed.</p>
 
                 <p>So the daemon wasn't built by some random other Claude. It was built by infrastructure the client-app session had stood up itself. A session bootstrapping its own substrate.</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/pipeline-spawn.png"
+                     alt="The CCC orchestration spawn moment, earlier the same morning. The client-app session issues a Bash tool call with a SPAWN_PROMPT instructing the new peer to execute Phase 0 of an event-bus design. Response: ok:true, pid:50895. Slug: event-bus-phase-0-whatsapp-push. The peer is told to read the design doc, implement Phase 0, self-test end-to-end with a manual INSERT, and inject a status update back via /api/inject-input once verified."
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
 
                 <p>Mid-task, that client-app session noticed two production bugs in the daemon. It was the session being injected into, so it could see them clearly: every WhatsApp message produced two injects instead of one, and each inject landed in the terminal buffer but never pressed <code>Enter</code>, so its own input box quietly accumulated stale text.</p>
 
@@ -649,19 +668,81 @@
 
             <section class="essay-section" id="s3">
                 <span class="section-number">03</span>
+                <span class="section-date">Problem Three</span>
+                <h2>From Chat to Code, and Back.</h2>
+
+                <p>Most Claude Code sessions are passive. You open one, type something, it replies, you read, you type again. Useful but bounded — the agent only works while you're sitting in front of it.</p>
+
+                <p>For two clients, that wasn't enough. Chuck — a realtor in Charleston — wanted to send feedback about his website over iMessage and see the changes deploy. David — running a Hebrew family library — wanted the same loop, but over WhatsApp. Both expected the channel to close: text in, code out, confirmation back, all on their phone.</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/pipeline-chuck-iterating.png"
+                     alt="A realtor session deploying Chuck's feedback. The session writes: 'Deployed and confirmed back. About page now reads: These days I'm based in Mount Pleasant, working primarily across Charleston, Berkeley, and Dorchester counties. I served three and a half years on the Architectural Review Board for Dunes West, including time as vice-chair...' followed by 'The three new market cards (West Ashley, North Charleston, Edisto Beach) on the Markets page do the geographic-specifics work, like Chuck said.' Chuck replies via iMessage: 'You are great!' The session closes the loop: 'Thanks Chuck — happy to keep iterating. The feedback channel via iMessage is working well, just keep them coming as they hit you.'"
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <p>What that meant architecturally: a Claude session living on my laptop, woken up by an external event, doing the work, and replying through the same channel — without my laptop running a public-facing server. The session has to be reachable from outside even though it has no public IP and can only act when something puts text in its mouth.</p>
+
+                <h3 class="sub">One dispatcher, many event sources.</h3>
+
+                <p>The pattern that worked: many event sources, one internal interface, a single dispatcher inside CCC that routes <code>{source, body, ...}</code> to the right Claude session. Sources speak through different acquisition paths — public broker for WhatsApp/Twilio/Linear/Stripe webhooks, local poll for iMessage's <code>chat.db</code>, file-system events for watchers, calendar APIs for time-based triggers — but the dispatcher doesn't care how an event was produced.</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/pipeline-dispatcher.png"
+                     alt="Mental model from the design session: CCC has multiple event sources, each speaking the same internal 'wake the agent' interface but with different acquisition paths. WhatsApp/Twilio, Linear webhook, and Stripe webhook all reach the dispatcher via a public broker. iMessage reaches it via local poll, file watcher via local filesystem events, calendar via local API. All flow through the CCC dispatcher, which injects the event into the appropriate Claude session."
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <h3 class="sub">A persistent WebSocket, not a webhook.</h3>
+
+                <p>For the WhatsApp side specifically, the substrate is a persistent WebSocket. CCC dials out to Supabase once at startup and keeps the connection open. Twilio hits a Vercel webhook → INSERT into Supabase → Supabase pushes the new row down the open WebSocket → CCC dispatches the inject. End-to-end latency in practice: about two seconds. No public endpoint on the laptop. No cron polling.</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/pipeline-websocket.png"
+                     alt="Sequence diagram: Vercel inserts a row into Supabase; Supabase pushes the event down a persistent WebSocket connection that CCC opened on startup; the laptop receives the push and injects into Claude. 'Not a cron, not a webhook. It's a persistent WebSocket connection — CCC dials out to Supabase once at startup and keeps the connection open. Supabase pushes events down that pipe whenever something inserts. Your laptop is the client; Supabase is the broker.'"
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <p>Photos travel the same lane. When David sends a photo of a book cover, Twilio hands the URL to a webhook that downloads the file, uploads it to Supabase Storage, and writes the public URL into the row before the dispatcher fires. By the time the inject reaches David's library session, the photo is already accessible without auth:</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/pipeline-photo-flow.png"
+                     alt="Diagram of the photo enrichment pipeline: David's phone sends a photo via WhatsApp; Twilio hosts it on its CDN and triggers our webhook; the webhook downloads the file and uploads it to Supabase Storage, which generates a public URL stored in the inserted row. Anyone viewing the app sees the photo through the public URL — no auth needed, lives forever."
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <h3 class="sub">Sessions all the way down.</h3>
+
+                <p>The whatsapp-supabase daemon mentioned earlier — the one with the double-fire bug — <em>is</em> this dispatcher. The David-library session was reporting bugs in its own infrastructure to the peer that built it. One session designed the architecture, spawned a peer to build it, watched the peer ship Phase 0 in five minutes, then started receiving live WhatsApp injects within two seconds of David's text arriving. When the daemon misbehaved, the same client session routed the bug back to the spawned peer.</p>
+
+                <p>The end-state, in a single screen: Chuck texts <em>"the about page should mention Mount Pleasant"</em> → his realtor session injects, reads the request, edits the codebase, ships to Vercel, texts back <em>"Deployed and confirmed back. About page now reads…"</em> Chuck replies <em>"you are great!"</em> The whole loop closes through one channel. The agent is wired to the world.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s4">
+                <span class="section-number">04</span>
                 <span class="section-date">Common Thread</span>
                 <h2>Operations, Not Magic.</h2>
 
-                <p>Both fixes do the same thing: turn implicit, hard-to-see state into legible, queryable artifacts. Sessions chatting in markdown. Memory in a SQLite index. Nothing fancy.</p>
+                <p>All three fixes do the same thing: turn implicit, hard-to-see state into legible, queryable artifacts. Sessions chatting in markdown. Memory in a SQLite index. External events arriving through a unified dispatcher. Nothing fancy.</p>
 
-                <p>When you're orchestrating dozens of agents, the real wins aren't smarter prompts or better models. They're better record-keeping. The implicit, ambient knowledge an individual developer carries in their head doesn't scale to thirty parallel sessions — but markdown files and search indexes do.</p>
+                <p>When you're orchestrating dozens of agents, the real wins aren't smarter prompts or better models. They're better record-keeping. The implicit, ambient knowledge an individual developer carries in their head doesn't scale to thirty parallel sessions — but markdown files, search indexes, and event buses do.</p>
 
-                <p>If you're running more than ten parallel Claude Code sessions, both of these will save you time. If you're running fewer, file them away — at some point the overhead of coordination starts to dominate the cost of work, and you'll want them ready.</p>
+                <p>If you're running more than ten parallel Claude Code sessions, all three of these will save you time. If you're running fewer, file them away — at some point the overhead of coordination starts to dominate the cost of work, and you'll want them ready.</p>
             </section>
 
             <section class="cta-block" id="ccc">
                 <span class="eyebrow">Open Source · MIT</span>
-                <h3>Both fixes ship with CCC.</h3>
+                <h3>All three fixes ship with CCC.</h3>
                 <p>Command Center for Claude — the kanban that took me from "two terminals" to thirty parallel Claude Code sessions. Local, private, no daemon. Two-line install on macOS:</p>
                 <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
@@ -722,7 +803,7 @@ cd claude-command-center && ./run.sh</pre>
 
             <div class="marginalia section-block">
                 <span class="heading">Method</span>
-                <p>Both fixes were built and validated against real, daily multi-session workloads — not synthetic benchmarks. Counts and timings are observed, not extrapolated.</p>
+                <p>All three fixes were built and validated against real, daily multi-session workloads — not synthetic benchmarks. Counts and timings are observed, not extrapolated.</p>
             </div>
 
             <div class="marginalia section-block">
