@@ -435,23 +435,27 @@
             </figure>
 
             <section class="essay-section">
-                <h3 class="sub">Another example — routing bugs to the right session.</h3>
+                <h3 class="sub">Another example — routing bugs to the right peer.</h3>
 
-                <p>I had a session running a client website build, talking to the client through a WhatsApp pipeline. Mid-task, that session detected two production bugs in the daemon another session owned — the WhatsApp-Supabase shim that routes messages between Supabase and a target Claude session.</p>
+                <p>I'd been running a Claude session against a Hebrew-speaking client's web app, talking with the client through a WhatsApp pipeline. The pipeline itself — Twilio webhook → Supabase Realtime → CCC inject — was built and shipped by a <em>separate</em> peer session that I'd originally spawned via CCC orchestration to do exactly that one job.</p>
 
-                <p>It didn't try to fix them. Fixing would have lost its own context and risked introducing more bugs in code it didn't own. Instead, it posted a triaged bug report to the group chat — priority-ordered hypotheses for each root cause, diagnostic steps to verify each one, even a suggested fix that referenced a sibling session's iMessage-inject pattern as the shape to mirror. Then it tagged the daemon owner and wrote: <em>"Reply with status when fixed (or stuck)."</em></p>
+                <p>Mid-task, the client-app session noticed two production bugs in the daemon. It was the session being injected into, and it could see them clearly: every WhatsApp message produced two injects instead of one, and each inject landed in the terminal buffer but never pressed <code>Enter</code>, so its own input box quietly accumulated stale text.</p>
+
+                <p>It didn't try to fix the daemon itself. Fixing would have lost its own context — David was still waiting on a feature — and risked introducing new bugs in code it had never read. Instead, it pushed a triaged report directly to the peer that had built the daemon, via CCC's inject API. Priority-ordered hypotheses for each root cause, diagnostic steps to verify each one, and a suggested fix that referenced a sibling session's iMessage-inject pattern as the shape to mirror.</p>
             </section>
 
             <figure class="fig">
                 <img src="/images/group-chat-bug-routing.png"
-                     alt="GROUP_CHAT.md post: one session reports two production bugs in the WhatsApp-Supabase daemon, with priority-ordered hypotheses, diagnostic steps, and a suggested fix referencing an iMessage-inject pattern. The daemon-owner session replies: 'Let me investigate both bugs in parallel.'"
+                     alt="A bug report being delivered cross-session: one Claude session reports two production bugs in a WhatsApp-Supabase daemon to the peer that built it. Priority-ordered hypotheses, diagnostic steps, suggested fix referencing an iMessage-inject pattern. The peer replies 'Let me investigate both bugs in parallel.'"
                      loading="lazy">
             </figure>
 
             <section class="essay-section">
                 <div class="pullquote">"Look at how Chuck's iMessage inject handles this — it presumably already presses Enter, so mirror that pattern."</div>
 
-                <p>The daemon-owner session picked it up. Its only reply was <em>"Let me investigate both bugs in parallel."</em> Both fixes landed without me being in the loop.</p>
+                <p>The daemon-author peer picked it up immediately. Its only reply was <em>"Let me investigate both bugs in parallel."</em> The client-app session went back to David. <em>"Standing by for their reply. Meanwhile this session handles whatever ticks land — even if double-fired, my code is idempotent."</em> Both fixes landed without me in the loop.</p>
+
+                <p>One detail worth naming: the substrate here wasn't the markdown chat file. It was CCC's inject API — a session looking up another session in the registry by name, then writing into its input. Same primitive as the chat, different channel. The taxonomy isn't the point. What matters is that sessions can be visible to each other and route work between themselves, regardless of which transport they use.</p>
             </section>
 
             <figure class="fig">
@@ -463,14 +467,14 @@
                     </defs>
                     <!-- actor headers -->
                     <rect x="20" y="20" width="220" height="56" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
-                    <text x="130" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">client-website session</text>
-                    <text x="130" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">talking to client via WhatsApp</text>
+                    <text x="130" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">client-app session</text>
+                    <text x="130" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">talking to David via WhatsApp</text>
                     <rect x="290" y="20" width="220" height="56" rx="2" fill="#fbf9f8" stroke="#aa3527" stroke-width="1"></rect>
-                    <text x="400" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">GROUP_CHAT.md</text>
-                    <text x="400" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">the medium</text>
+                    <text x="400" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">CCC inject API</text>
+                    <text x="400" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">/api/inject-input</text>
                     <rect x="560" y="20" width="220" height="56" rx="2" fill="none" stroke="#1b1c1c" stroke-width="0.5"></rect>
-                    <text x="670" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">whatsapp-supabase</text>
-                    <text x="670" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">daemon owner session</text>
+                    <text x="670" y="44" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="14" fill="#1b1c1c">daemon-author peer</text>
+                    <text x="670" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#747878">whatsapp-supabase owner</text>
                     <!-- lifelines -->
                     <line x1="130" y1="76" x2="130" y2="340" stroke="#c4c7c7" stroke-width="0.5" stroke-dasharray="2 4"></line>
                     <line x1="400" y1="76" x2="400" y2="340" stroke="#c4c7c7" stroke-width="0.5" stroke-dasharray="2 4"></line>
