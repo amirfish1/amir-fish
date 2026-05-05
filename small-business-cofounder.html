@@ -46,12 +46,17 @@
         footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
         footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
         footer a:hover { text-decoration-color: #999; }
+        figure { margin: 2.5rem 0; }
+        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
+        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
+        figure.hero-figure { margin: 1.5rem 0 0; }
         @media (max-width: 500px) {
             .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
             .hero .subtitle { font-size: 1.1rem; }
             .closing { padding: 2rem 1.4rem; }
             .closing .cta { display: block; margin: 0.5rem 0; }
+            figure { margin: 2rem 0; }
         }
     </style>
 </head>
@@ -68,6 +73,14 @@
             <p class="subtitle">AI just made bespoke software cheap enough to build for one customer. The one-size-fits-all SaaS era is quietly ending.</p>
             <p>For thirty years, "small business software" has meant the same trade. You take a tool built for ten thousand businesses that look roughly like yours, and you contort your operations to fit its assumptions. Acuity. QuickBooks. Square. Mailchimp. They're competent, generic, and never quite right.</p>
             <p>That trade exists for one reason: building custom software for a single business has never been economically viable. Until now.</p>
+
+            <figure class="hero-figure">
+                <img src="/images/small-business-counter-1x.webp"
+                     srcset="/images/small-business-counter-1x.webp 1x, /images/small-business-counter-2x.webp 2x"
+                     alt="The unmanned front counter of a small studio at golden hour: a laptop showing a calendar, a notebook and pen, a mug of tea, fresh flowers in a small vase, plants on shelves in the background."
+                     loading="eager">
+                <figcaption>The actual operating system of most small businesses: a laptop, a notebook, three SaaS tools that don't talk to each other, and the owner's memory holding it all together.</figcaption>
+            </figure>
         </section>
 
         <hr>
@@ -98,6 +111,14 @@
             <p>I'm not a uniquely fast engineer. I'm a product manager who built this with Claude Code. The reason it took weekends instead of months isn't talent — it's that AI shifted where the cost of custom software lives. The bottleneck used to be implementation. Now the bottleneck is specifying what you actually want.</p>
 
             <p>If you can describe your business clearly, you can have software shaped exactly like it.</p>
+
+            <figure>
+                <img src="/images/bym-dashboard-1x.webp"
+                     srcset="/images/bym-dashboard-1x.webp 1x, /images/bym-dashboard-2x.webp 2x"
+                     alt="The Pilates studio admin dashboard, with today's appointments, a payments row showing 502 unpaid line items with a 'Resolve with AI' button, and a client list ordered by how often each one books."
+                     loading="lazy">
+                <figcaption>The Pilates studio dashboard the day after launch. None of these screens exist in any commercial scheduler — but each one came from a sentence the owner could already say out loud.</figcaption>
+            </figure>
         </section>
 
         <hr>
