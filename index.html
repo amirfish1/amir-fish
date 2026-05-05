@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amir Fish</title>
+    <meta name="description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai — custom AI software for small businesses — and Command Center for Claude. Field notes on AI product work.">
+    <meta property="og:title" content="Amir Fish">
+    <meta property="og:description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai and Command Center for Claude. Field notes on AI product work.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://amirfish.ai/">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -85,9 +91,18 @@
         /* --- Writing --- */
         .writing-item {
             margin-bottom: 2rem;
+            display: block;
+            text-decoration: none;
+            color: inherit;
         }
 
         .writing-item:last-child { margin-bottom: 0; }
+
+        .writing-item:hover h3 {
+            text-decoration: underline;
+            text-decoration-color: #c2693a;
+            text-underline-offset: 4px;
+        }
 
         .writing-item .tag {
             display: inline-block;
@@ -106,6 +121,7 @@
             letter-spacing: -0.01em;
             line-height: 1.35;
             margin-bottom: 0.25rem;
+            color: #111;
         }
 
         .writing-item p {
@@ -130,6 +146,75 @@
         .building-item span {
             color: #888;
             font-size: 0.92rem;
+        }
+
+        .building-item a {
+            color: #111;
+            text-decoration-color: #ccc;
+        }
+
+        /* --- CCC banner card --- */
+        .ccc-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 1.6rem 1.8rem;
+            margin: 0;
+            background: #fff;
+        }
+
+        .ccc-card .ccc-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #c2693a;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .ccc-card h3 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+        }
+
+        .ccc-card p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .ccc-card pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: #f5f4f1;
+            padding: 0.8rem 1rem;
+            border-radius: 3px;
+            color: #333;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .ccc-card .links {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .ccc-card .links a {
+            color: #c2693a;
+            text-decoration-color: #e5c5b3;
+            margin-right: 1.2rem;
+        }
+
+        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
+
+        .ccc-card .disclaimer {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+            margin-top: 1rem;
         }
 
         /* --- Advisory --- */
@@ -172,6 +257,7 @@
         @media (max-width: 500px) {
             .hero { padding-top: 8vh; }
             .hero h1 { font-size: 2.6rem; }
+            .ccc-card { padding: 1.3rem 1.4rem; }
         }
     </style>
 </head>
@@ -182,44 +268,67 @@
             <h1>Amir Fish</h1>
             <p>I spent 20 years building AI products at Google and Meta — leading teams, shipping to hundreds of millions of users, and learning what actually works.</p>
             <p>Now I build things myself and help founders and small businesses do the same.</p>
-            <p>Currently building <a href="https://kneaded.ai">Kneaded.ai</a>. Based in Sunnyvale, CA.</p>
+            <p>Currently building <a href="https://kneaded.ai">Kneaded.ai</a> and <a href="https://github.com/amirfish1/claude-command-center">Command Center for Claude</a>. Based in Sunnyvale, CA.</p>
         </section>
 
         <hr>
 
         <section>
-            <div class="section-label">Writing</div>
-            <div class="writing-item">
-                <span class="tag">Field Note #4</span>
+            <div class="section-label">Field Notes</div>
+            <a class="writing-item" href="/spec-is-the-hard-part">
+                <span class="tag">Field Note · Product</span>
+                <h3>The Spec Is The Hard Part</h3>
+                <p>Code stopped being the bottleneck. What's left is the harder problem product orgs weren't trained to solve at scale. Notes from a workshop with seven NVIDIA PMs.</p>
+            </a>
+            <a class="writing-item" href="/parallel-sessions">
+                <span class="tag">Field Note · Operations</span>
+                <h3>Two Fixes for Running 30+ Claude Sessions in Parallel</h3>
+                <p>A markdown commit-coordination protocol and a local search index over every transcript. Both built around CCC. The wins aren't smarter prompts — they're better record-keeping.</p>
+            </a>
+            <a class="writing-item" href="/guided-verification">
+                <span class="tag">Field Note · Product</span>
                 <h3>The Guided Verification Problem</h3>
-                <p>Why "human in the loop" is usually just rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google.</p>
-            </div>
-            <div class="writing-item">
-                <span class="tag">Field Note #3</span>
+                <p>Why "human in the loop" is usually rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google.</p>
+            </a>
+            <a class="writing-item" href="/small-business-cofounder">
+                <span class="tag">Field Note · Thesis</span>
                 <h3>Every Small Business Deserves a Technical Co-Founder</h3>
                 <p>AI makes bespoke software economically viable for the first time. The one-size-fits-all SaaS era is ending.</p>
-            </div>
-            <div class="writing-item">
-                <span class="tag">Field Note #2</span>
+            </a>
+            <a class="writing-item" href="/pilates">
+                <span class="tag">Field Note · Build</span>
                 <h3>I Built My Wife's Pilates Studio a Custom Platform</h3>
                 <p>4 hours a week of admin, replaced by something built from scratch. Venmo payments, SMS reminders, WhatsApp booking. Admin time now: 20 minutes.</p>
-            </div>
-            <div class="writing-item">
-                <span class="tag">Field Note #1</span>
+            </a>
+            <a class="writing-item" href="/cyborg-workflow">
+                <span class="tag">Field Note · Workflow</span>
                 <h3>The Cyborg Workflow</h3>
                 <p>How I build software now: Claude Code writing logic on one terminal, Claude configuring APIs on another. Two senior engineers, always available.</p>
-            </div>
+            </a>
         </section>
 
         <hr>
 
         <section>
             <div class="section-label">Building</div>
-            <div class="building-item">
-                <strong>Kneaded.ai</strong> <span>— Custom AI software for small businesses. Every local business deserves tools built for exactly how they work.</span>
+            <div class="ccc-card">
+                <span class="ccc-label">Open source · MIT</span>
+                <h3>Command Center for Claude</h3>
+                <p>A local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. Built around the workflow that took me from "two terminals" to thirty parallel sessions without losing track of any of them.</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/parallel-sessions">Field note →</a>
+                </div>
+                <p class="disclaimer">Not affiliated with Anthropic. Community-built.</p>
+            </div>
+            <div class="building-item" style="margin-top: 2rem;">
+                <strong><a href="https://kneaded.ai">Kneaded.ai</a></strong> <span>— Custom AI software for small businesses. Every local business deserves tools built for exactly how they work.</span>
             </div>
             <div class="building-item">
-                <strong>plts.xyz</strong> <span>— A complete business management platform for a Pilates studio. Scheduling, payments, reminders, client portal.</span>
+                <strong><a href="https://plts.xyz">plts.xyz</a></strong> <span>— A complete business management platform for a Pilates studio. Scheduling, payments, reminders, client portal. The proof case behind Kneaded.ai.</span>
             </div>
             <div class="building-item">
                 <strong>Finance Tools</strong> <span>— Expense tracking and tax optimization for rental properties and small business. Where guided verification was born.</span>
@@ -235,7 +344,9 @@
         </section>
 
         <footer>
-            <a href="https://linkedin.com/in/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+            <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
+            <a href="https://www.linkedin.com/in/afish/" target="_blank">LinkedIn</a>
             <a href="mailto:amir@amirfish.com">Email</a>
         </footer>
 

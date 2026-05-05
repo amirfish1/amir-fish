@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spec Is The Hard Part — Amir Fish</title>
+    <meta name="description" content="Code stopped being the bottleneck. The bottleneck is now writing a spec clear enough that a model — or a team — can execute it. Notes from a workshop with seven NVIDIA PMs.">
+    <meta property="og:title" content="The Spec Is The Hard Part">
+    <meta property="og:description" content="The next product-org capability isn't 'use AI more.' It's an AI-native operating system: plain text files that codify how work gets done, so anyone or anything can run it.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/spec-is-the-hard-part">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
+        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
+        a:hover { text-decoration-color: #111; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
+        .top-nav a { color: #999; text-decoration-color: #ddd; }
+        .top-nav a:hover { color: #444; text-decoration-color: #999; }
+        .hero { padding: 8vh 0 0; }
+        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
+        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        .ccc-card { border: 1px solid #e5e5e5; border-radius: 4px; padding: 1.6rem 1.8rem; margin: 2.5rem 0; background: #fff; }
+        .ccc-card .ccc-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 0.6rem; display: block; }
+        .ccc-card h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.25rem; font-weight: 500; margin-bottom: 0.6rem; }
+        .ccc-card p { font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem; }
+        .ccc-card pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: #f5f4f1; padding: 0.8rem 1rem; border-radius: 3px; color: #333; overflow-x: auto; margin-bottom: 1rem; }
+        .ccc-card .links { font-size: 0.9rem; color: #666; }
+        .ccc-card .links a { color: #c2693a; text-decoration-color: #e5c5b3; margin-right: 1.2rem; }
+        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
+        .ccc-card .disclaimer { font-size: 0.85rem; color: #999; font-style: italic; margin-top: 1rem; }
+        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
+        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
+        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
+        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
+        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
+        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
+        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
+        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
+        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
+        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
+        .closing .install { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #fff; border: 1px solid #e5e5e5; padding: 0.8rem 1rem; border-radius: 3px; color: #333; display: inline-block; margin-bottom: 1.5rem; }
+        .closing .star-cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; }
+        .closing .star-cta:hover { opacity: 0.6; }
+        .related { margin: 3rem 0; }
+        .related .section-label { margin-bottom: 1.25rem; }
+        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
+        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
+        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
+        footer a:hover { text-decoration-color: #999; }
+        @media (max-width: 500px) {
+            .hero { padding-top: 5vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.1rem; }
+            .ccc-card { padding: 1.3rem 1.4rem; }
+            .closing { padding: 2rem 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="top-nav">
+            <a href="/">← amirfish.ai</a>
+        </nav>
+
+        <section class="hero">
+            <span class="tag-eyebrow">Field Note · Product</span>
+            <h1>The Spec Is The Hard Part</h1>
+            <p class="subtitle">Code stopped being the bottleneck. What's left is the harder problem nobody trained product orgs to solve at scale.</p>
+            <p>I co-hosted an AI Automation workshop for seven NVIDIA product managers a couple of weeks ago, with NVIDIA's Eran Arkin. Most of the room was already using Claude Code daily. I went in expecting questions about prompts. The questions I got were different, and the difference is the whole point of this note.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Setup</span>
+            <h2>What Good Looks Like For A Product Org.</h2>
+
+            <p>We didn't open by talking about AI. We opened by writing what every product team I've ever met says they want:</p>
+
+            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.5rem;"><strong>Build the right things</strong> — not just what's easiest to build.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Quality output</strong> — designs that bake in user understanding, research, and judgment.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Focus on the work</strong> — the problem, not the PowerPoint.</li>
+                <li><strong>Move fast</strong> — not queue behind three other teams' cycles.</li>
+            </ul>
+
+            <p>Then we wrote what was actually in their way, in their own words:</p>
+
+            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.5rem;"><em>"Staying on top of everything — meetings, Slack, Teams, emails."</em></li>
+                <li style="margin-bottom: 0.5rem;"><em>"Nothing is automated."</em></li>
+                <li style="margin-bottom: 0.5rem;"><em>"I don't have the vocabulary to use an AI agent effectively."</em></li>
+                <li><em>"Recreating content takes a lot of time. Requirements aren't always clear."</em></li>
+            </ul>
+
+            <p>Those are verbatim from the room. They were already using AI. They were still describing the same problems product teams have always had.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Question</span>
+            <h2>The Question That Reframed The Workshop.</h2>
+
+            <p>Halfway through, one of the PMs asked the question that's been rattling in my head since:</p>
+
+            <div class="pullquote">"If we each write these rules — the prompts, the workflows, the playbooks — how do they get shared across the org?"</div>
+
+            <p>Notice what's not in that question. Not <em>"how do I get a better answer from Claude?"</em>. Not <em>"which model should we use?"</em>. The question is structural. It's about how a hundred-person product org turns one PM's good prompt into the rest of the org's leverage.</p>
+
+            <p>I think this is the question. Most companies are still optimizing the wrong layer.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Diagnosis</span>
+            <h2>Code Isn't The Hard Part Anymore.</h2>
+
+            <p>I wrote this on a panel a couple weeks earlier and it's the lens I keep coming back to: <strong>the spec is now the hard part, not the code.</strong> Models can write the implementation. The unsolved problem is writing requirements clear enough — and durable enough, and shared enough — that a model or a team can act on them without the PM standing over its shoulder.</p>
+
+            <p>Which means the bottleneck for product orgs has moved one layer up. The discipline that used to live in a PM's head — <em>"this product is for these users, the goals are these numbers, here's how we usually write a PRD, here's the org map for getting it shipped"</em> — that discipline used to be sufficient when it stayed in the PM's head. It isn't anymore. Now it has to be readable by something that isn't the PM.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Pattern</span>
+            <h2>The Folder Is The System, Not The Editor.</h2>
+
+            <p>What an AI-native product organization actually needs isn't a fancier IDE or a better chat UI. It's a foundation of plain-text files — boring, machine-digestible, source-controlled — that answer the questions a PM asks themselves before any work begins.</p>
+
+            <p>Six files, in my current draft of the pattern:</p>
+
+            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.7rem;"><strong>Product Overview.</strong> A clear, generic definition of what the product is. (Done at scale across all products, you accumulate a library.)</li>
+                <li style="margin-bottom: 0.7rem;"><strong>Goals & KPIs.</strong> Current 3-, 6-, 12-month targets, in plain English and hard numbers.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>Raw Inputs.</strong> Unfiltered context from clients, support, sales, marketing.</li>
+                <li style="margin-bottom: 0.7rem;"><strong>The Ledger.</strong> Past decisions, reviews, and crucial learnings about <em>what not to do.</em></li>
+                <li style="margin-bottom: 0.7rem;"><strong>Style Guides.</strong> The exact standard for how your team writes a PRD, a test plan, meeting notes.</li>
+                <li><strong>Org Reality.</strong> The unwritten map of who works with whom, which VPs to loop in, how decisions actually get made.</li>
+            </ol>
+
+            <p>Once that foundation exists, two things become composable on top of it:</p>
+
+            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
+                <li style="margin-bottom: 0.6rem;"><strong>Skills</strong> codify <em>how</em> specific work gets done — the equivalent of a well-written runbook, executable by a model.</li>
+                <li><strong>Agents</strong> (invocable lenses like <code>@skeptical-pm</code>, <code>@customer-voice</code>, <code>@data-realist</code>) scale <em>how much</em> gets done.</li>
+            </ul>
+
+            <p>Codification plus multiplication. That's the shape.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">The Implication</span>
+            <h2>This Is A Project, Not A Tool Choice.</h2>
+
+            <p>The thing I want to be honest about: a system like this isn't built in an afternoon and rolled out at all-hands. The PMs who asked the sharing question were already three steps ahead — they understood that codifying their own work was the easy part. The hard part is making it so that a marketing manager, a designer, a data scientist can plug into the same system without being PMs themselves.</p>
+
+            <p>That's a real organizational project. It's designed, experimented with, expanded; leadership has to be brought along at every step. It looks more like rolling out a new operating model than installing a new tool.</p>
+
+            <p>And the companies that figure this out — the ones that build a real shared operating layer for product work, not just give everyone a Claude license — are going to be the ones whose product orgs feel an order of magnitude faster three years from now.</p>
+
+            <div class="ccc-card">
+                <span class="ccc-label">If you're already running this at scale</span>
+                <h3>Command Center for Claude</h3>
+                <p>Open-source local kanban for every Claude Code session on your Mac. The thing I built when "two terminals, two Claudes" turned into thirty parallel sessions and the coordination cost started to dominate.</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                </div>
+                <p class="disclaimer">Not affiliated with Anthropic. Community-built. MIT.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <span class="section-label">If This Is You</span>
+            <h2>Who I'm Talking To.</h2>
+
+            <p>If you're a product leader whose team is already using Claude Code, and you can feel the gap between "individual sparks" and "shared operating infrastructure" — that's the conversation I'm spending most of my time on right now. Email's at the bottom. Whether or not it turns into anything formal, I find these conversations the best way to pressure-test the pattern in public.</p>
+        </section>
+
+        <div class="related">
+            <span class="section-label">Related</span>
+            <a href="/cyborg-workflow">→ The Cyborg Workflow</a>
+            <a href="/parallel-sessions">→ Two Fixes for Running 30+ Claude Sessions in Parallel</a>
+            <a href="/guided-verification">→ The Guided Verification Problem</a>
+        </div>
+
+        <div class="closing">
+            <h2>Try CCC</h2>
+            <p>The infrastructure I built once "two terminals" turned into thirty:</p>
+            <div class="install">git clone https://github.com/amirfish1/claude-command-center && cd claude-command-center && ./run.sh</div>
+            <br>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="star-cta">Drop a star on GitHub →</a>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">If you install it, I'd love to hear how. Open an issue, comment on LinkedIn, or just say hi.</p>
+        </div>
+
+        <footer>
+            <a href="/">amirfish.ai</a>
+            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
+            <a href="mailto:amir@amirfish.com">Email</a>
+        </footer>
+
+    </div>
+</body>
+</html>
