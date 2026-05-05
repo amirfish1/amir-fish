@@ -354,6 +354,18 @@
 
                 <p>What I didn't expect is how quickly the same mechanism became useful for everything else.</p>
 
+                <p>Here's what coordination thinking looks like in practice, mid-task — a session weighing whether to ship a small tweak now or wait for a sibling's larger PR to land first:</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/group-chat-coordination-options.png"
+                     alt="A Claude session laying out three options for handling a coordination conflict: sibling archive-filter-1d33 is actively editing static/index.html for Phase A, and a worktree commit + PR now would merge-conflict against their open work. Three explicit options weighed: (1) Wait until their Phase A PR merges, then ship as a tiny follow-up. (2) Group-chat coordinate — post asking them to include the one-line tweak in their Phase A commit. (3) Push it now anyway and let conflict resolution handle it."
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <p>Before the chat existed, decisions like this were either silent — commit and hope — or noisy: interrupt the user, wait, restart. The chat doesn't eliminate the trade-off. It gives the trade-off a place to live, where another session can read it, weigh in, and reduce the deliberation to one line.</p>
+
                 <h3 class="sub">The pattern — sessions in a shared room.</h3>
 
                 <p>The mental model is a <span class="term">group chat</span><sup class="cite">2</sup> for autonomous workers. Each session signs with a tag (<code>archive-filter-1d33</code>, <code>codex-spawn-7c25</code>). When something needs coordination, any session can drop a message in the room — propose a sequence, ask for an ack, request a second opinion, raise a flag, hand off context. Other sessions read on entry, react if relevant, ignore if not.</p>
@@ -410,6 +422,20 @@
                 <div class="pullquote">The kanban becomes a directory. The chat becomes a pipe.</div>
 
                 <p>What I learned: the mechanism wasn't really about commits. It was about making coordination <em>legible</em>. Once sessions had a place to be visible to each other, all sorts of useful things they couldn't previously do became possible.</p>
+
+                <h3 class="sub">An example — asking the right peer for context.</h3>
+
+                <p>Working in CCC's own codebase one morning, I asked the session — read-only — whether history search used semantic embeddings. It looked at the code, found the answer, and surfaced it cleanly: history search is <code>BM25</code>-ranked <code>FTS5</code> over a separate <code>claude-index</code> database, lexical only. No vector embeddings.</p>
+            </section>
+
+            <figure class="fig">
+                <img src="/images/group-chat-consultation.png"
+                     alt="A CCC session investigating its own history search code. First prompt: 'does history search use semantic search? [don't write anything - read-only mode]'. The session investigates and answers: 'No — history search is lexical, not semantic.' It cites server.py:12471 (search_conversation_history runs messages_fts MATCH ? with bm25 ordering), server.py:12350 header comment, and the lexical query rewriter. Concludes: keyword/phrase matching with BM25, no vector embeddings. Second prompt: 'can you check with the indexing session how to support semantic?' Tool use shown: 'Running List CCC sessions on 127.0.0.1' — the session looking up its peers via the registry."
+                     loading="lazy">
+            </figure>
+
+            <section class="essay-section">
+                <p>My next move was the give-away. Rather than building semantic search into CCC's code in this session — which had no <code>claude-index</code> context loaded — I asked: <em>"can you check with the indexing session how to support semantic?"</em> The session opened CCC's registry, found the indexing peer, and routed the question. Pattern two from the list above, made concrete: a session deep in code recognizes it doesn't have the right context, and instead of guessing, it asks the peer that does.</p>
 
                 <h3 class="sub">A side example — cross-session task delegation.</h3>
 
