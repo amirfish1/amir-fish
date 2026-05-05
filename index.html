@@ -347,6 +347,119 @@
             color: var(--ink-mute);
         }
 
+        /* --- CTA blocks --- */
+        .cta-block {
+            margin: 3.5rem 0;
+            padding: 2.5rem 0;
+            border-top: 0.5px solid var(--rule);
+            border-bottom: 0.5px solid var(--rule);
+        }
+        .cta-block .eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 0.9rem;
+            display: block;
+        }
+        .cta-block h3 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-variation-settings: "opsz" 60;
+            font-size: 1.65rem;
+            letter-spacing: -0.018em;
+            line-height: 1.22;
+            color: var(--ink);
+            margin-bottom: 1rem;
+        }
+        .cta-block p {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: var(--ink-soft);
+            margin-bottom: 1.25rem;
+        }
+        .cta-block ul.modes {
+            list-style: none;
+            margin: 0 0 1.6rem;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+        .cta-block ul.modes li {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: var(--ink-mute);
+            padding-left: 0;
+            display: flex;
+            gap: 0.65rem;
+        }
+        .cta-block ul.modes li::before {
+            content: "—";
+            color: var(--accent);
+            font-weight: 400;
+            flex-shrink: 0;
+        }
+        .cta-block ul.modes li strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+        .cta-block .strong-cta {
+            display: inline-block;
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 1.08rem;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 2px;
+        }
+        .cta-block .strong-cta:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .cta-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            background: #f5f3f0;
+            padding: 0.95rem 1.05rem;
+            border: 0.5px solid var(--rule-soft);
+            color: var(--ink-soft);
+            overflow-x: auto;
+            margin-bottom: 1.4rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .cta-block .cta-links {
+            display: flex;
+            gap: 1.6rem 2rem;
+            flex-wrap: wrap;
+        }
+        .cta-block .cta-links a {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 2px;
+        }
+        .cta-block .cta-links a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .cta-block .meta-line {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 1.1rem;
+        }
+
         /* --- Right rail --- */
         .right-rail {
             position: sticky;
@@ -520,8 +633,8 @@
             <a href="/" class="wordmark">Amir Fish · Field Notes</a>
             <nav>
                 <a href="/" class="active">Index</a>
-                <a href="#building">Building</a>
                 <a href="#advisory">Advisory</a>
+                <a href="#ccc">CCC</a>
                 <a href="mailto:amir@amirfish.com">Correspond</a>
             </nav>
         </div>
@@ -612,6 +725,32 @@
                 <p class="preview">How I build software now: Claude Code writing the application logic on one terminal, Claude in a browser configuring the third-party APIs on another. Two simultaneous threads of work I'm orchestrating, not executing. The setup that scaled to thirty parallel sessions before <span class="term">CCC</span> had to step in.</p>
             </article>
 
+            <section class="cta-block" id="advisory">
+                <span class="eyebrow">Advisory</span>
+                <h3>Talk to me about your AI product.</h3>
+                <p>I take 2–3 advisory roles at a time — most often early-stage AI startups, product orgs scaling their AI work, and operators thinking about going fractional themselves. The bar isn't an impressive demo, it's a clear product spec for the right thing. Three flavors:</p>
+                <ul class="modes">
+                    <li><strong>Solo founder.</strong> A single 60-minute strategy session. $200, focused on your product spec or a specific decision you're stuck on.</li>
+                    <li><strong>Team.</strong> A fractional retainer working alongside a small product team — monthly cadence, embedded into specific initiatives.</li>
+                    <li><strong>Product leader.</strong> A weekly thinking-partner engagement with a VP / CPO / founding PM. Deeper context, longer arc.</li>
+                </ul>
+                <a href="mailto:amir@amirfish.com?subject=Advisory%20—%20fit%20check" class="strong-cta">Email me to see if there's a fit →</a>
+            </section>
+
+            <section class="cta-block" id="ccc">
+                <span class="eyebrow">Open Source · MIT</span>
+                <h3>Command Center for Claude.</h3>
+                <p>The kanban that took me from "two terminals" to thirty parallel Claude Code sessions without losing track of any of them. Local, private, no daemon. Two of the field notes above came directly out of building it. Two-line install on macOS:</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="cta-links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/parallel-sessions">Field note →</a>
+                </div>
+                <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
+            </section>
+
             <p class="signoff">— Amir Fish &nbsp;·&nbsp; Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</p>
 
         </main>
@@ -639,7 +778,7 @@
                 <span class="term">Pays-through.</span> One Venmo account covers two clients (a husband and a wife). The system reconciles automatically. No commercial scheduler models this — it's too specific.
             </div>
 
-            <div class="marginalia section-block" id="building">
+            <div class="marginalia section-block">
                 <span class="heading">Currently Building</span>
                 <ul>
                     <li>
@@ -648,7 +787,7 @@
                     </li>
                     <li>
                         <a href="https://github.com/amirfish1/claude-command-center" target="_blank">Command Center for Claude</a>
-                        <span class="desc">Open-source · MIT. The kanban that scaled past two terminals.</span>
+                        <span class="desc">Open-source · MIT.</span>
                     </li>
                     <li>
                         <a href="https://plts.xyz">plts.xyz</a>
@@ -659,12 +798,6 @@
                         <span class="desc">Where guided verification was born.</span>
                     </li>
                 </ul>
-            </div>
-
-            <div class="marginalia section-block" id="advisory">
-                <span class="heading">Advisory</span>
-                <p>I take on 2–3 advisory roles at a time for early-stage AI startups. Product strategy, product-market fit, building the right thing — not just an impressive demo.</p>
-                <a href="mailto:amir@amirfish.com" class="cta-line">Email to see if there's a fit →</a>
             </div>
 
             <div class="marginalia section-block">
