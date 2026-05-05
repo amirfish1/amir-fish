@@ -328,37 +328,39 @@ cd claude-command-center && ./run.sh</pre>
 
         <section>
             <span class="section-label">Problem 1</span>
-            <h2>Sessions Fighting Over Commits</h2>
+            <h2>Putting Multiple Sessions in a Group Chat</h2>
 
-            <p>Five sessions on the same <code>main</code> branch, each wanting to commit their own work. They'd burn cycles checking <code>git status</code>, second-guessing whether files were theirs, sometimes clobbering each other anyway. The git index is a single shared file. Between the moment one session runs <code>git add</code> and the moment it runs <code>git commit</code>, a sibling session can stage their own work into the same index — and the commit happily picks up whatever is staged at commit time.</p>
+            <p>When you're running thirty Claude sessions at once, the bottleneck stops being any single agent's reasoning. It becomes coordination — getting sessions to know what other sessions are doing, defer to each other, ask for help, and not step on each other's work.</p>
 
-            <p>Pre-commit checks don't help: there's an unbounded race window between the check and the commit. I observed it bite twice in one day across two repos.</p>
+            <p>I started with a narrow version of this problem. Five sessions on the same <code>main</code> branch, each wanting to commit. They'd burn cycles checking <code>git status</code>, second-guessing whether files were theirs, sometimes clobbering each other anyway. The git index is a single shared file — between the moment one session runs <code>git add</code> and the moment it runs <code>git commit</code>, a sibling can stage their own work into the same index, and the commit picks up whatever is staged.</p>
 
-            <h3 class="sub">The fix — a shared markdown chat file</h3>
+            <p>That was a real bug. I observed it bite twice in one day across two repos. So I built a fix for it: a shared markdown file the sessions read and write to, where each session announces what it's about to stage before staging.</p>
 
-            <p>A <code>GROUP_CHAT.md</code> file lives in every working directory. All sessions read and write to it. Before committing, each session posts something like:</p>
+            <p>What I didn't expect is how quickly the same mechanism became useful for everything else.</p>
 
-            <pre>## 2026-05-04 — Proposal from `worktree-rebase-7c25`
+            <h3 class="sub">The pattern — sessions in a shared room</h3>
 
-Stakeholders: `archive-filter`, `pr-link-test`, `cwd-routing`.
+            <p>The mental model is a group chat for autonomous workers. Each session signs with a tag (<code>archive-filter-1d33</code>, <code>codex-spawn-7c25</code>). When something needs coordination, any session can drop a message in the room — propose a sequence, ask for an ack, request a second opinion, raise a flag, hand off context. Other sessions read on entry, react if relevant, ignore if not.</p>
 
-### Proposed sequence
-1. **`worktree-rebase-7c25`** — codex spawn engine
-   - Stage: `git add server.py static/index.html`
-   - Commit: `feat(ui): codex spawn — engine routing`
-2. **Push:** `git push origin main` after step 1.</pre>
-
-            <p>Sibling sessions reply with <code>✅ ack</code> or <code>Counter:</code>. The first session to start posts <code>▶ starting step 1</code>. After committing, it posts <code>✅ step 1 done</code>. The protocol is just a markdown convention, enforced by a <code>/group-chat</code> slash-command skill that handles the role logic (proposer / acker / executor / observer).</p>
-
-            <p>Three things make it work:</p>
+            <p>Three coordination patterns I now use it for, every day:</p>
 
             <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.6rem;"><strong>Stage by explicit path only.</strong> Never <code>git add -A</code> — it'll sweep in another session's in-flight edits.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Commit with <code>git commit --only &lt;paths&gt;</code>.</strong> Atomic. The race window collapses to zero — only the listed paths land in the commit, regardless of what else is staged.</li>
-                <li><strong>Make coordination visible.</strong> The point isn't the file. It's that sessions can't accidentally race over invisible state.</li>
+                <li style="margin-bottom: 0.9rem;"><strong>The original — staged commits.</strong> Before staging, post the paths you're touching. Siblings ack or counter. After committing, post the SHA. Combined with <code>git commit --only &lt;paths&gt;</code> (atomic, race-free), the clobber problem disappears entirely.</li>
+                <li style="margin-bottom: 0.9rem;"><strong>Second opinions across context boundaries.</strong> When a session is deep in code and needs a sanity check, I tell it: <em>"Drop this in the group chat — anyone who's been working in this area should weigh in."</em> Sessions that have spent hours in adjacent code respond with the context the asking session doesn't have. It beats inventing a fresh agent that has to re-learn.</li>
+                <li><strong>Multi-session collaboration on one problem.</strong> When two or three sessions converge on the same hard issue, I send them all to the chat: <em>"Go on a group chat about this, agree on an approach, then one of you executes."</em> They negotiate without me, post the resolution, and one takes the work. I see the receipts later.</li>
             </ol>
 
-            <p>No daemon, no IPC, no central server. Just a markdown file and a convention. Multiple sessions on the same Mac, on the same clone, on the same branch — they negotiate, they don't clobber.</p>
+            <p>The protocol underneath is intentionally minimal — sessions read the room, classify the state (open question, proposal, executing, done), and pick the action their role implies. There's a <code>/group-chat</code> slash-command skill that handles the role logic, but the underlying surface is just a markdown file. No daemon. No IPC. No central server. The work the sessions are doing stays in code; the coordination overflow goes into a file they can all see.</p>
+
+            <p>What I learned: the mechanism wasn't really about commits. It was about making coordination <em>legible</em>. Once sessions had a place to be visible to each other, all sorts of useful things they couldn't previously do became possible.</p>
+
+            <h3 class="sub">A side example — cross-session task delegation</h3>
+
+            <p>Same primitive, broader use. I had a long-running session on my machine called <em>"my office manager"</em> — it tracks tasks, reminders, and project state across all my work. One day a separate session needed to push something onto its agenda.</p>
+
+            <p>I didn't have to do it manually. I told the working session: <em>"Find my office manager — make this its top priority."</em> The session asked CCC for the list of open sessions on the machine, found the one named "my office manager," and used CCC's inject API to push a high-priority message into it. The office-manager session picked it up on its next turn.</p>
+
+            <p>Two sessions, neither one knowing about the other ahead of time, coordinated through a shared substrate. The pattern generalizes: any session can ask CCC who else is alive, what they're working on, and route work or questions to them. The kanban becomes a directory; the chat becomes a pipe.</p>
         </section>
 
         <hr>
@@ -382,11 +384,14 @@ Stakeholders: `archive-filter`, `pr-link-test`, `cwd-routing`.
 
             <p>Both run locally. Sub-second results across thousands of session files. The query language supports phrase quoting, prefix wildcards, time windows, project filters, and role filters.</p>
 
-            <p>Wired into CCC's sidebar — type a topic, matches surface live without opening a terminal:</p>
+            <p>Wired into CCC's sidebar — type a topic, results pop up live without opening a terminal:</p>
 
-            <pre>// inside CCC: type "tax prep hub" in the search bar
-// → returns the 3 sessions where you discussed it,
-//   ranked by recency × relevance, with snippets.</pre>
+            <figure style="margin: 1.5rem 0;">
+                <video src="/images/claude-index-search.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: 4px; border: 1px solid #e5e5e5;">
+                    Your browser doesn't support inline video. <a href="/images/claude-index-search.mp4">Download the demo</a>.
+                </video>
+                <figcaption style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.85rem; color: #888; text-align: center; margin-top: 0.6rem;">Two seconds: keystroke to results.</figcaption>
+            </figure>
 
             <p>The index also covers Codex transcripts (<code>~/.codex/sessions/*.jsonl</code>) under the same schema — one search, both runtimes.</p>
 
