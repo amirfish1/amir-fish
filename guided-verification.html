@@ -12,51 +12,360 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        body { font-family: 'DM Sans', -apple-system, sans-serif; font-size: 16px; line-height: 1.8; color: #111; background: #fcfcfc; padding: 0 1.5rem; }
-        a { color: #111; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #ccc; }
-        a:hover { text-decoration-color: #111; }
-        .container { max-width: 650px; margin: 0 auto; }
-        .top-nav { padding: 2.5rem 0 0; font-size: 0.9rem; color: #999; }
-        .top-nav a { color: #999; text-decoration-color: #ddd; }
+
+        :root {
+            --paper: #fbf9f8;
+            --ink: #1a1a1a;
+            --ink-soft: #2a2a2a;
+            --ink-mute: #6b6b6b;
+            --rule: #e8e3d8;
+            --rule-soft: #ece7e0;
+            --accent: #c2693a;
+            --accent-deep: #8b3d18;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--ink);
+            background: var(--paper);
+            padding: 0 1.5rem;
+            font-feature-settings: "kern", "liga", "onum";
+        }
+
+        a {
+            color: var(--ink);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--accent);
+            text-decoration-thickness: 1px;
+        }
+        a:hover { text-decoration-color: var(--ink); text-decoration-thickness: 1.5px; }
+
+        /* --- Outer container --- */
+        .container {
+            max-width: 870px;
+            margin: 0 auto;
+        }
+
+        .top-nav {
+            padding: 2.5rem 0 0;
+            font-size: 0.88rem;
+            color: #999;
+        }
+        .top-nav a {
+            color: #999;
+            text-decoration-color: #ddd;
+        }
         .top-nav a:hover { color: #444; text-decoration-color: #999; }
-        .hero { padding: 8vh 0 0; }
-        .tag-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #c2693a; margin-bottom: 1rem; display: block; }
-        .hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem; }
-        .hero .subtitle { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-style: italic; color: #666; line-height: 1.5; margin-bottom: 2.5rem; }
-        .hero p { font-size: 1.05rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        hr { border: none; border-top: 1px solid #e5e5e5; margin: 4rem 0; }
-        .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 2rem; display: block; }
-        section h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.8rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 1.5rem; }
-        section h3.sub { font-family: 'Fraunces', Georgia, serif; font-size: 1.15rem; font-weight: 500; color: #333; margin: 2rem 0 0.75rem; }
-        section p { font-size: 1rem; line-height: 1.85; color: #444; margin-bottom: 1.25rem; }
-        section code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; background: #f5f4f1; padding: 0.1rem 0.35rem; border-radius: 3px; color: #444; }
-        .pullquote { border-left: 2px solid #c2693a; padding: 0.4rem 0 0.4rem 1.4rem; margin: 2rem 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; color: #333; line-height: 1.55; }
-        .closing { background: #faf8f4; border-radius: 6px; padding: 2.5rem 2rem; margin: 4rem 0 2rem; text-align: center; }
-        .closing h2 { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 1rem; }
-        .closing p { font-size: 1rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
-        .closing .cta { display: inline-block; font-size: 0.95rem; font-weight: 500; color: #111; text-decoration: none; border-bottom: 1.5px solid #111; padding-bottom: 1px; margin: 0 1rem; }
+
+        /* --- Hero (full container width) --- */
+        .hero {
+            padding: 7vh 0 4rem;
+            border-bottom: 1px solid var(--rule);
+            margin-bottom: 4rem;
+            max-width: 600px;
+        }
+        .tag-eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--accent-deep);
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+        .hero h1 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: clamp(2.4rem, 5.5vw, 3.4rem);
+            font-weight: 500;
+            font-variation-settings: "opsz" 144;
+            letter-spacing: -0.025em;
+            line-height: 1.08;
+            margin-bottom: 1.5rem;
+            color: #111;
+        }
+        .hero .subtitle {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.25rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 2.25rem;
+        }
+        .hero p {
+            font-size: 1.02rem;
+            line-height: 1.85;
+            color: var(--ink-soft);
+            margin-bottom: 1.1rem;
+        }
+
+        /* --- Two-column annotated essay grid --- */
+        .essay {
+            margin-bottom: 5rem;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 540px 240px;
+            column-gap: 56px;
+            margin-bottom: 1.4rem;
+            align-items: start;
+        }
+        .row > * { grid-column: 1; min-width: 0; }
+        .row > aside.margin-note {
+            grid-column: 2;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--ink-mute);
+            border-left: 1px solid var(--rule);
+            padding: 0.1rem 0 0.1rem 1rem;
+            margin-top: 0.45rem;
+            position: relative;
+        }
+        .row > aside.margin-note .num {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-deep);
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+        .row > aside.margin-note strong {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.92rem;
+        }
+
+        /* --- Section labels and headings (live in main column) --- */
+        .row .section-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #999;
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+        .row h2 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            font-variation-settings: "opsz" 72;
+            font-size: 1.75rem;
+            letter-spacing: -0.018em;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #111;
+        }
+        .row h3.sub {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.15rem;
+            color: #444;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .row p {
+            font-size: 1rem;
+            line-height: 1.85;
+            color: var(--ink-soft);
+            margin-bottom: 1.1rem;
+        }
+        .row p:last-child { margin-bottom: 0; }
+
+        /* Inline citation/reference superscript */
+        .ref {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7em;
+            color: var(--accent-deep);
+            font-weight: 600;
+            vertical-align: super;
+            line-height: 0;
+            margin-left: 1px;
+            text-decoration: none;
+        }
+
+        /* Pull quote */
+        .row .pullquote {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #2a2a2a;
+            border-left: 2px solid var(--accent);
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            margin: 2.25rem 0;
+        }
+
+        /* Code/inline */
+        .row code, .hero code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            background: #f1ece5;
+            padding: 0.08rem 0.35rem;
+            border-radius: 2px;
+            color: #444;
+        }
+
+        /* Numbered lists */
+        .row ol {
+            margin: 0.6rem 0 1.25rem;
+            padding-left: 1.5rem;
+            color: var(--ink-soft);
+            line-height: 1.85;
+        }
+        .row ol li { margin-bottom: 0.6rem; }
+
+        /* --- Figures (in main column, caption in margin) --- */
+        .row.fig-row {
+            margin: 2.5rem 0;
+        }
+        .row.fig-row > figure {
+            margin: 0;
+        }
+        .row.fig-row figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+            border: 1px solid var(--rule);
+        }
+        .row.fig-row > aside.fig-caption {
+            grid-column: 2;
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--ink-mute);
+            border-left: 1px solid var(--rule);
+            padding: 0.1rem 0 0.1rem 1rem;
+            margin-top: 0.4rem;
+        }
+        .row.fig-row > aside.fig-caption .fig-num {
+            font-family: 'DM Sans', sans-serif;
+            font-style: normal;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-deep);
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Section divider --- */
+        hr.section-divider {
+            border: none;
+            border-top: 1px solid var(--rule);
+            margin: 3.5rem 0;
+            max-width: 540px;
+        }
+
+        /* --- Closing block (full container width) --- */
+        .closing {
+            background: #f4ede1;
+            border-radius: 4px;
+            padding: 2.5rem 2rem;
+            margin: 4rem 0 2rem;
+            text-align: center;
+            max-width: 600px;
+        }
+        .closing h2 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2a2a2a;
+        }
+        .closing p {
+            font-size: 0.98rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .closing .cta {
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1.5px solid var(--ink);
+            padding-bottom: 1px;
+            margin: 0 1rem;
+        }
         .closing .cta:hover { opacity: 0.6; }
-        .related { margin: 3rem 0; }
-        .related .section-label { margin-bottom: 1.25rem; }
-        .related a { display: block; color: #444; text-decoration-color: #ddd; margin-bottom: 0.6rem; font-size: 0.95rem; }
-        footer { margin-top: 4rem; padding-bottom: 4rem; font-size: 0.85rem; color: #bbb; }
-        footer a { color: #999; text-decoration-color: #ddd; margin-right: 1.5rem; }
-        footer a:hover { text-decoration-color: #999; }
-        figure { margin: 2.5rem 0; }
-        figure img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid #e8e3d8; box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05); }
-        figure figcaption { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 0.92rem; color: #888; line-height: 1.55; margin-top: 0.85rem; text-align: center; padding: 0 0.5rem; }
-        figure.hero-figure { margin: 1.5rem 0 0; }
+
+        .related {
+            margin: 3rem 0;
+            max-width: 540px;
+        }
+        .related .section-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #999;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+        .related a {
+            display: block;
+            color: #444;
+            text-decoration-color: #ddd;
+            margin-bottom: 0.6rem;
+            font-size: 0.96rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-bottom: 4rem;
+            font-size: 0.85rem;
+            color: #aaa;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        footer a { color: #888; text-decoration-color: #ddd; }
+        footer a:hover { color: #444; text-decoration-color: #888; }
+
+        /* --- Mobile / narrow: collapse marginalia inline --- */
+        @media (max-width: 900px) {
+            .row {
+                grid-template-columns: 1fr;
+                column-gap: 0;
+                max-width: 600px;
+            }
+            .row > aside.margin-note,
+            .row.fig-row > aside.fig-caption {
+                grid-column: 1;
+                font-style: italic;
+                margin: 0.5rem 0 1rem;
+                padding: 0.4rem 0 0.4rem 1rem;
+                font-size: 0.88rem;
+            }
+            hr.section-divider, .hero, .closing, .related { max-width: 100%; }
+        }
         @media (max-width: 500px) {
-            .hero { padding-top: 5vh; }
+            .hero { padding-top: 4vh; }
             .hero h1 { font-size: 2rem; }
             .hero .subtitle { font-size: 1.1rem; }
             .closing { padding: 2rem 1.4rem; }
             .closing .cta { display: block; margin: 0.5rem 0; }
-            figure { margin: 2rem 0; }
         }
     </style>
 </head>
@@ -67,125 +376,216 @@
             <a href="/">← amirfish.ai</a>
         </nav>
 
-        <section class="hero">
-            <span class="tag-eyebrow">Field Note · Product</span>
+        <header class="hero">
+            <span class="tag-eyebrow">Field Note · Product · 2026</span>
             <h1>The Guided Verification Problem</h1>
             <p class="subtitle">Most "human-in-the-loop" UX is rubber-stamping. The pattern that actually works looks different — and it's the whole game for AI products.</p>
             <p>I built three versions of the same expense tracker. The first one looked great and was silently wrong. The second one was correct and unusable. The third one is the version I now think every AI product team should be building.</p>
             <p>This is what each version got wrong, what the third version got right, and why I think this pattern matters more than the model you pick.</p>
+        </header>
 
-            <figure class="hero-figure">
-                <img src="/images/guided-verification-hero-1x.webp"
-                     srcset="/images/guided-verification-hero-1x.webp 1x, /images/guided-verification-hero-2x.webp 2x"
-                     alt="A wooden desk strewn with bank statements, a ledger book, a calculator with a coil of receipt tape, a coffee cup and a yellow legal pad covered in handwritten figures."
-                     loading="eager">
-                <figcaption>Tax season, before the tool existed. The data was there. The system to engage with it wasn't.</figcaption>
-            </figure>
-        </section>
+        <article class="essay">
 
-        <hr>
+            <div class="row fig-row">
+                <figure>
+                    <img src="/images/guided-verification-hero-1x.webp"
+                         srcset="/images/guided-verification-hero-1x.webp 1x, /images/guided-verification-hero-2x.webp 2x"
+                         alt="A wooden desk strewn with bank statements, a ledger book, a calculator with a coil of receipt tape, a coffee cup, and a yellow legal pad covered in handwritten figures."
+                         loading="eager">
+                </figure>
+                <aside class="fig-caption">
+                    <span class="fig-num">Fig. 1</span>
+                    Tax season, before the tool existed. The data was there. The system to engage with it wasn't.
+                </aside>
+            </div>
 
-        <section>
-            <span class="section-label">Version 1</span>
-            <h2>Full Automation. Silently Wrong.</h2>
+            <div class="row">
+                <span class="section-label">Version 1</span>
+            </div>
+            <div class="row">
+                <h2>Full Automation. Silently Wrong.</h2>
+            </div>
 
-            <p>The first version was the obvious AI play. Plaid pulls every transaction from every account. The model categorizes each one — rental property, business, personal, charity. The user gets a clean report at the end of the month.</p>
+            <div class="row">
+                <p>The first version was the obvious AI play. <span class="ref">¹</span>Plaid pulls every transaction from every account. The model categorizes each one — rental property, business, personal, charity. The user gets a clean report at the end of the month.</p>
+                <aside class="margin-note">
+                    <span class="num">1</span>
+                    <strong>Plaid</strong> — the bank-data API behind most fintech apps. Reads transactions from connected accounts in near-real time.
+                </aside>
+            </div>
 
-            <p>It looked great. It was wrong about the things that mattered.</p>
+            <div class="row">
+                <p>It looked great. It was wrong about the things that mattered.</p>
+            </div>
 
-            <p>A $2,400 plumbing repair on a rental property, miscategorized as <em>"office supplies."</em> A $180 dinner with a prospective Pilates client, dropped into <em>"personal."</em> A reimbursement for a deposit, double-counted because the model didn't recognize the reverse pair.</p>
+            <div class="row">
+                <p>A $2,400 plumbing repair on a rental property, miscategorized as <em>"office supplies."</em><span class="ref">²</span> A $180 dinner with a prospective Pilates client, dropped into <em>"personal."</em> A reimbursement for a deposit, double-counted because the model didn't recognize the reverse pair.</p>
+                <aside class="margin-note">
+                    <span class="num">2</span>
+                    Real example. The merchant string for the plumber's billing arm overlapped with a hardware-store template, and the model picked the wrong neighbor.
+                </aside>
+            </div>
 
-            <p>None of these errors fired an alert. There was nothing to alert on — the model returned a confident category for every transaction. The output was a beautiful, perfectly-formatted report containing dozens of expensive mistakes, and you only found them at tax time.</p>
+            <div class="row">
+                <p>None of these errors fired an alert. There was nothing to alert on — the model returned a confident category for every transaction. The output was a beautiful, perfectly-formatted report containing dozens of expensive mistakes, and you only found them at tax time.</p>
+            </div>
 
-            <p>The deeper problem isn't the accuracy rate. It's that the user has no surface to engage with the model's reasoning. <strong>If the only way to catch errors is to re-do the categorization yourself, the AI hasn't actually saved you any work.</strong> You've just shifted from doing the task to auditing it — which is harder.</p>
-        </section>
+            <div class="row">
+                <p>The deeper problem isn't the accuracy rate. It's that the user has no surface to engage with the model's reasoning. <strong>If the only way to catch errors is to re-do the categorization yourself, the AI hasn't actually saved you any work.</strong> You've just shifted from doing the task to auditing it — which is harder.</p>
+            </div>
 
-        <hr>
+            <hr class="section-divider">
 
-        <section>
-            <span class="section-label">Version 2</span>
-            <h2>Fully Manual. Soul-Crushing.</h2>
+            <div class="row">
+                <span class="section-label">Version 2</span>
+            </div>
+            <div class="row">
+                <h2>Fully Manual. Soul-Crushing.</h2>
+            </div>
 
-            <p>So I flipped it. Version 2 imported transactions and put them in a queue. The user sat at a table and clicked through every row. No AI. Just a fast-keyboard-driven categorization tool.</p>
+            <div class="row">
+                <p>So I flipped it. Version 2 imported transactions and put them in a queue. The user sat at a table and clicked through every row. No AI. Just a fast-keyboard-driven categorization tool.</p>
+            </div>
 
-            <p>Accuracy: perfect. Adoption: zero.</p>
+            <div class="row">
+                <p>Accuracy: perfect. Adoption: zero.</p>
+            </div>
 
-            <p>Nobody — including me, the person who built it — wanted to grind through 200 transactions on the first of every month. The act of categorizing the tenth coffee shop transaction in a row is the kind of work AI is supposed to <em>obviate</em>, not formalize.</p>
+            <div class="row">
+                <p>Nobody — including me, the person who built it — wanted to grind through 200 transactions on the first of every month. The act of categorizing the tenth coffee shop transaction in a row is the kind of work AI is supposed to <em>obviate</em>, not formalize.</p>
+            </div>
 
-            <p>The lesson here was less obvious than the V1 lesson. The model wasn't useless — the V1 model had been right roughly 80% of the time. <strong>Throwing all of it away to recover trust was the wrong trade.</strong> What I needed was a way to keep the speed of automation and the trust of manual review.</p>
-        </section>
+            <div class="row">
+                <p>The lesson here was less obvious than the V1 lesson. The model wasn't useless — the V1 model had been right roughly 80% of the time.<span class="ref">³</span> <strong>Throwing all of it away to recover trust was the wrong trade.</strong> What I needed was a way to keep the speed of automation and the trust of manual review.</p>
+                <aside class="margin-note">
+                    <span class="num">3</span>
+                    Measured against my hand-categorized ground truth on 200 transactions. 80% sounds high until you notice the 20% includes every line item over $1,000.
+                </aside>
+            </div>
 
-        <hr>
+            <hr class="section-divider">
 
-        <section>
-            <span class="section-label">Version 3</span>
-            <h2>Guided Verification.</h2>
+            <div class="row">
+                <span class="section-label">Version 3</span>
+            </div>
+            <div class="row">
+                <h2>Guided Verification.<span class="ref">⁴</span></h2>
+                <aside class="margin-note">
+                    <span class="num">4</span>
+                    <strong>Guided verification.</strong> The pattern of having the AI commit to a first-pass result, then walk the user through it in priority order. The test: the user is responding, not driving.
+                </aside>
+            </div>
 
-            <p>Version 3 is the one that works. The system does a first-pass categorization, then walks the user through the result one decision at a time — but it owns the walk. It's not a list with checkboxes. It's a flow.</p>
+            <div class="row">
+                <p>Version 3 is the one that works. The system does a first-pass categorization, then walks the user through the result one decision at a time — but it owns the walk. It's not a list with checkboxes. It's a flow.</p>
+            </div>
 
-            <p>Each transaction comes up on a card showing four things:</p>
+            <div class="row">
+                <p>Each transaction comes up on a card showing four things:</p>
+            </div>
 
-            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.6rem;"><strong>What it did</strong> — the category it picked.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Why</strong> — one sentence of reasoning, in plain English. <em>"Marked rental because the merchant matches a vendor you've previously paid from this property's account."</em></li>
-                <li style="margin-bottom: 0.6rem;"><strong>How confident</strong> — a flag if the signal was weak or contradictory.</li>
-                <li><strong>The choice</strong> — confirm, change, or skip. One keystroke each.</li>
-            </ol>
+            <div class="row">
+                <ol>
+                    <li><strong>What it did</strong> — the category it picked.</li>
+                    <li><strong>Why</strong> — one sentence of reasoning, in plain English. <em>"Marked rental because the merchant matches a vendor you've previously paid from this property's account."</em></li>
+                    <li><strong>How confident</strong> — a flag if the signal was weak or contradictory.</li>
+                    <li><strong>The choice</strong> — confirm, change, or skip. One keystroke each.</li>
+                </ol>
+            </div>
 
-            <p>The flow is ordered: high-uncertainty cards first, easy ones last. Often by the time the user gets through the uncertain ones, the system can confirm-by-default the rest. 100 transactions verified in under 10 minutes. Down from two hours, with the same accuracy as V2.</p>
+            <div class="row">
+                <p>The flow is ordered: high-uncertainty cards first, easy ones last.<span class="ref">⁵</span> Often by the time the user gets through the uncertain ones, the system can confirm-by-default the rest. 100 transactions verified in under 10 minutes. Down from two hours, with the same accuracy as V2.</p>
+                <aside class="margin-note">
+                    <span class="num">5</span>
+                    <strong>Hard-first ordering.</strong> The same shape shows up in code review tools, content moderation, and triage interfaces. Once the user is in flow, the easy decisions become muscle memory.
+                </aside>
+            </div>
 
-            <figure>
-                <img src="/images/bym-dashboard-1x.webp"
-                     srcset="/images/bym-dashboard-1x.webp 1x, /images/bym-dashboard-2x.webp 2x"
-                     alt="An admin dashboard showing 'Today's Appointments', a 'Payments — 502 unpaid' row with a 'Resolve with AI' button, and a client list ordered by frequency."
-                     loading="lazy">
-                <figcaption>The pattern in production: the system flags 502 unpaid line items, but it doesn't dump them in a list. The button says <em>Resolve with AI</em> — meaning the system will walk you through them, one decision at a time, in order of uncertainty.</figcaption>
-            </figure>
+            <div class="row">
+                <div class="pullquote">The key shift: the system takes ownership of the review. The user is responding, not driving.</div>
+            </div>
 
-            <div class="pullquote">The key shift: the system takes ownership of the review. The user is responding, not driving.</div>
+            <div class="row">
+                <p>That sentence is the whole pattern. In V1, the AI did the work and the user was supposed to audit it. In V2, the user did the work and the AI was absent. In V3, the AI does the work <em>and</em> the audit, and the user supplies one bit of judgment per uncertain decision. Their job is to react, not to scan.</p>
+            </div>
 
-            <p>That sentence is the whole pattern. In V1, the AI did the work and the user was supposed to audit it. In V2, the user did the work and the AI was absent. In V3, the AI does the work <em>and</em> the audit, and the user supplies one bit of judgment per uncertain decision. Their job is to react, not to scan.</p>
-        </section>
+            <div class="row fig-row">
+                <figure>
+                    <img src="/images/bym-dashboard-1x.webp"
+                         srcset="/images/bym-dashboard-1x.webp 1x, /images/bym-dashboard-2x.webp 2x"
+                         alt="An admin dashboard showing 'Today's Appointments', a 'Payments — 502 unpaid' row with a 'Resolve with AI' button, and a client list ordered by frequency."
+                         loading="lazy">
+                </figure>
+                <aside class="fig-caption">
+                    <span class="fig-num">Fig. 2</span>
+                    The pattern in production, on the Pilates studio admin. 502 unpaid line items aren't dumped into a list. The button reads <em>Resolve with AI</em> — a queue the system will walk through, one decision at a time.
+                </aside>
+            </div>
 
-        <hr>
+            <hr class="section-divider">
 
-        <section>
-            <span class="section-label">Why This Matters</span>
-            <h2>"Human In The Loop" Is Doing A Lot Of Work In That Sentence.</h2>
+            <div class="row">
+                <span class="section-label">Why This Matters</span>
+            </div>
+            <div class="row">
+                <h2>"Human In The Loop" Is Doing A Lot Of Work In That Sentence.</h2>
+            </div>
 
-            <p>Every AI product team I talk to says they have a "human in the loop." Almost none of them mean what V3 means. Most mean V1: the model produces output, the human sees it, the human is theoretically responsible for catching errors. That's not a loop. That's a dump.</p>
+            <div class="row">
+                <p>Every AI product team I talk to says they have a "human in the loop." Almost none of them mean what V3 means. Most mean V1: the model produces output, the human sees it, the human is theoretically responsible for catching errors. That's not a loop. That's a dump.</p>
+            </div>
 
-            <p>A real loop has three properties:</p>
+            <div class="row">
+                <p>A real loop has three properties:</p>
+            </div>
 
-            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.6rem;"><strong>The system surfaces its own uncertainty.</strong> Not just confidence scores — readable explanations of why a particular call is hard. <em>"Two vendors with similar names. Last time you said personal."</em></li>
-                <li style="margin-bottom: 0.6rem;"><strong>The system orders the review for the user.</strong> Hardest first. Cheap signals last. Don't make the user prioritize.</li>
-                <li><strong>The system collapses to single-bit decisions.</strong> If a card asks the user to think for more than a few seconds, the design is wrong. Either pre-resolve more, or break the decision into parts.</li>
-            </ol>
+            <div class="row">
+                <ol>
+                    <li><strong>The system surfaces its own uncertainty.</strong> Not just confidence scores — readable explanations of why a particular call is hard. <em>"Two vendors with similar names. Last time you said personal."</em></li>
+                    <li><strong>The system orders the review for the user.</strong> Hardest first. Cheap signals last. Don't make the user prioritize.</li>
+                    <li><strong>The system collapses to single-bit decisions.</strong> If a card asks the user to think for more than a few seconds, the design is wrong. Either pre-resolve more, or break the decision into parts.</li>
+                </ol>
+            </div>
 
-            <p>I've started using "guided verification" as the test. If you can't describe how your product does these three things, you don't have a human in the loop. You have a human at the dump.</p>
+            <div class="row">
+                <p>I've started using "guided verification" as the test. If you can't describe how your product does these three things, you don't have a human in the loop. You have a human at the dump.</p>
+            </div>
 
-            <figure>
-                <img src="/images/human-in-the-loop-1x.webp"
-                     srcset="/images/human-in-the-loop-1x.webp 1x, /images/human-in-the-loop-2x.webp 2x"
-                     alt="A single index card on warm-grey paper. Typed text reads 'human in the loop?' followed by a large hand-drawn question mark in red ink."
-                     loading="lazy">
-                <figcaption>The phrase has been carrying a lot of weight. Most teams haven't earned it.</figcaption>
-            </figure>
-        </section>
+            <div class="row fig-row">
+                <figure>
+                    <img src="/images/human-in-the-loop-1x.webp"
+                         srcset="/images/human-in-the-loop-1x.webp 1x, /images/human-in-the-loop-2x.webp 2x"
+                         alt="A single index card on warm-grey paper. Typed text reads 'human in the loop?' followed by a large hand-drawn question mark in red ink."
+                         loading="lazy">
+                </figure>
+                <aside class="fig-caption">
+                    <span class="fig-num">Fig. 3</span>
+                    The phrase has been carrying a lot of weight. Most teams haven't earned it.
+                </aside>
+            </div>
 
-        <hr>
+            <hr class="section-divider">
 
-        <section>
-            <span class="section-label">Where I'm Taking This</span>
-            <h2>The Pattern Generalizes.</h2>
+            <div class="row">
+                <span class="section-label">Where I'm Taking This</span>
+            </div>
+            <div class="row">
+                <h2>The Pattern Generalizes.</h2>
+            </div>
 
-            <p>Once you see the shape, it's everywhere. Code review of AI-generated patches. Reviewing AI-drafted emails. Triaging support tickets. Tagging photos. Every task that looks like <em>"AI does the bulk, human catches the edges"</em> has the same V1 / V2 / V3 trajectory available to it, and almost everyone is still on V1.</p>
+            <div class="row">
+                <p>Once you see the shape, it's everywhere. Code review of AI-generated patches. Reviewing AI-drafted emails. Triaging support tickets. Tagging photos. Every task that looks like <em>"AI does the bulk, human catches the edges"</em> has the same V1 / V2 / V3 trajectory available to it, and almost everyone is still on V1.</p>
+            </div>
 
-            <p>The teams I find myself most interested in are the ones building V3 from the start — designing the verification flow before they ship the categorizer. That's a different kind of product spec than most AI-native teams write today, and it's where I think the next few years of differentiation will come from.</p>
+            <div class="row">
+                <p>The teams I find myself most interested in are the ones building V3 from the start — designing the verification flow before they ship the categorizer. That's a different kind of product spec than most AI-native teams write today, and it's where I think the next few years of differentiation will come from.</p>
+            </div>
 
-            <p>If you're building something in this shape and want to compare notes, my email's at the bottom.</p>
-        </section>
+            <div class="row">
+                <p>If you're building something in this shape and want to compare notes, my email's at the bottom.</p>
+            </div>
+
+        </article>
 
         <div class="related">
             <span class="section-label">Related</span>
