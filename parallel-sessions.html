@@ -3,484 +3,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Fixes for 30+ Parallel Claude Sessions — Amir Fish</title>
-    <meta name="description" content="Two operational fixes for running dozens of Claude Code sessions in parallel: a markdown-based commit-coordination protocol, and a local search index over every transcript. Both built around CCC (Command Center for Claude).">
-    <meta property="og:title" content="Two Fixes for 30+ Parallel Claude Sessions">
+    <title>Two Fixes for Running 30+ Claude Sessions in Parallel — Amir Fish</title>
+    <meta name="description" content="A markdown commit-coordination protocol and a local search index over every transcript. Both built around CCC. The wins aren't smarter prompts — they're better record-keeping.">
+    <meta property="og:title" content="Two Fixes for Running 30+ Claude Sessions in Parallel">
     <meta property="og:description" content="When you orchestrate dozens of agents, the real wins aren't smarter prompts. They're better record-keeping.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://amirfish.ai/parallel-sessions">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-
+        :root {
+            --paper: #fbf9f8;
+            --ink: #1b1c1c;
+            --ink-soft: #2a2a2a;
+            --ink-mute: #444748;
+            --rule: #c4c7c7;
+            --rule-soft: #e4e2e2;
+            --rule-strong: #747878;
+            --accent: #aa3527;
+            --accent-soft: #c4583f;
+        }
         body {
-            font-family: 'DM Sans', -apple-system, sans-serif;
-            font-size: 16px;
-            line-height: 1.8;
-            color: #111;
-            background: #fcfcfc;
-            padding: 0 1.5rem;
-        }
-
-        a {
-            color: #111;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            text-decoration-color: #ccc;
-        }
-
-        a:hover { text-decoration-color: #111; }
-
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        /* --- Top nav (light) --- */
-        .top-nav {
-            padding: 2.5rem 0 0;
-            font-size: 0.9rem;
-            color: #999;
-        }
-
-        .top-nav a {
-            color: #999;
-            text-decoration-color: #ddd;
-        }
-
-        .top-nav a:hover { color: #444; text-decoration-color: #999; }
-
-        /* --- Hero --- */
-        .hero {
-            padding: 8vh 0 0;
-        }
-
-        .tag-eyebrow {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #c2693a;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .hero h1 {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: clamp(2.4rem, 5.5vw, 3.4rem);
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-        }
-
-        .hero .subtitle {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.3rem;
-            font-style: italic;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 2.5rem;
-        }
-
-        .hero p {
-            font-size: 1.05rem;
-            line-height: 1.85;
-            color: #444;
-            margin-bottom: 1.25rem;
-        }
-
-        /* --- CCC banner card --- */
-        .ccc-card {
-            border: 1px solid #e5e5e5;
-            border-radius: 4px;
-            padding: 1.6rem 1.8rem;
-            margin: 2.5rem 0;
-            background: #fff;
-        }
-
-        .ccc-card .ccc-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #c2693a;
-            margin-bottom: 0.6rem;
-            display: block;
-        }
-
-        .ccc-card h3 {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 0.6rem;
-        }
-
-        .ccc-card p {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-
-        .ccc-card pre {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            background: #f5f4f1;
-            padding: 0.8rem 1rem;
-            border-radius: 3px;
-            color: #333;
-            overflow-x: auto;
-            margin-bottom: 1rem;
-        }
-
-        .ccc-card .links {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .ccc-card .links a {
-            color: #c2693a;
-            text-decoration-color: #e5c5b3;
-            margin-right: 1.2rem;
-        }
-
-        .ccc-card .links a:hover { text-decoration-color: #c2693a; }
-
-        /* --- Section --- */
-        hr {
-            border: none;
-            border-top: 1px solid #e5e5e5;
-            margin: 4rem 0;
-        }
-
-        .section-label {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #999;
-            margin-bottom: 2rem;
-            display: block;
-        }
-
-        section h2 {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.8rem;
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            line-height: 1.25;
-            margin-bottom: 1.5rem;
-        }
-
-        section h3.sub {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.15rem;
-            font-weight: 500;
-            color: #333;
-            margin: 2rem 0 0.75rem;
-        }
-
-        section p {
-            font-size: 1rem;
-            line-height: 1.85;
-            color: #444;
-            margin-bottom: 1.25rem;
-        }
-
-        section pre {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            background: #f5f4f1;
-            padding: 0.9rem 1.1rem;
-            border-radius: 3px;
-            color: #333;
-            overflow-x: auto;
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 17px;
             line-height: 1.6;
-            margin: 1.25rem 0;
+            color: var(--ink);
+            background: var(--paper);
+            font-feature-settings: "kern", "liga", "onum";
+        }
+        a {
+            color: var(--ink);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: var(--rule);
+            text-decoration-thickness: 0.5px;
+            transition: color 0.15s, text-decoration-color 0.15s;
+        }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+        ::selection { background: #ffdad4; color: #410000; }
+
+        .top-bar {
+            border-bottom: 0.5px solid var(--rule-soft);
+            background: rgba(251, 249, 248, 0.92);
+            backdrop-filter: blur(6px);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .top-bar-inner {
+            max-width: 1280px; margin: 0 auto; padding: 1.1rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: baseline; gap: 2rem;
+        }
+        .top-bar .wordmark {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic; font-weight: 500; font-size: 1.15rem;
+            letter-spacing: -0.01em; color: var(--ink); text-decoration: none;
+        }
+        .top-bar nav { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; display: flex; gap: 2rem; }
+        .top-bar nav a { color: #888; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 0.12rem; }
+        .top-bar nav a.active { color: var(--ink); border-bottom-color: var(--ink); }
+        .top-bar nav a:hover { color: var(--ink); }
+
+        .page {
+            max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
+            display: grid; grid-template-columns: 200px minmax(0, 1fr) 280px;
+            column-gap: 64px; align-items: start;
         }
 
-        section code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.88rem;
-            background: #f5f4f1;
-            padding: 0.1rem 0.35rem;
-            border-radius: 3px;
-            color: #444;
+        .left-rail { position: sticky; top: 4.5rem; padding-top: 5rem; font-size: 0.92rem; }
+        .left-rail .label {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;
+            color: var(--accent); margin-bottom: 0.4rem; display: block;
+        }
+        .left-rail .context-title {
+            font-family: 'Newsreader', Georgia, serif; font-weight: 500;
+            color: var(--ink); font-size: 1rem; margin-bottom: 1.6rem;
+        }
+        .left-rail .toc { display: flex; flex-direction: column; gap: 0.7rem; list-style: none; }
+        .left-rail .toc a { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; color: #888; text-decoration: none; line-height: 1.4; }
+        .left-rail .toc a:hover { color: var(--ink); }
+        .left-rail .toc-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-right: 0.45rem; font-variant-numeric: tabular-nums; }
+
+        main { max-width: 520px; padding: 5rem 0 6rem; position: relative; }
+
+        .hero { margin-bottom: 4rem; }
+        .hero .eyebrow {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+            color: var(--accent); margin-bottom: 1.5rem; display: block;
+        }
+        .hero h1 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.5rem; font-weight: 400; font-variation-settings: "opsz" 72;
+            letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); margin-bottom: 1.5rem;
+        }
+        .hero .subtitle {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400;
+            font-size: 1.18rem; line-height: 1.55; color: var(--ink-mute); margin-bottom: 2rem;
+        }
+        .hero p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; }
+
+        section.essay-section { margin-bottom: 3.5rem; position: relative; }
+        section.essay-section .section-number {
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+            color: var(--accent); font-variant-numeric: tabular-nums;
+            position: absolute; left: -3rem; top: 0.25rem; user-select: none;
+        }
+        section.essay-section .section-date {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.18em; color: var(--rule-strong);
+            margin-bottom: 0.75rem; display: block;
+        }
+        section.essay-section h2 {
+            font-family: 'Newsreader', Georgia, serif; font-size: 1.8rem; font-weight: 400;
+            font-variation-settings: "opsz" 60; letter-spacing: -0.018em; line-height: 1.2;
+            color: var(--ink); margin-bottom: 1.4rem;
+        }
+        section.essay-section h3.sub {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400;
+            font-size: 1.18rem; color: var(--ink); margin: 1.8rem 0 0.6rem;
+        }
+        main p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.1rem; }
+        main p strong { font-weight: 600; color: var(--ink); }
+        main em, main i { font-style: italic; }
+
+        .term {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic;
+            font-variant: all-small-caps; letter-spacing: 0.04em;
+            color: var(--ink); font-weight: 500;
+        }
+        sup.cite {
+            font-family: 'Inter', sans-serif; font-size: 0.65em; color: var(--accent);
+            font-weight: 600; margin-left: 1px; font-variant-numeric: tabular-nums;
+            line-height: 0; cursor: default;
         }
 
-        /* --- Closing CTA --- */
-        .closing {
-            background: #faf8f4;
-            border-radius: 6px;
-            padding: 2.5rem 2rem;
-            margin: 4rem 0 2rem;
-            text-align: center;
-        }
+        main ol, main ul { margin: 0.5rem 0 1.4rem 1.5rem; color: var(--ink-soft); }
+        main ol li, main ul li { margin-bottom: 0.5rem; font-size: 1.0625rem; line-height: 1.7; padding-left: 0.3rem; }
+        main ol li::marker { font-variant-numeric: oldstyle-nums; color: var(--accent); }
+        main ul li::marker { color: var(--accent); }
 
-        .closing h2 {
-            font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.6rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .closing p {
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .closing .install {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            background: #fff;
-            border: 1px solid #e5e5e5;
-            padding: 0.8rem 1rem;
-            border-radius: 3px;
-            color: #333;
-            display: inline-block;
-            margin-bottom: 1.5rem;
-        }
-
-        .closing .star-cta {
-            display: inline-block;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #111;
-            text-decoration: none;
-            border-bottom: 1.5px solid #111;
-            padding-bottom: 1px;
-        }
-
-        .closing .star-cta:hover { opacity: 0.6; }
-
-        /* --- Footer --- */
-        footer {
-            margin-top: 4rem;
-            padding-bottom: 4rem;
-            font-size: 0.85rem;
-            color: #bbb;
-        }
-
-        footer a {
-            color: #999;
-            text-decoration-color: #ddd;
-            margin-right: 1.5rem;
-        }
-
-        footer a:hover { text-decoration-color: #999; }
-
-        /* --- Disclaimer --- */
-        .disclaimer {
-            font-size: 0.85rem;
-            color: #999;
-            font-style: italic;
-            margin-top: 2rem;
-        }
-
-        /* --- Figures --- */
-        figure {
-            margin: 2.5rem 0;
-        }
-
-        figure img,
-        figure video {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-            border: 1px solid #e8e3d8;
-            box-shadow: 0 1px 2px rgba(20, 14, 8, 0.03), 0 8px 28px rgba(20, 14, 8, 0.05);
-        }
-
-        figure figcaption {
-            font-family: 'Fraunces', Georgia, serif;
-            font-style: italic;
-            font-size: 0.92rem;
-            color: #888;
-            line-height: 1.55;
-            margin-top: 0.85rem;
-            text-align: center;
-            padding: 0 0.5rem;
-        }
-
-        figure.hero-figure {
-            margin: 1.5rem 0 0;
-        }
-
-        /* --- Pull-quote (Stitch-style left-rule) --- */
         .pullquote {
-            font-family: 'Fraunces', Georgia, serif;
-            font-style: italic;
-            font-size: 1.35rem;
-            line-height: 1.5;
-            color: #333;
-            border-left: 2px solid #c2693a;
-            padding: 0.4rem 0 0.4rem 1.5rem;
-            margin: 2.5rem 0;
+            font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400;
+            font-size: 1.4rem; line-height: 1.45; color: var(--ink);
+            border-left: 2px solid var(--accent); padding: 0.4rem 0 0.4rem 1.4rem; margin: 2.25rem 0;
         }
 
+        main code {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.86rem;
+            background: #f1ece5; padding: 0.06rem 0.32rem; color: #444;
+        }
+        .listing-label {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.14em; color: var(--rule-strong);
+            font-weight: 500; margin: 1.6rem 0 0.5rem; display: block;
+        }
+        main pre {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.6;
+            border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule);
+            padding: 1rem 0; color: var(--ink-soft); background: transparent;
+            margin-bottom: 1.5rem; overflow-x: auto;
+        }
+
+        figure.fig { margin: 2.5rem 0; }
+        figure.fig img { display: block; width: 100%; height: auto; border: 0.5px solid var(--rule); }
+        figure.fig figcaption { display: none; }
+
+        hr.divider { border: none; border-top: 0.5px solid var(--rule-soft); margin: 3rem 0; }
+
+        .right-rail {
+            position: sticky; top: 4.5rem; padding-top: 5rem;
+            display: flex; flex-direction: column; gap: 2.25rem;
+        }
+        .marginalia {
+            border-left: 0.5px solid var(--rule-strong); padding-left: 1rem;
+            font-size: 0.86rem; line-height: 1.55; color: var(--ink-mute);
+        }
+        .marginalia .num {
+            font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
+            color: var(--ink); margin-bottom: 0.3rem; display: block;
+            font-variant-numeric: tabular-nums;
+        }
+        .marginalia .term { font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        .marginalia em { font-style: italic; }
+        .marginalia .fig-num {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent);
+            font-weight: 500; margin-bottom: 0.35rem; display: block;
+        }
+        .marginalia.section-block { border-left: none; padding-left: 0; border-top: 0.5px solid var(--rule); padding-top: 1rem; }
+        .marginalia.section-block .heading {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent);
+            font-weight: 500; margin-bottom: 0.55rem; display: block;
+        }
+        .marginalia.section-block ul { list-style: none; margin: 0; padding: 0; }
+        .marginalia.section-block ul li { margin-bottom: 0.5rem; font-size: 0.86rem; }
+        .marginalia.section-block ul li a { text-decoration: none; border-bottom: 0.5px solid var(--rule); color: var(--ink-mute); }
+        .marginalia.section-block ul li a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+
+        /* CTA blocks */
+        .cta-block {
+            margin: 3.5rem 0; padding: 2.5rem 0;
+            border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule);
+        }
+        .cta-block .eyebrow {
+            font-family: 'Inter', sans-serif; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500;
+            color: var(--accent); margin-bottom: 0.9rem; display: block;
+        }
+        .cta-block h3 {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400;
+            font-variation-settings: "opsz" 60; font-size: 1.65rem;
+            letter-spacing: -0.018em; line-height: 1.22; color: var(--ink); margin-bottom: 1rem;
+        }
+        .cta-block p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.25rem; }
+        .cta-block pre {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.55;
+            background: #f5f3f0; padding: 0.95rem 1.05rem;
+            border: 0.5px solid var(--rule-soft); color: var(--ink-soft);
+            overflow-x: auto; margin-bottom: 1.4rem;
+            white-space: pre-wrap; word-break: break-word;
+        }
+        .cta-block .cta-links { display: flex; gap: 1.6rem 2rem; flex-wrap: wrap; }
+        .cta-block .cta-links a {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.05rem;
+            color: var(--ink); text-decoration: none;
+            border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+        }
+        .cta-block .cta-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .cta-block .meta-line {
+            font-family: 'Newsreader', Georgia, serif; font-style: italic;
+            font-size: 0.9rem; color: #999; margin-top: 1.1rem;
+        }
+
+        /* Three doors closing */
+        .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
+        .closing h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--ink); }
+        .closing p { font-size: 0.95rem; color: var(--ink-mute); margin-bottom: 1.2rem; }
+        .closing .cta { display: inline-block; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.02rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; margin: 0 0.9rem; }
+        .closing .cta:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+        footer { border-top: 0.5px solid var(--rule-soft); margin-top: 4rem; }
+        .footer-inner {
+            max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem;
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
+            font-family: 'Newsreader', Georgia, serif; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.18em; color: #999;
+        }
+        .footer-inner .colophon { font-style: italic; text-transform: none; letter-spacing: 0.02em; color: #999; font-size: 0.85rem; }
+        .footer-inner .links { display: flex; gap: 2rem; }
+        .footer-inner a { color: #888; text-decoration: none; border-bottom: 0.5px solid transparent; }
+        .footer-inner a:hover { color: var(--ink); border-bottom-color: #888; }
+
+        @media (max-width: 1180px) {
+            .page { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 48px; }
+            .left-rail { display: none; }
+            section.essay-section .section-number { position: static; display: block; margin-bottom: 0.5rem; }
+        }
+        @media (max-width: 900px) {
+            .page { grid-template-columns: minmax(0, 1fr); }
+            .right-rail { position: static; padding-top: 0; margin-top: 1.5rem; }
+            main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; }
+            .marginalia { font-size: 0.92rem; }
+            .top-bar nav { display: none; }
+        }
         @media (max-width: 500px) {
-            .hero { padding-top: 5vh; }
             .hero h1 { font-size: 2rem; }
-            .hero .subtitle { font-size: 1.1rem; }
-            .ccc-card { padding: 1.3rem 1.4rem; }
-            .closing { padding: 2rem 1.4rem; }
-            figure { margin: 2rem 0; }
-            .pullquote { font-size: 1.15rem; }
+            .hero .subtitle { font-size: 1.05rem; }
+            section.essay-section h2 { font-size: 1.55rem; }
+            main p, main ol li, main ul li { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
 
-        <nav class="top-nav">
-            <a href="/">← amirfish.com</a>
-        </nav>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/">Index</a>
+                <a href="/#advisory">Advisory</a>
+                <a href="/#ccc" class="active">CCC</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
 
-        <section class="hero">
-            <span class="tag-eyebrow">Field Note · Operations</span>
-            <h1>Two Fixes for Running 30+ Claude Sessions in Parallel</h1>
-            <p class="subtitle">Both have the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
-            <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, two things were dragging the workflow to a crawl. Both have fixes now. This is what they are and how they work.</p>
-            <p>If you're running more than ten parallel sessions, you've probably hit at least one of these.</p>
+    <div class="page">
 
-            <figure class="hero-figure">
+        <aside class="left-rail">
+            <span class="label">Field Note · 02</span>
+            <div class="context-title">Two Fixes for 30+ Parallel Sessions</div>
+            <ol class="toc">
+                <li><a href="#s1"><span class="toc-num">01</span>The Group Chat</a></li>
+                <li><a href="#s2"><span class="toc-num">02</span>The Local Index</a></li>
+                <li><a href="#s3"><span class="toc-num">03</span>Operations, Not Magic</a></li>
+                <li><a href="#ccc"><span class="toc-num">·</span>Try CCC</a></li>
+            </ol>
+        </aside>
+
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Note · Operations · Spring 2026</span>
+                <h1>Two Fixes for Running 30+ Claude Sessions in Parallel.</h1>
+                <p class="subtitle">Both have the same shape — turn implicit, hard-to-see state into legible, queryable artifacts.</p>
+                <p>I run dozens of Claude Code sessions in parallel daily to ship my projects. After months of doing this, two things were dragging the workflow to a crawl. Both have fixes now. This is what they are and how they work.</p>
+                <p>If you're running more than ten parallel sessions, you've probably hit at least one of these.</p>
+            </header>
+
+            <figure class="fig">
                 <img src="/images/ccc-kanban-1x.webp"
                      srcset="/images/ccc-kanban-1x.webp 1x, /images/ccc-kanban-2x.webp 2x"
                      alt="CCC kanban board, dark theme, with planning, working, review, testing, and verified columns spread across multiple repos."
                      loading="eager">
-                <figcaption>One screenshot, one Tuesday. Ten sessions across two repos. Without the kanban, none of them know the others exist.</figcaption>
             </figure>
 
-            <div class="ccc-card">
-                <span class="ccc-label">Both fixes live inside CCC</span>
-                <h3>Command Center for Claude</h3>
-                <p>An open-source local kanban for every Claude Code session running on your Mac — terminal, headless, dashboard-spawned, doesn't matter. The two fixes below are integrated; you don't have to wire them yourself.</p>
-                <pre>git clone https://github.com/amirfish1/claude-command-center
-cd claude-command-center && ./run.sh</pre>
-                <div class="links">
-                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
-                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
-                </div>
-                <p class="disclaimer">Not affiliated with Anthropic. Community-built. MIT.</p>
-            </div>
-        </section>
+            <section class="essay-section" id="s1">
+                <span class="section-number">01</span>
+                <span class="section-date">Problem One</span>
+                <h2>Putting Multiple Sessions in a Group Chat.</h2>
 
-        <hr>
+                <p>When you're running thirty Claude sessions at once, the bottleneck stops being any single agent's reasoning. It becomes coordination — getting sessions to know what other sessions are doing, defer to each other, ask for help, and not step on each other's work.</p>
 
-        <section>
-            <span class="section-label">Problem 1</span>
-            <h2>Putting Multiple Sessions in a Group Chat</h2>
+                <p>I started with a narrow version of this problem. Five sessions on the same <code>main</code> branch, each wanting to commit. They'd burn cycles checking <code>git status</code>, second-guessing whether files were theirs, sometimes clobbering each other anyway. The git index is a single shared file<sup class="cite">1</sup> — between the moment one session runs <code>git add</code> and the moment it runs <code>git commit</code>, a sibling can stage their own work into the same index, and the commit picks up whatever is staged.</p>
 
-            <p>When you're running thirty Claude sessions at once, the bottleneck stops being any single agent's reasoning. It becomes coordination — getting sessions to know what other sessions are doing, defer to each other, ask for help, and not step on each other's work.</p>
+                <p>That was a real bug. I observed it bite twice in one day across two repos. So I built a fix for it: a shared markdown file the sessions read and write to, where each session announces what it's about to stage before staging.</p>
 
-            <p>I started with a narrow version of this problem. Five sessions on the same <code>main</code> branch, each wanting to commit. They'd burn cycles checking <code>git status</code>, second-guessing whether files were theirs, sometimes clobbering each other anyway. The git index is a single shared file — between the moment one session runs <code>git add</code> and the moment it runs <code>git commit</code>, a sibling can stage their own work into the same index, and the commit picks up whatever is staged.</p>
+                <p>What I didn't expect is how quickly the same mechanism became useful for everything else.</p>
 
-            <p>That was a real bug. I observed it bite twice in one day across two repos. So I built a fix for it: a shared markdown file the sessions read and write to, where each session announces what it's about to stage before staging.</p>
+                <h3 class="sub">The pattern — sessions in a shared room.</h3>
 
-            <p>What I didn't expect is how quickly the same mechanism became useful for everything else.</p>
+                <p>The mental model is a <span class="term">group chat</span><sup class="cite">2</sup> for autonomous workers. Each session signs with a tag (<code>archive-filter-1d33</code>, <code>codex-spawn-7c25</code>). When something needs coordination, any session can drop a message in the room — propose a sequence, ask for an ack, request a second opinion, raise a flag, hand off context. Other sessions read on entry, react if relevant, ignore if not.</p>
 
-            <h3 class="sub">The pattern — sessions in a shared room</h3>
+                <p>Three coordination patterns I now use it for, every day:</p>
 
-            <p>The mental model is a group chat for autonomous workers. Each session signs with a tag (<code>archive-filter-1d33</code>, <code>codex-spawn-7c25</code>). When something needs coordination, any session can drop a message in the room — propose a sequence, ask for an ack, request a second opinion, raise a flag, hand off context. Other sessions read on entry, react if relevant, ignore if not.</p>
+                <ol>
+                    <li><strong>Staged commits.</strong> Before staging, post the paths you're touching. Siblings ack or counter. After committing, post the SHA. Combined with <code>git commit --only &lt;paths&gt;</code> (atomic, race-free), the clobber problem disappears entirely.</li>
+                    <li><strong>Second opinions across context boundaries.</strong> When a session is deep in code and needs a sanity check, I tell it: <em>"Drop this in the group chat — anyone who's been working in this area should weigh in."</em> Sessions that have spent hours in adjacent code respond with the context the asking session doesn't have.</li>
+                    <li><strong>Multi-session collaboration on one problem.</strong> When two or three sessions converge on a hard issue, I send them all to the chat: <em>"Go on a group chat about this, agree on an approach, then one of you executes."</em> They negotiate without me, post the resolution, and one takes the work.</li>
+                </ol>
 
-            <p>Three coordination patterns I now use it for, every day:</p>
+                <p>The protocol underneath is intentionally minimal — sessions read the room, classify the state (open question, proposal, executing, done), and pick the action their role implies. There's a <code>/group-chat</code> slash-command skill that handles the role logic, but the underlying surface is just a markdown file. No daemon. No IPC. No central server.</p>
 
-            <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.9rem;"><strong>The original — staged commits.</strong> Before staging, post the paths you're touching. Siblings ack or counter. After committing, post the SHA. Combined with <code>git commit --only &lt;paths&gt;</code> (atomic, race-free), the clobber problem disappears entirely.</li>
-                <li style="margin-bottom: 0.9rem;"><strong>Second opinions across context boundaries.</strong> When a session is deep in code and needs a sanity check, I tell it: <em>"Drop this in the group chat — anyone who's been working in this area should weigh in."</em> Sessions that have spent hours in adjacent code respond with the context the asking session doesn't have. It beats inventing a fresh agent that has to re-learn.</li>
-                <li><strong>Multi-session collaboration on one problem.</strong> When two or three sessions converge on the same hard issue, I send them all to the chat: <em>"Go on a group chat about this, agree on an approach, then one of you executes."</em> They negotiate without me, post the resolution, and one takes the work. I see the receipts later.</li>
-            </ol>
+                <div class="pullquote">The kanban becomes a directory. The chat becomes a pipe.</div>
 
-            <p>The protocol underneath is intentionally minimal — sessions read the room, classify the state (open question, proposal, executing, done), and pick the action their role implies. There's a <code>/group-chat</code> slash-command skill that handles the role logic, but the underlying surface is just a markdown file. No daemon. No IPC. No central server. The work the sessions are doing stays in code; the coordination overflow goes into a file they can all see.</p>
+                <p>What I learned: the mechanism wasn't really about commits. It was about making coordination <em>legible</em>. Once sessions had a place to be visible to each other, all sorts of useful things they couldn't previously do became possible.</p>
 
-            <p>What I learned: the mechanism wasn't really about commits. It was about making coordination <em>legible</em>. Once sessions had a place to be visible to each other, all sorts of useful things they couldn't previously do became possible.</p>
+                <h3 class="sub">A side example — cross-session task delegation.</h3>
 
-            <div class="pullquote">The kanban becomes a directory. The chat becomes a pipe.</div>
+                <p>Same primitive, broader use. I had a long-running session on my machine called <em>"my office manager"</em> — it tracks tasks, reminders, and project state across all my work. One day a separate session needed to push something onto its agenda.</p>
 
-            <h3 class="sub">A side example — cross-session task delegation</h3>
+                <p>I didn't have to do it manually. I told the working session: <em>"Find my office manager — make this its top priority."</em> The session asked CCC for the list of open sessions on the machine, found the one named "my office manager," and used CCC's <span class="term">inject</span><sup class="cite">3</sup> API to push a high-priority message into it. The office-manager session picked it up on its next turn.</p>
 
-            <p>Same primitive, broader use. I had a long-running session on my machine called <em>"my office manager"</em> — it tracks tasks, reminders, and project state across all my work. One day a separate session needed to push something onto its agenda.</p>
+                <p>Two sessions, neither one knowing about the other ahead of time, coordinated through a shared substrate. Any session can ask CCC who else is alive, what they're working on, and route work or questions to them.</p>
+            </section>
 
-            <p>I didn't have to do it manually. I told the working session: <em>"Find my office manager — make this its top priority."</em> The session asked CCC for the list of open sessions on the machine, found the one named "my office manager," and used CCC's inject API to push a high-priority message into it. The office-manager session picked it up on its next turn.</p>
+            <hr class="divider">
 
-            <p>Two sessions, neither one knowing about the other ahead of time, coordinated through a shared substrate. The pattern generalizes: any session can ask CCC who else is alive, what they're working on, and route work or questions to them. The kanban becomes a directory; the chat becomes a pipe.</p>
-        </section>
+            <section class="essay-section" id="s2">
+                <span class="section-number">02</span>
+                <span class="section-date">Problem Two</span>
+                <h2>Retrieving Across Sessions.</h2>
 
-        <hr>
+                <p>I work on multiple products. The same topics surface across many sessions. <em>"What did I decide about the customization-layer thesis last week?"</em> used to take minutes of <code>grep</code> over <code>~/.claude/projects/*.jsonl</code>. With dozens of session files spread across multiple projects, even ripgrep couldn't keep that fast.</p>
 
-        <section>
-            <span class="section-label">Problem 2</span>
-            <h2>Retrieving Across Sessions</h2>
+                <p>That delay broke flow. By the time I'd found the relevant earlier conversation, the current session had already moved on or made the same mistake.</p>
 
-            <p>I work on multiple products. The same topics surface across many sessions. <em>"What did I decide about the customization-layer thesis last week?"</em> used to take minutes of <code>grep</code> over <code>~/.claude/projects/*.jsonl</code>. With dozens of session files spread across multiple projects, even ripgrep couldn't keep that fast.</p>
+                <h3 class="sub">The fix — a local search index over every transcript.</h3>
 
-            <p>That delay broke flow. By the time I'd found the relevant earlier conversation, the current session had already moved on or made the same mistake.</p>
+                <p><span class="term">claude-index</span><sup class="cite">4</sup> is a SQLite-backed index that ingests every Claude Code transcript on the machine. Two flavors of search live on top:</p>
 
-            <h3 class="sub">The fix — a local search index over every transcript</h3>
+                <ul>
+                    <li><strong>Keyword (FTS5).</strong> For exact strings — file paths, error messages, commit hashes, slugs. Fast, deterministic, perfect when you know the words.</li>
+                    <li><strong>Semantic (vector embeddings via Ollama).</strong> For <em>"find that thing about hyper-personalization"</em> when you don't remember the exact words. Hybrid <span class="term">RRF</span><sup class="cite">5</sup> combines both signals.</li>
+                </ul>
 
-            <p><code>claude-index</code> is a SQLite-backed index that ingests every Claude Code transcript on the machine. Two flavors of search live on top:</p>
+                <p>Both run locally. Sub-second results across thousands of session files. The query language supports phrase quoting, prefix wildcards, time windows, project filters, and role filters.</p>
 
-            <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: #444; line-height: 1.85;">
-                <li style="margin-bottom: 0.6rem;"><strong>Keyword (FTS5).</strong> For exact strings — file paths, error messages, commit hashes, slugs. Fast, deterministic, perfect when you know the words.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Semantic (vector embeddings via Ollama).</strong> For <em>"find that thing about hyper-personalization"</em> when you don't remember the exact words. Hybrid Reciprocal Rank Fusion combines both signals.</li>
-            </ul>
+                <p>Wired into CCC's sidebar — type a topic, results pop up live without opening a terminal:</p>
+            </section>
 
-            <p>Both run locally. Sub-second results across thousands of session files. The query language supports phrase quoting, prefix wildcards, time windows, project filters, and role filters.</p>
-
-            <p>Wired into CCC's sidebar — type a topic, results pop up live without opening a terminal:</p>
-
-            <figure>
+            <figure class="fig">
                 <img src="/images/ccc-search-1x.webp"
                      srcset="/images/ccc-search-1x.webp 1x, /images/ccc-search-2x.webp 2x"
                      alt="CCC kanban with the search detail panel open on the right, showing matched session messages with snippets."
                      loading="lazy">
-                <figcaption>Type a topic, results pop up in the sidebar. Sub-second on the index across thousands of session files.</figcaption>
             </figure>
 
-            <p>The index also covers Codex transcripts (<code>~/.codex/sessions/*.jsonl</code>) under the same schema — one search, both runtimes.</p>
+            <section class="essay-section">
+                <p>The index also covers Codex transcripts (<code>~/.codex/sessions/*.jsonl</code>) under the same schema — one search, both runtimes.</p>
 
-            <p>What changed in practice: retrieval went from "I'll grep this later" to "I just looked it up." That shift collapsed the cost of cross-session memory enough that I started leaning on it for decisions I used to make from gut.</p>
-        </section>
+                <p>What changed in practice: retrieval went from "I'll grep this later" to "I just looked it up." That shift collapsed the cost of cross-session memory enough that I started leaning on it for decisions I used to make from gut.</p>
+            </section>
 
-        <hr>
+            <hr class="divider">
 
-        <section>
-            <span class="section-label">Common Thread</span>
-            <h2>Operations, Not Magic</h2>
+            <section class="essay-section" id="s3">
+                <span class="section-number">03</span>
+                <span class="section-date">Common Thread</span>
+                <h2>Operations, Not Magic.</h2>
 
-            <p>Both fixes do the same thing: turn implicit, hard-to-see state into legible, queryable artifacts. Sessions chatting in markdown. Memory in a SQLite index. Nothing fancy.</p>
+                <p>Both fixes do the same thing: turn implicit, hard-to-see state into legible, queryable artifacts. Sessions chatting in markdown. Memory in a SQLite index. Nothing fancy.</p>
 
-            <p>When you're orchestrating dozens of agents, the real wins aren't smarter prompts or better models. They're better record-keeping. The implicit, ambient knowledge an individual developer carries in their head doesn't scale to thirty parallel sessions — but markdown files and search indexes do.</p>
+                <p>When you're orchestrating dozens of agents, the real wins aren't smarter prompts or better models. They're better record-keeping. The implicit, ambient knowledge an individual developer carries in their head doesn't scale to thirty parallel sessions — but markdown files and search indexes do.</p>
 
-            <p>If you're running more than ten parallel Claude Code sessions, both of these will save you time. If you're running fewer, file them away — at some point the overhead of coordination starts to dominate the cost of work, and you'll want them ready.</p>
-        </section>
+                <p>If you're running more than ten parallel Claude Code sessions, both of these will save you time. If you're running fewer, file them away — at some point the overhead of coordination starts to dominate the cost of work, and you'll want them ready.</p>
+            </section>
 
-        <div class="closing">
-            <h2>Try CCC</h2>
-            <p>Both fixes ship with CCC. Two-line install on macOS:</p>
-            <div class="install">git clone https://github.com/amirfish1/claude-command-center && cd claude-command-center && ./run.sh</div>
-            <br>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="star-cta">Drop a star on GitHub →</a>
-            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">If you install it, I'd love to hear how. Open an issue, comment on the LinkedIn post, or just say hi.</p>
-        </div>
+            <section class="cta-block" id="ccc">
+                <span class="eyebrow">Open Source · MIT</span>
+                <h3>Both fixes ship with CCC.</h3>
+                <p>Command Center for Claude — the kanban that took me from "two terminals" to thirty parallel Claude Code sessions. Local, private, no daemon. Two-line install on macOS:</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="cta-links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/cyborg-workflow">Read the cyborg-workflow note →</a>
+                </div>
+                <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
+            </section>
 
-        <footer>
-            <a href="/">amirfish.com</a>
-            <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC on GitHub</a>
-            <a href="mailto:amir@amirfish.com">Email</a>
-        </footer>
+            <div class="closing">
+                <h3>Three doors</h3>
+                <p>If this resonated, the most useful next step is one of these:</p>
+                <a href="/" class="cta">More Field Notes →</a>
+                <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="cta">Star CCC →</a>
+            </div>
+
+        </main>
+
+        <aside class="right-rail">
+
+            <div class="marginalia">
+                <span class="fig-num">Fig. 1</span>
+                <em>One screenshot, one Tuesday. Ten sessions across two repos. Without the kanban, none of them know the others exist.</em>
+            </div>
+
+            <div class="marginalia">
+                <span class="num">1</span>
+                The git index — <code>.git/index</code> — is a single file shared across every process working on the same clone. Locks help inside one process; they don't span sessions.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">2</span>
+                <span class="term">Group chat.</span> The shared markdown file is just a convention. The protocol enforcement lives in a <code>/group-chat</code> slash-command skill each session loads on start.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">3</span>
+                <span class="term">Inject.</span> CCC exposes an API to push a high-priority message into another running session's queue, by name or by ID.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">4</span>
+                <span class="term">claude-index.</span> SQLite + FTS5 + Ollama embeddings. Ingests Claude Code and Codex transcripts under the same schema.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">5</span>
+                <span class="term">RRF.</span> Reciprocal Rank Fusion — combines two ranked lists (keyword and semantic) by summing the inverse-rank of each result, weighted.
+            </div>
+
+            <div class="marginalia">
+                <span class="fig-num">Fig. 2</span>
+                <em>Type a topic, results pop up in the sidebar. Sub-second on the index across thousands of session files.</em>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Method</span>
+                <p>Both fixes were built and validated against real, daily multi-session workloads — not synthetic benchmarks. Counts and timings are observed, not extrapolated.</p>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Related Field Notes</span>
+                <ul>
+                    <li><a href="/cyborg-workflow">→ The Cyborg Workflow</a></li>
+                    <li><a href="/spec-is-the-hard-part">→ The Spec Is The Hard Part</a></li>
+                    <li><a href="/guided-verification">→ The Guided Verification Problem</a></li>
+                </ul>
+            </div>
+
+        </aside>
 
     </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="/">All Field Notes</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
