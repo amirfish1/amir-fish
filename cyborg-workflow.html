@@ -55,7 +55,28 @@
         main ol li, main ul li { margin-bottom: 0.5rem; font-size: 1.0625rem; line-height: 1.7; padding-left: 0.3rem; }
         main ol li::marker { font-variant-numeric: oldstyle-nums; color: var(--accent); }
         main ul li::marker { color: var(--accent); }
-        .pullquote { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; line-height: 1.45; color: var(--ink); border-left: 2px solid var(--accent); padding: 0.4rem 0 0.4rem 1.4rem; margin: 2.25rem 0; }
+        .pullquote {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.45rem;
+            line-height: 1.4;
+            color: var(--ink);
+            position: relative;
+            padding: 1.75rem 0 1.75rem 2rem;
+            margin: 3rem 0;
+            border-top: 0.5px solid var(--rule);
+            border-bottom: 0.5px solid var(--rule);
+        }
+        .pullquote::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1.25rem;
+            bottom: 1.25rem;
+            width: 3px;
+            background: var(--accent);
+        }
         main code { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; background: #f1ece5; padding: 0.06rem 0.32rem; color: #444; }
         figure.fig { margin: 2.5rem 0; }
         figure.fig img { display: block; width: 100%; height: auto; border: 0.5px solid var(--rule); }

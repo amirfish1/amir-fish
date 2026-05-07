@@ -425,14 +425,31 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.82rem;
             line-height: 1.55;
-            background: #f5f3f0;
+            background: #1b1b1b;
             padding: 0.95rem 1.05rem;
-            border: 0.5px solid var(--rule-soft);
-            color: var(--ink-soft);
+            border: 0.5px solid #333;
+            color: #c5bfb8;
             overflow-x: auto;
-            margin-bottom: 1.4rem;
+            margin-bottom: 0;
             white-space: pre-wrap;
             word-break: break-word;
+            border-top: none;
+        }
+        .cta-block .terminal-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            color: #888;
+            background: #f0ece6;
+            border: 0.5px solid var(--rule-soft);
+            border-bottom: 0.5px solid #333;
+            padding: 0.4rem 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
+        .cta-block .terminal-wrap {
+            margin-bottom: 1.4rem;
         }
         .cta-block .cta-links {
             display: flex;
@@ -759,8 +776,14 @@
                 </a>
                 <p class="video-caption"><a href="https://youtu.be/_WRf0hH6yhg" target="_blank">Watch the 2:46 demo on YouTube →</a></p>
                 <p>The kanban that took me from "two terminals" to thirty parallel Claude Code sessions without losing track of any of them. Local, private, no daemon. Two of the field notes above came directly out of building it. Two-line install on macOS:</p>
-                <pre>git clone https://github.com/amirfish1/claude-command-center
+                <div class="terminal-wrap">
+                    <div class="terminal-header">
+                        <span>Install</span>
+                        <span>macOS · zsh</span>
+                    </div>
+                    <pre>git clone https://github.com/amirfish1/claude-command-center
 cd claude-command-center && ./run.sh</pre>
+                </div>
                 <div class="cta-links">
                     <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
                     <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
