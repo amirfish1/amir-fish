@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>09 · Closer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--ink);color:var(--paper);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(110% 80% at 80% 12%, rgba(184,85,47,.20), transparent 55%),radial-gradient(90% 80% at 6% 96%, rgba(124,138,126,.14), transparent 60%);}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid rgba(244,239,231,.16);}
+  .stage{position:absolute;inset:0;padding:120px 140px;display:flex;flex-direction:column;justify-content:space-between;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay-soft);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:rgba(244,239,231,.45);letter-spacing:.1em;}
+
+  .center{max-width:1380px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay-soft);margin-bottom:40px;}
+  h1{font-family:"Fraunces",serif;font-weight:300;font-size:92px;line-height:1.08;letter-spacing:-.02em;color:var(--paper);}
+  h1 em{font-style:italic;color:var(--clay-soft);font-weight:500;}
+  .recap{margin-top:56px;display:flex;gap:48px;}
+  .chip{display:flex;flex-direction:column;gap:10px;}
+  .chip .dot{width:16px;height:16px;border-radius:50%;}
+  .chip.silent .dot{background:transparent;border:2px solid var(--sage);}
+  .chip.aware .dot{background:var(--slate);}
+  .chip.approved .dot{background:var(--clay);}
+  .chip .nm{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);}
+  .chip .ds{font-size:21px;color:rgba(244,239,231,.6);font-weight:300;max-width:280px;line-height:1.4;}
+
+  .footer{display:flex;justify-content:space-between;align-items:flex-end;}
+  .sig{font-family:"Fraunces",serif;font-style:italic;font-size:34px;color:var(--paper);}
+  .sig span{display:block;font-family:"IBM Plex Mono",monospace;font-style:normal;font-size:16px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,239,231,.5);margin-top:14px;}
+  .hand{text-align:right;font-size:24px;color:rgba(244,239,231,.7);font-weight:300;line-height:1.5;}
+  .hand b{color:var(--clay-soft);font-weight:500;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">The takeaway</div>
+      <div class="pageno">09 / 09</div>
+    </div>
+
+    <div class="center">
+      <div class="eyebrow">Supervision, settled</div>
+      <h1>Don't ask <em>how much</em> to trust<br>the agent. Ask <em>which two dials</em>—<br>per job—and close the loop.</h1>
+
+      <div class="recap">
+        <div class="chip approved">
+          <span class="dot"></span>
+          <span class="nm">Owner-approved</span>
+          <span class="ds">Asks first. For decisions with judgment in them.</span>
+        </div>
+        <div class="chip aware">
+          <span class="dot"></span>
+          <span class="nm">Owner-aware</span>
+          <span class="ds">Acts, then digests. A summary, never the firehose.</span>
+        </div>
+        <div class="chip silent">
+          <span class="dot"></span>
+          <span class="nm">Silent</span>
+          <span class="ds">Acts and logs it. For the routine and the high-volume.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="sig">Becky &amp; the front desk that runs itself.<span>An interaction model from the MyLife / BookYourMat team</span></div>
+      <div class="hand">If you're building agents,<br>steal this model. <b>Then go split your use-cases.</b></div>
+    </div>
+  </div>
+</body>
+</html>

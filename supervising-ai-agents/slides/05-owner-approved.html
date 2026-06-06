@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>05 · Owner-approved in action</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;padding:120px 140px;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .layout{display:grid;grid-template-columns:600px 1fr;gap:100px;align-items:center;flex:1;margin-top:6px;}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+  .tag .sw{width:13px;height:13px;border-radius:50%;background:var(--clay);}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:72px;line-height:1.03;letter-spacing:-.02em;}
+  h2 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lead{margin-top:30px;font-size:29px;line-height:1.55;color:var(--ink-soft);font-weight:300;max-width:540px;}
+  .lead b{color:var(--ink);font-weight:500;}
+  .pull{margin-top:44px;padding-left:30px;border-left:3px solid var(--clay);font-family:"Fraunces",serif;font-style:italic;font-size:32px;line-height:1.4;color:var(--ink);max-width:540px;}
+
+  /* owner's phone — the decision prompt */
+  .phone{justify-self:center;width:560px;background:#fbf8f2;border:1px solid var(--line);border-radius:34px;padding:14px;box-shadow:0 50px 90px -50px rgba(28,26,23,.6);}
+  .phone .notch{height:30px;display:flex;justify-content:center;align-items:center;}
+  .phone .notch i{width:120px;height:7px;border-radius:5px;background:var(--line);display:block;}
+  .convo{padding:18px 26px 30px;}
+  .channel{text-align:center;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:24px;}
+
+  .msg{max-width:88%;padding:20px 26px;border-radius:22px;font-size:24px;line-height:1.42;margin-bottom:10px;}
+  .from-ai{background:var(--slate);color:#f4efe7;border-bottom-left-radius:6px;}
+  .from-ai .who{display:block;font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.1em;opacity:.6;margin-bottom:8px;text-transform:uppercase;}
+  .from-ai .rec{display:block;margin-top:14px;padding-top:14px;border-top:1px solid rgba(244,239,231,.22);font-style:italic;}
+  .meta{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-faint);margin:0 4px 22px;}
+
+  .decision{display:flex;gap:16px;margin-top:6px;}
+  .btn{flex:1;text-align:center;padding:20px 0;border-radius:16px;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.08em;text-transform:uppercase;}
+  .btn.no{background:#efe6da;color:var(--ink-soft);border:1px solid var(--line);}
+  .btn.yes{background:var(--clay);color:#fff;}
+  .ownerline{margin-top:22px;max-width:78%;margin-left:auto;background:#e6ddcd;color:var(--ink);padding:18px 24px;border-radius:22px;border-bottom-right-radius:6px;font-size:24px;}
+  .ownerwho{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.1em;color:var(--ink-faint);text-align:right;margin:8px 6px 0;text-transform:uppercase;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">Mode 01 · owner-approved</div>
+      <div class="pageno">05 / 09</div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="tag"><span class="sw"></span>The AI asks first</div>
+        <h2>It does the<br>thinking. You make<br>the <em>call</em>.</h2>
+        <p class="lead">For decisions with judgment in them, the agent doesn't guess and doesn't dump it on you raw. It surfaces the <b>context, the catch, and a recommendation</b> — then waits for one tap.</p>
+        <div class="pull">"Sarah wants the waiver waived — but it's her 4th cancellation. I'd decline. OK?"</div>
+      </div>
+
+      <div class="phone">
+        <div class="notch"><i></i></div>
+        <div class="convo">
+          <div class="channel">Becky &rarr; Owner</div>
+
+          <div class="msg from-ai">
+            <span class="who">Becky · needs your call</span>
+            Sarah is asking to waive the $25 late-cancel fee for tomorrow's 9am.
+            <span class="rec">Heads up: this is her 4th cancellation this month. My read — I'd decline, but offer one courtesy credit. Your call.</span>
+          </div>
+          <div class="meta">8:11 am · waiting</div>
+
+          <div class="decision">
+            <div class="btn no">Decline</div>
+            <div class="btn yes">Waive it</div>
+          </div>
+
+          <div class="ownerline">Decline, but give her the credit. Be kind about it 💛</div>
+          <div class="ownerwho">Martha · 8:13 am</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

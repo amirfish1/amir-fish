@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>04 · Three practical modes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;padding:120px 140px;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .head{margin:18px 0 52px;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:74px;line-height:1.02;letter-spacing:-.02em;}
+  h2 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lead{margin-top:24px;font-size:29px;color:var(--ink-soft);font-weight:300;max-width:1080px;line-height:1.5;}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:46px;flex:1;}
+  .card{position:relative;background:#fbf8f2;border:1px solid var(--line);border-radius:24px;padding:48px 46px 44px;display:flex;flex-direction:column;box-shadow:0 30px 60px -46px rgba(28,26,23,.5);overflow:hidden;}
+  .card .bar{position:absolute;top:0;left:0;width:100%;height:8px;}
+  .card.approved .bar{background:var(--clay);}
+  .card.aware .bar{background:var(--slate);}
+  .card.silent .bar{background:linear-gradient(90deg,var(--sage),transparent);}
+
+  .stamp{font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:26px;}
+  .card.approved .stamp{color:var(--clay);}
+  .card.aware .stamp{color:var(--slate);}
+  .card.silent .stamp{color:var(--sage);}
+  .stamp .n{font-size:14px;opacity:.7;}
+
+  .cname{font-family:"Fraunces",serif;font-size:50px;font-weight:500;letter-spacing:-.01em;line-height:1;}
+  .cwhat{margin-top:20px;font-size:27px;line-height:1.5;color:var(--ink);font-weight:300;}
+  .cwhat b{font-weight:600;}
+
+  .props{margin-top:auto;padding-top:34px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:18px;}
+  .prop{display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
+  .prop .k{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
+  .prop .v{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink);text-align:right;}
+
+  .use{margin-top:26px;font-size:22px;color:var(--ink-soft);font-style:italic;font-family:"Fraunces",serif;}
+  .use b{font-style:normal;color:var(--ink);font-weight:500;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">From two axes · three modes</div>
+      <div class="pageno">04 / 09</div>
+    </div>
+
+    <div class="head">
+      <h2>Three modes you actually <em>ship</em>.</h2>
+      <p class="lead">The grid collapses to three usable settings — each a different answer to "how much of me does this decision need?" You set them per use-case, not once for the whole agent.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card approved">
+        <div class="bar"></div>
+        <div class="stamp"><span class="n">01</span> High stakes</div>
+        <div class="cname">Owner-<br>approved</div>
+        <div class="cwhat">The AI <b>proposes and recommends</b>. You approve before anything happens.</div>
+        <div class="props">
+          <div class="prop"><span class="k">Autonomy</span><span class="v">asks first</span></div>
+          <div class="prop"><span class="k">Awareness</span><span class="v">in the loop</span></div>
+          <div class="use">Best for <b>refunds, waivers, exceptions.</b></div>
+        </div>
+      </div>
+
+      <div class="card aware">
+        <div class="bar"></div>
+        <div class="stamp"><span class="n">02</span> The default</div>
+        <div class="cname">Owner-<br>aware</div>
+        <div class="cwhat">The AI <b>acts automatically</b>, then hands you a clean outcome digest.</div>
+        <div class="props">
+          <div class="prop"><span class="k">Autonomy</span><span class="v">acts alone</span></div>
+          <div class="prop"><span class="k">Awareness</span><span class="v">digest, not firehose</span></div>
+          <div class="use">Best for <b>most of the day.</b></div>
+        </div>
+      </div>
+
+      <div class="card silent">
+        <div class="bar"></div>
+        <div class="stamp"><span class="n">03</span> Routine · high-volume</div>
+        <div class="cname">Silent</div>
+        <div class="cwhat">The AI <b>acts automatically</b> and tells you nothing. It's there if you go looking.</div>
+        <div class="props">
+          <div class="prop"><span class="k">Autonomy</span><span class="v">acts alone</span></div>
+          <div class="prop"><span class="k">Awareness</span><span class="v">log only</span></div>
+          <div class="use">Best for <b>reminders, FAQs, confirmations.</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

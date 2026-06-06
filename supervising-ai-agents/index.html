@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Becky · The Owner-Agent Interaction Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;--clay:#b8552f;--line:rgba(28,26,23,.14);}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ink);color:var(--paper);font-family:"IBM Plex Mono",monospace;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:1px solid rgba(244,239,231,.14);flex:0 0 auto;}
+  .brand{font-family:"Fraunces",serif;font-size:22px;font-weight:500;letter-spacing:-.01em;}
+  .brand span{color:var(--clay);}
+  .counter{font-size:14px;letter-spacing:.1em;color:rgba(244,239,231,.6);}
+  .nav{display:flex;gap:12px;align-items:center;}
+  .nav button{background:transparent;border:1px solid rgba(244,239,231,.28);color:var(--paper);font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;border-radius:8px;cursor:pointer;transition:.15s;}
+  .nav button:hover{background:var(--clay);border-color:var(--clay);}
+
+  .stagewrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;padding:20px;}
+  .scaler{position:relative;width:1920px;height:1080px;transform-origin:center center;box-shadow:0 40px 100px -30px rgba(0,0,0,.6);}
+  iframe{width:1920px;height:1080px;border:none;display:block;background:var(--paper);}
+
+  .thumbs{flex:0 0 auto;display:flex;gap:8px;padding:14px 28px;border-top:1px solid rgba(244,239,231,.14);overflow-x:auto;}
+  .thumb{flex:0 0 auto;font-size:12px;letter-spacing:.04em;color:rgba(244,239,231,.55);border:1px solid rgba(244,239,231,.18);border-radius:7px;padding:8px 12px;cursor:pointer;white-space:nowrap;transition:.15s;}
+  .thumb:hover{color:var(--paper);border-color:rgba(244,239,231,.4);}
+  .thumb.active{color:var(--ink);background:var(--paper);border-color:var(--paper);font-weight:500;}
+  .hint{position:absolute;bottom:14px;right:24px;font-size:12px;color:rgba(244,239,231,.4);letter-spacing:.08em;}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">How should a human supervise an <span>AI agent?</span></div>
+    <div class="nav">
+      <button id="prev">&larr; Prev</button>
+      <span class="counter"><span id="cur">1</span> / <span id="tot">9</span></span>
+      <button id="next">Next &rarr;</button>
+    </div>
+  </div>
+
+  <div class="stagewrap">
+    <div class="scaler" id="scaler">
+      <iframe id="frame" src="slides/01-title.html"></iframe>
+    </div>
+    <div class="hint">&larr; / &rarr; arrow keys to navigate</div>
+  </div>
+
+  <div class="thumbs" id="thumbs"></div>
+
+<script>
+  const slides = [
+    ["01-title.html","Title"],
+    ["02-problem.html","The problem"],
+    ["03-matrix.html","2×2 matrix"],
+    ["04-three-modes.html","Three modes"],
+    ["05-owner-approved.html","Owner-approved"],
+    ["06-digest-not-firehose.html","Digest, not firehose"],
+    ["07-per-usecase-dial.html","Per-use-case dial"],
+    ["08-generalization.html","Generalization"],
+    ["09-closer.html","Closer"],
+  ];
+  let i = 0;
+  const frame = document.getElementById('frame');
+  const cur = document.getElementById('cur');
+  const thumbs = document.getElementById('thumbs');
+  document.getElementById('tot').textContent = slides.length;
+
+  slides.forEach((s, idx)=>{
+    const t = document.createElement('div');
+    t.className = 'thumb';
+    t.textContent = String(idx+1).padStart(2,'0') + ' · ' + s[1];
+    t.onclick = ()=>go(idx);
+    thumbs.appendChild(t);
+  });
+
+  function fit(){
+    const wrap = document.querySelector('.stagewrap');
+    const pad = 40;
+    const sx = (wrap.clientWidth - pad) / 1920;
+    const sy = (wrap.clientHeight - pad) / 1080;
+    document.getElementById('scaler').style.transform = 'scale(' + Math.min(sx, sy) + ')';
+  }
+  function go(n){
+    i = (n + slides.length) % slides.length;
+    frame.src = 'slides/' + slides[i][0];
+    cur.textContent = i+1;
+    [...thumbs.children].forEach((c,idx)=>c.classList.toggle('active', idx===i));
+  }
+  document.getElementById('prev').onclick = ()=>go(i-1);
+  document.getElementById('next').onclick = ()=>go(i+1);
+  window.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') go(i+1);
+    if(e.key==='ArrowLeft') go(i-1);
+  });
+  window.addEventListener('resize', fit);
+  fit(); go(0);
+</script>
+</body>
+</html>

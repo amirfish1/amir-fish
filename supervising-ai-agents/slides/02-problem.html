@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>02 · The problem — half-conversations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--paper-2:#ece5d8;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+    --bubble-client:#e6ddcd;--bubble-ai:#3c4a47;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;padding:80px 140px;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .head{max-width:1180px;margin-bottom:34px;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:72px;line-height:1.04;letter-spacing:-.02em;}
+  h2 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lead{margin-top:22px;font-size:29px;line-height:1.48;color:var(--ink-soft);max-width:1040px;font-weight:300;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:start;flex:1;}
+  .col-label{font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+  .col-label .who{color:var(--ink-soft);}
+
+  /* phone-ish chat panel */
+  .panel{background:#fbf8f2;border:1px solid var(--line);border-radius:26px;padding:32px 40px;box-shadow:0 30px 60px -40px rgba(28,26,23,.45);}
+  .panel.muted{background:repeating-linear-gradient(135deg,#f0eadf,#f0eadf 11px,#ece5d8 11px,#ece5d8 22px);}
+  .msg{max-width:78%;padding:17px 24px;border-radius:22px;font-size:24px;line-height:1.36;margin-bottom:12px;}
+  .client{background:var(--bubble-client);color:var(--ink);border-bottom-left-radius:6px;}
+  .ai{background:var(--bubble-ai);color:#f4efe7;margin-left:auto;border-bottom-right-radius:6px;}
+  .ai .tag{display:block;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.1em;opacity:.6;margin-bottom:7px;text-transform:uppercase;}
+  .time{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink-faint);margin:0 4px 16px;}
+  .time.r{text-align:right;}
+
+  /* the blind spot */
+  .blind{position:relative;}
+  .blind .veil{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:240px;color:var(--ink-faint);text-align:center;gap:16px;}
+  .blind .q{font-family:"Fraunces",serif;font-style:italic;font-size:44px;color:var(--ink-soft);}
+  .blind .sub{font-size:23px;max-width:380px;line-height:1.45;font-weight:300;}
+  .qmark{font-family:"Fraunces",serif;font-size:120px;color:rgba(184,85,47,.28);line-height:.7;}
+
+  .footstrip{margin-top:30px;display:flex;align-items:center;gap:22px;padding-top:22px;border-top:1px solid var(--line);}
+  .footstrip .pin{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);}
+  .footstrip .t{font-size:26px;color:var(--ink);font-weight:300;}
+  .footstrip .t b{font-weight:500;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">The failure mode</div>
+      <div class="pageno">02 / 09</div>
+    </div>
+
+    <div class="head">
+      <h2>The agent acts <em>in the dark</em>—<br>and leaves you with half a conversation.</h2>
+      <p class="lead">The owner sees the client's question land. Then... silence on her end. The AI answered, booked, handled it — but she was never looped in. She's left wondering what's going on in her own business.</p>
+    </div>
+
+    <div class="cols">
+      <div>
+        <div class="col-label"><span>What the client experiences</span></div>
+        <div class="panel">
+          <div class="msg client">Hey! Can I move my Friday 9am to Saturday? Something came up at work.</div>
+          <div class="time">Sarah &middot; 7:42 am</div>
+          <div class="msg ai"><span class="tag">Becky · AI</span>Done — you're set for Saturday 9am with Maya. Want me to text you a reminder the night before?</div>
+          <div class="time r">7:42 am</div>
+          <div class="msg client">Perfect, yes please 🙏</div>
+          <div class="time">7:43 am</div>
+        </div>
+      </div>
+
+      <div class="blind">
+        <div class="col-label"><span class="who">What the owner sees</span></div>
+        <div class="panel muted">
+          <div class="msg client">Hey! Can I move my Friday 9am to Saturday? Something came up at work.</div>
+          <div class="time">Sarah &middot; 7:42 am</div>
+          <div class="veil">
+            <div class="qmark">?</div>
+            <div class="q">Did anyone answer her?</div>
+            <div class="sub">No reply shown. No outcome. Just a question hanging in the air — and a quiet itch to go check.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footstrip">
+      <span class="pin">The fix</span>
+      <span class="t">Close the loop. The owner should always know the conversation <b>resolved</b>—at the right volume, in the right voice.</span>
+    </div>
+  </div>
+</body>
+</html>

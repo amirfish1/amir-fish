@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>08 · The supervision model for any agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;padding:120px 140px;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .head{margin:18px 0 50px;max-width:1280px;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:74px;line-height:1.02;letter-spacing:-.02em;}
+  h2 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lead{margin-top:24px;font-size:29px;color:var(--ink-soft);font-weight:300;line-height:1.5;max-width:1120px;}
+  .lead b{color:var(--ink);font-weight:500;}
+
+  .body{flex:1;display:grid;grid-template-columns:1fr 560px;gap:90px;align-items:center;}
+
+  /* generalized cards */
+  .examples{display:flex;flex-direction:column;gap:26px;}
+  .ex{display:grid;grid-template-columns:280px 1fr;align-items:center;background:#fbf8f2;border:1px solid var(--line);border-radius:18px;padding:30px 36px;gap:24px;}
+  .ex .domain{font-family:"Fraunces",serif;font-size:30px;font-weight:500;}
+  .ex .domain span{display:block;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;margin-top:5px;}
+  .ex .map{display:flex;flex-direction:column;gap:14px;}
+  .mline{display:flex;align-items:center;gap:14px;font-size:22px;}
+  .pill{font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.06em;text-transform:uppercase;padding:5px 14px;border-radius:30px;color:#fff;}
+  .pill.silent{background:var(--sage);} .pill.aware{background:var(--slate);} .pill.approved{background:var(--clay);}
+  .mline .what{color:var(--ink-soft);font-weight:300;}
+
+  /* the abstract restatement */
+  .abstract{background:var(--ink);color:var(--paper);border-radius:26px;padding:60px 56px;box-shadow:0 40px 80px -50px rgba(28,26,23,.8);position:relative;overflow:hidden;}
+  .abstract::after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .abstract .at{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay-soft);margin-bottom:34px;}
+  .abstract .ax{display:flex;align-items:flex-start;gap:18px;margin-bottom:30px;}
+  .abstract .ax .q{font-family:"Fraunces",serif;font-size:60px;color:rgba(244,239,231,.22);line-height:.8;font-weight:500;}
+  .abstract .ax .tt{font-family:"Fraunces",serif;font-size:34px;line-height:1.25;}
+  .abstract .ax .tt b{color:var(--clay-soft);}
+  .abstract .div{height:1px;background:rgba(244,239,231,.16);margin:8px 0 30px;}
+  .abstract .close{font-size:24px;line-height:1.5;color:rgba(244,239,231,.78);font-weight:300;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">It's not about pilates</div>
+      <div class="pageno">08 / 09</div>
+    </div>
+
+    <div class="head">
+      <h2>This is the supervision model<br>for <em>any</em> agentic system.</h2>
+      <p class="lead">Drop the front desk. The two questions — <b>act alone?</b> and <b>tell the human?</b> — hold for a coding agent, an inbox, a trading desk, an ops bot. Same dials, different jobs.</p>
+    </div>
+
+    <div class="body">
+      <div class="examples">
+        <div class="ex">
+          <div class="domain">Coding agent<span>SWE copilot</span></div>
+          <div class="map">
+            <div class="mline"><span class="pill silent">silent</span><span class="what">formatting, lint fixes</span></div>
+            <div class="mline"><span class="pill aware">aware</span><span class="what">opens a PR you'll review</span></div>
+            <div class="mline"><span class="pill approved">approved</span><span class="what">deploy to production</span></div>
+          </div>
+        </div>
+        <div class="ex">
+          <div class="domain">Inbox agent<span>exec assistant</span></div>
+          <div class="map">
+            <div class="mline"><span class="pill silent">silent</span><span class="what">files &amp; labels mail</span></div>
+            <div class="mline"><span class="pill aware">aware</span><span class="what">replies, then digests it</span></div>
+            <div class="mline"><span class="pill approved">approved</span><span class="what">anything to the board</span></div>
+          </div>
+        </div>
+        <div class="ex">
+          <div class="domain">Ops / finance bot<span>back office</span></div>
+          <div class="map">
+            <div class="mline"><span class="pill silent">silent</span><span class="what">reconciles small txns</span></div>
+            <div class="mline"><span class="pill aware">aware</span><span class="what">flags anomalies daily</span></div>
+            <div class="mline"><span class="pill approved">approved</span><span class="what">moves real money</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="abstract">
+        <div class="at">The model, stated plainly</div>
+        <div class="ax"><span class="q">1</span><span class="tt">Does it <b>act on its own</b>, or check with me first?</span></div>
+        <div class="ax"><span class="q">2</span><span class="tt">When it acts, <b>am I told</b> — and at what volume?</span></div>
+        <div class="div"></div>
+        <div class="close">Answer both, per job. You get an agent that's neither a runaway nor a chore — one you can actually hand the keys to.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

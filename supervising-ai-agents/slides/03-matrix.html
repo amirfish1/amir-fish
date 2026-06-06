@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>03 · The two axes — Autonomy × Awareness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;--ink:#1c1a17;--ink-soft:#534e46;--ink-faint:#8c8578;
+    --clay:#b8552f;--clay-soft:#cf7a52;--slate:#3c4a47;--sage:#7c8a7e;--line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;position:relative;-webkit-font-smoothing:antialiased;}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;padding:120px 140px;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay);font-weight:500;}
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .layout{display:grid;grid-template-columns:560px 1fr;gap:96px;align-items:center;flex:1;margin-top:6px;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:74px;line-height:1.03;letter-spacing:-.02em;}
+  h2 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lead{margin-top:30px;font-size:29px;line-height:1.55;color:var(--ink-soft);font-weight:300;max-width:520px;}
+  .axdef{margin-top:50px;display:flex;flex-direction:column;gap:26px;}
+  .axdef .ax{display:flex;gap:20px;align-items:flex-start;}
+  .axdef .num{font-family:"IBM Plex Mono",monospace;font-size:17px;color:var(--clay);border:1px solid var(--clay);border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:0 0 38px;margin-top:4px;}
+  .axdef .nm{font-family:"Fraunces",serif;font-size:30px;font-weight:500;}
+  .axdef .ds{font-size:23px;color:var(--ink-soft);font-weight:300;line-height:1.4;margin-top:3px;}
+  .axdef .ds code{font-family:"IBM Plex Mono",monospace;font-size:19px;background:#e8e0d2;padding:2px 9px;border-radius:5px;color:var(--ink);}
+
+  /* matrix */
+  .matrixwrap{position:relative;display:flex;justify-content:center;}
+  .grid{position:relative;width:640px;height:640px;}
+  .yaxis{position:absolute;left:-92px;top:0;height:640px;display:flex;align-items:center;}
+  .yaxis span{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-faint);transform:rotate(-90deg);white-space:nowrap;}
+  .xaxis{position:absolute;bottom:-66px;left:0;width:640px;text-align:center;}
+  .xaxis span{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-faint);}
+  .ylab{position:absolute;left:-58px;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);}
+  .ylab.top{top:30px;} .ylab.bot{bottom:24px;}
+  .xlab{position:absolute;bottom:-30px;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);}
+  .xlab.left{left:24px;} .xlab.right{right:24px;}
+
+  .cell{position:absolute;width:320px;height:320px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;padding:38px;background:#fbf8f2;}
+  .cell.tl{left:0;top:0;border-top-left-radius:18px;}
+  .cell.tr{right:0;top:0;border-top-right-radius:18px;}
+  .cell.bl{left:0;bottom:0;border-bottom-left-radius:18px;}
+  .cell.br{right:0;bottom:0;border-bottom-right-radius:18px;}
+
+  .cell .mode{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;}
+  .cell .title{font-family:"Fraunces",serif;font-size:38px;font-weight:500;line-height:1.05;letter-spacing:-.01em;}
+  .cell .desc{font-size:20px;color:var(--ink-soft);line-height:1.4;font-weight:300;margin-top:12px;}
+
+  .cell.approved{background:#f7e9e2;border-color:rgba(184,85,47,.32);}
+  .cell.approved .mode,.cell.approved .title{color:var(--clay);}
+  .cell.aware{background:#e8ede9;border-color:rgba(60,74,71,.3);}
+  .cell.aware .mode,.cell.aware .title{color:var(--slate);}
+  .cell.silent .mode{color:var(--sage);}
+  .cell.silent .title{color:var(--ink-soft);}
+  .cell.gap{background:repeating-linear-gradient(135deg,#efe8dc,#efe8dc 9px,#eae2d4 9px,#eae2d4 18px);}
+  .cell.gap .x{font-family:"Fraunces",serif;font-style:italic;font-size:30px;color:var(--ink-faint);text-align:center;line-height:1.25;}
+
+  .dotmark{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:9px;vertical-align:middle;}
+  .d-clay{background:var(--clay);} .d-slate{background:var(--slate);} .d-sage{background:transparent;border:2px solid var(--sage);}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">The model · two axes</div>
+      <div class="pageno">03 / 09</div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <h2>Two questions.<br>That's the whole <em>model</em>.</h2>
+        <p class="lead">Every human-and-agent relationship resolves to two independent dials. Set them, and supervision stops being a vibe and starts being a setting.</p>
+        <div class="axdef">
+          <div class="ax">
+            <div class="num">1</div>
+            <div>
+              <div class="nm">Autonomy</div>
+              <div class="ds">Does it act on its own, or ask first? <code>owner-approved</code> &harr; <code>auto</code></div>
+            </div>
+          </div>
+          <div class="ax">
+            <div class="num">2</div>
+            <div>
+              <div class="nm">Awareness</div>
+              <div class="ds">When it acts, are you told? <code>aware</code> &harr; <code>silent</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="matrixwrap">
+        <div class="grid">
+          <div class="yaxis"><span>Awareness &nbsp;&#8593;</span></div>
+          <div class="ylab top">told</div>
+          <div class="ylab bot">silent</div>
+          <div class="xaxis"><span>Autonomy &nbsp;&#8594;</span></div>
+          <div class="xlab left">asks&nbsp;first</div>
+          <div class="xlab right">acts&nbsp;alone</div>
+
+          <!-- top-left: asks first + told -->
+          <div class="cell approved tl">
+            <div class="mode"><span class="dotmark d-clay"></span>Mode · owner-approved</div>
+            <div class="title">Owner-<br>approved</div>
+            <div class="desc">Proposes &amp; recommends. You approve before it acts.</div>
+          </div>
+          <!-- top-right: acts alone + told -->
+          <div class="cell aware tr">
+            <div class="mode"><span class="dotmark d-slate"></span>Mode · owner-aware</div>
+            <div class="title">Owner-aware</div>
+            <div class="desc">Acts automatically, then sends you a clean outcome digest.</div>
+          </div>
+          <!-- bottom-left: asks first + silent → doesn't exist -->
+          <div class="cell gap bl">
+            <div class="x">asks first, but<br>never tells you?<br><span style="font-style:normal;font-size:20px;color:var(--ink-faint)">— incoherent</span></div>
+          </div>
+          <!-- bottom-right: acts alone + silent -->
+          <div class="cell silent br">
+            <div class="mode"><span class="dotmark d-sage"></span>Mode · silent</div>
+            <div class="title">Silent</div>
+            <div class="desc">Acts automatically. Nothing to you — it's only in the log.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

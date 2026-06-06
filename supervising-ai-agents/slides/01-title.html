@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 · How should a human supervise an AI agent?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4efe7;
+    --paper-2:#ece5d8;
+    --ink:#1c1a17;
+    --ink-soft:#534e46;
+    --ink-faint:#8c8578;
+    --clay:#b8552f;
+    --clay-soft:#cf7a52;
+    --slate:#3c4a47;
+    --sage:#7c8a7e;
+    --line:rgba(28,26,23,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Newsreader",Georgia,serif;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* paper grain + vignette */
+  body::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(120% 90% at 78% 18%, rgba(207,122,82,.10), transparent 55%),
+      radial-gradient(90% 80% at 8% 95%, rgba(60,74,71,.07), transparent 60%);
+  }
+  body::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .frame{position:absolute;inset:64px;border:1px solid var(--line);}
+  .stage{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:120px 140px;}
+
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--clay);font-weight:500;
+  }
+  .pageno{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.1em;}
+
+  .center{max-width:1340px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-soft);margin-bottom:38px;display:flex;align-items:center;gap:20px;
+  }
+  .eyebrow .dot{width:9px;height:9px;border-radius:50%;background:var(--clay);display:inline-block;}
+  h1{
+    font-family:"Fraunces",serif;font-weight:400;font-size:118px;line-height:1.02;
+    letter-spacing:-.02em;color:var(--ink);
+  }
+  h1 em{font-style:italic;color:var(--clay);font-weight:500;}
+  .sub{
+    margin-top:44px;font-size:34px;line-height:1.5;color:var(--ink-soft);max-width:1000px;font-weight:300;
+  }
+  .sub b{font-weight:500;color:var(--ink);}
+
+  .footer{display:flex;justify-content:space-between;align-items:flex-end;}
+  .byline{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink-faint);letter-spacing:.05em;}
+  .byline b{color:var(--ink-soft);font-weight:500;}
+
+  /* the two-axis emblem, top-right */
+  .emblem{position:absolute;top:150px;right:140px;width:300px;height:300px;}
+  .emblem text{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.12em;fill:var(--ink-faint);text-transform:uppercase;}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+
+  <svg class="emblem" viewBox="0 0 300 300">
+    <!-- axes -->
+    <line x1="40" y1="260" x2="270" y2="260" stroke="#1c1a17" stroke-opacity=".25" stroke-width="1.5"/>
+    <line x1="40" y1="260" x2="40" y2="30" stroke="#1c1a17" stroke-opacity=".25" stroke-width="1.5"/>
+    <text x="48" y="285">autonomy &#8594;</text>
+    <text x="8" y="24">awareness</text>
+    <!-- three mode nodes -->
+    <circle cx="92" cy="206" r="13" fill="#b8552f"/>
+    <circle cx="170" cy="138" r="13" fill="#3c4a47"/>
+    <circle cx="232" cy="78" r="13" fill="none" stroke="#7c8a7e" stroke-width="2" stroke-dasharray="3 4"/>
+    <path d="M92 206 L170 138 L232 78" fill="none" stroke="#1c1a17" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="2 5"/>
+  </svg>
+
+  <div class="stage">
+    <div class="topbar">
+      <div class="kicker">A field note on human &times; AI</div>
+      <div class="pageno">01 / 09</div>
+    </div>
+
+    <div class="center">
+      <div class="eyebrow"><span class="dot"></span>The supervision problem</div>
+      <h1>How should a human<br>supervise an <em>AI agent</em>?</h1>
+      <p class="sub">An agent that can read, decide, and <b>act on your behalf</b> needs the right level of you behind it — not a kill switch, not a blank check. Here is the model we built running a real front desk.</p>
+    </div>
+
+    <div class="footer">
+      <div class="byline">Field-tested on <b>Becky</b> — an AI front desk for a pilates studio</div>
+      <div class="byline">An interaction model that generalizes to <b>any</b> agentic system</div>
+    </div>
+  </div>
+</body>
+</html>
