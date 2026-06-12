@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCC Resources - Amir Fish</title>
+    <meta name="description" content="Resources for the one-person company carousel: CCC install, prompt pack, cookbooks, video-claw, and a visual companion video.">
+    <meta property="og:title" content="CCC Resources">
+    <meta property="og:description" content="Install CCC, get the prompts and cookbooks, and watch the visual companion video.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://amirfish.ai/ccc-resources">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --paper: #fbf9f8;
+            --ink: #1b1c1c;
+            --ink-soft: #2c2d2d;
+            --ink-mute: #555b5d;
+            --rule: #d7d3cf;
+            --rule-strong: #8b8178;
+            --accent: #aa3527;
+            --code: #161616;
+        }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body {
+            font-family: "Newsreader", Georgia, serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--ink);
+            background: var(--paper);
+        }
+        a {
+            color: var(--ink);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: var(--rule-strong);
+        }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+        .wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 40px 24px 72px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: baseline;
+            border-bottom: 1px solid var(--rule);
+            padding-bottom: 18px;
+            margin-bottom: 70px;
+        }
+        .brand {
+            font-style: italic;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        nav {
+            font-family: Inter, sans-serif;
+            font-size: 13px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            display: flex;
+            gap: 22px;
+        }
+        nav a { color: var(--ink-mute); text-decoration: none; }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+            gap: 72px;
+            align-items: center;
+            margin-bottom: 72px;
+        }
+        .eyebrow {
+            display: block;
+            font-family: Inter, sans-serif;
+            font-size: 12px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        h1 {
+            font-size: clamp(3.2rem, 8vw, 6.6rem);
+            line-height: .93;
+            letter-spacing: -.05em;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+        h1 em {
+            color: var(--accent);
+            font-style: normal;
+        }
+        .lede {
+            font-size: 1.35rem;
+            line-height: 1.45;
+            color: var(--ink-soft);
+            max-width: 640px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 30px;
+        }
+        .button {
+            font-family: Inter, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid var(--ink);
+            border-radius: 999px;
+            padding: 12px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .button.primary {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .panel {
+            border: 1px solid var(--rule);
+            background: rgba(255,255,255,.42);
+            border-radius: 18px;
+            padding: 26px;
+        }
+        .panel h2 {
+            font-family: Inter, sans-serif;
+            font-size: 13px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 18px;
+        }
+        .terminal {
+            background: var(--code);
+            color: #f6efe7;
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            margin: 16px 0 14px;
+        }
+        .terminal-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            color: #9d9690;
+            border-bottom: 1px solid rgba(255,255,255,.12);
+            padding: 10px 14px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+        pre {
+            white-space: pre-wrap;
+            padding: 18px 16px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin: 34px 0 72px;
+        }
+        .card {
+            border-top: 1px solid var(--rule-strong);
+            padding-top: 18px;
+        }
+        .card .num {
+            font-family: "JetBrains Mono", monospace;
+            color: var(--accent);
+            font-size: 13px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .card h3 {
+            font-family: Inter, sans-serif;
+            font-size: 1rem;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: var(--ink-mute);
+            font-size: .98rem;
+            line-height: 1.45;
+        }
+        .video {
+            display: grid;
+            grid-template-columns: .85fr 1.15fr;
+            gap: 36px;
+            align-items: center;
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+            padding: 48px 0;
+            margin-bottom: 52px;
+        }
+        .video h2 {
+            font-size: 2.2rem;
+            line-height: 1.05;
+            font-weight: 500;
+            letter-spacing: -.03em;
+            margin-bottom: 14px;
+        }
+        .video p { color: var(--ink-mute); }
+        .embed {
+            aspect-ratio: 16/9;
+            width: 100%;
+            border: 1px solid var(--rule);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #111;
+        }
+        .embed iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+        .note {
+            color: var(--ink-mute);
+            font-size: .95rem;
+            border-top: 1px solid var(--rule);
+            padding-top: 20px;
+        }
+        @media (max-width: 860px) {
+            header { align-items: flex-start; flex-direction: column; margin-bottom: 48px; }
+            .hero, .video { grid-template-columns: 1fr; gap: 34px; }
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 560px) {
+            .wrap { padding: 28px 18px 56px; }
+            nav { flex-wrap: wrap; row-gap: 10px; }
+            .grid { grid-template-columns: 1fr; }
+            .panel { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <a class="brand" href="https://amirfish.ai/">Amir Fish</a>
+            <nav aria-label="Resources">
+                <a href="#install">Install</a>
+                <a href="#resources">Resources</a>
+                <a href="#video">Video</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div>
+                    <span class="eyebrow">One-person company resources</span>
+                    <h1>Run agents like a <em>small team.</em></h1>
+                    <p class="lede">A companion page for the carousel: install CCC, grab the repo, find the cookbooks and prompt pack, and watch the short visual companion video.</p>
+                    <div class="actions">
+                        <a class="button primary" href="https://ccc.amirfish.ai/" target="_blank" rel="noopener">Install CCC</a>
+                        <a class="button" href="#resources">See resources</a>
+                    </div>
+                </div>
+                <aside class="panel" id="install">
+                    <h2>Start here</h2>
+                    <p>The primary CCC install page is already live:</p>
+                    <div class="terminal">
+                        <div class="terminal-bar">
+                            <span>Install hub</span>
+                            <span>CCC</span>
+                        </div>
+                        <pre>https://ccc.amirfish.ai</pre>
+                    </div>
+                    <p><a href="https://ccc.amirfish.ai/" target="_blank" rel="noopener">Open the CCC install page</a></p>
+                </aside>
+            </section>
+
+            <section class="grid" id="resources" aria-label="CCC resources">
+                <article class="card">
+                    <span class="num">01</span>
+                    <h3>CCC install</h3>
+                    <p>The product page, install commands, comparison, and live demo all live at <a href="https://ccc.amirfish.ai/" target="_blank" rel="noopener">ccc.amirfish.ai</a>.</p>
+                </article>
+                <article class="card">
+                    <span class="num">02</span>
+                    <h3>GitHub repo</h3>
+                    <p>The open-source command center code is at <a href="https://github.com/amirfish1/claude-command-center" target="_blank" rel="noopener">github.com/amirfish1/claude-command-center</a>.</p>
+                </article>
+                <article class="card">
+                    <span class="num">03</span>
+                    <h3>Prompt pack</h3>
+                    <p>Comment <strong>Prompts</strong> on the LinkedIn post and I will send the prompt pack, cookbooks, and scripts.</p>
+                </article>
+                <article class="card">
+                    <span class="num">04</span>
+                    <h3>video-claw</h3>
+                    <p>The open-source video tool behind the briefing-card workflow. <a href="https://github.com/amirfish1/video-claw" target="_blank" rel="noopener">GitHub</a>.</p>
+                </article>
+            </section>
+
+            <section class="video" id="video">
+                <div>
+                    <span class="eyebrow">Visual companion</span>
+                    <h2>What a one-person office with agents feels like.</h2>
+                    <p>This is not the proof layer. The carousel has the receipts. This short video is the visual companion: an office running with agents around the table.</p>
+                    <p><a href="https://youtu.be/BscoC5E3wVA" target="_blank" rel="noopener">Watch on YouTube</a></p>
+                </div>
+                <div class="embed">
+                    <iframe src="https://www.youtube.com/embed/BscoC5E3wVA" title="A one-person office running with agents around the table" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <p class="note">Use <a href="https://ccc.amirfish.ai/" target="_blank" rel="noopener">ccc.amirfish.ai</a> if you want to install CCC. This page is the companion-resource page for the carousel.</p>
+        </main>
+    </div>
+</body>
+</html>
