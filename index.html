@@ -101,26 +101,32 @@
 
         /* --- CCC banner --- */
         .ccc-banner {
-            background: linear-gradient(135deg, #8f2b1f 0%, #aa3527 50%, #c4583f 100%);
+            background: #141516;
             color: #fbf9f8;
-            text-align: center;
-            padding: 3rem 1.5rem;
             position: relative;
             overflow: hidden;
+            border-bottom: 0.5px solid #2a2a2a;
         }
         .ccc-banner::before {
             content: "";
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0%, transparent 35%),
-                radial-gradient(circle at 80% 80%, rgba(0,0,0,0.12) 0%, transparent 35%);
+                radial-gradient(circle at 12% 30%, rgba(170, 53, 39, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 88% 70%, rgba(170, 53, 39, 0.12) 0%, transparent 40%);
             pointer-events: none;
         }
         .ccc-banner-inner {
             position: relative;
-            max-width: 980px;
+            max-width: 1280px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            align-items: center;
+            gap: 0;
+        }
+        .ccc-banner .banner-copy {
+            padding: 3.5rem 2.5rem 3.5rem 1.5rem;
         }
         .ccc-banner .banner-eyebrow {
             font-family: 'Inter', sans-serif;
@@ -128,50 +134,51 @@
             text-transform: uppercase;
             letter-spacing: 0.22em;
             font-weight: 600;
-            color: rgba(251, 249, 248, 0.85);
-            margin-bottom: 0.9rem;
+            color: rgba(251, 249, 248, 0.65);
+            margin-bottom: 1rem;
             display: block;
         }
         .ccc-banner .banner-headline {
             font-family: 'Newsreader', Georgia, serif;
-            font-size: clamp(2rem, 5.5vw, 3.8rem);
-            font-weight: 500;
+            font-size: clamp(2.1rem, 5vw, 3.6rem);
+            font-weight: 400;
             line-height: 1.05;
             letter-spacing: -0.025em;
-            margin: 0 auto 1.1rem;
-            max-width: 24ch;
+            margin: 0 0 1rem;
+            max-width: 16ch;
         }
         .ccc-banner .banner-headline em {
             font-style: italic;
+            color: #e8a598;
         }
         .ccc-banner .banner-sub {
             font-family: 'Newsreader', Georgia, serif;
             font-style: italic;
-            font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-            color: rgba(251, 249, 248, 0.92);
-            max-width: 48ch;
-            margin: 0 auto 1.8rem;
+            font-size: clamp(1rem, 1.9vw, 1.25rem);
+            color: rgba(251, 249, 248, 0.78);
+            max-width: 38ch;
+            margin: 0 0 1.9rem;
             line-height: 1.45;
         }
         .ccc-banner .banner-cta {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.55rem;
             background: #fbf9f8;
-            color: #aa3527;
+            color: #1b1c1c;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            padding: 1rem 1.9rem;
+            padding: 0.95rem 1.7rem;
             border-radius: 999px;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
         }
         .ccc-banner .banner-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 14px 34px rgba(0,0,0,0.25);
-            color: #8f2b1f;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+            color: #1b1c1c;
         }
         .ccc-banner .banner-arrow {
             transition: transform 0.15s ease;
@@ -179,9 +186,48 @@
         .ccc-banner .banner-cta:hover .banner-arrow {
             transform: translateX(4px);
         }
-        @media (max-width: 600px) {
-            .ccc-banner { padding: 2.25rem 1.25rem; }
-            .ccc-banner .banner-cta { padding: 0.9rem 1.4rem; }
+        .ccc-banner .banner-media {
+            position: relative;
+            min-height: 340px;
+            height: 100%;
+            background: #0d0e0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 0.5px solid #2a2a2a;
+        }
+        .ccc-banner .banner-media img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: left top;
+            display: block;
+        }
+        .ccc-banner .banner-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #141516 0%, transparent 18%, transparent 82%, #141516 100%);
+            pointer-events: none;
+        }
+        @media (max-width: 900px) {
+            .ccc-banner-inner { grid-template-columns: 1fr; }
+            .ccc-banner .banner-copy { padding: 2.75rem 1.5rem; text-align: center; }
+            .ccc-banner .banner-headline { max-width: none; }
+            .ccc-banner .banner-sub { max-width: none; margin-left: auto; margin-right: auto; }
+            .ccc-banner .banner-media {
+                min-height: 260px;
+                border-left: none;
+                border-top: 0.5px solid #2a2a2a;
+            }
+            .ccc-banner .banner-media::after {
+                background: linear-gradient(180deg, #141516 0%, transparent 12%, transparent 88%, #141516 100%);
+            }
+        }
+        @media (max-width: 500px) {
+            .ccc-banner .banner-media { min-height: 200px; }
         }
 
         /* --- Page grid --- */
@@ -739,17 +785,6 @@
 </head>
 <body>
 
-    <aside class="ccc-banner" aria-label="Command Center for Claude announcement">
-        <div class="ccc-banner-inner">
-            <span class="banner-eyebrow">Now open source · MIT</span>
-            <p class="banner-headline">Your coding agents <em>outgrew</em> your terminal.</p>
-            <p class="banner-sub">Command Center for Claude puts every session on one local board and tells you which one needs you.</p>
-            <a href="https://ccc.amirfish.ai" class="banner-cta">
-                Try Command Center <span class="banner-arrow" aria-hidden="true">→</span>
-            </a>
-        </div>
-    </aside>
-
     <header class="top-bar">
         <div class="top-bar-inner">
             <a href="/" class="wordmark">Amir Fish · Field Notes</a>
@@ -761,6 +796,25 @@
             </nav>
         </div>
     </header>
+
+    <aside class="ccc-banner" aria-label="Command Center for Claude announcement">
+        <div class="ccc-banner-inner">
+            <div class="banner-copy">
+                <span class="banner-eyebrow">Now open source · MIT</span>
+                <p class="banner-headline">Your coding agents <em>outgrew</em> your terminal.</p>
+                <p class="banner-sub">Command Center for Claude puts every session on one local board and tells you which one needs you.</p>
+                <a href="https://ccc.amirfish.ai" class="banner-cta">
+                    Try Command Center <span class="banner-arrow" aria-hidden="true">→</span>
+                </a>
+            </div>
+            <div class="banner-media">
+                <img src="https://ccc.amirfish.ai/images/feature-wall/fleet-scan.gif"
+                     alt="Command Center for Claude scanning every coding-agent session onto one board"
+                     loading="eager"
+                     onerror="this.onerror=null; this.src='https://ccc.amirfish.ai/images/demo.png';">
+            </div>
+        </div>
+    </aside>
 
     <div class="page">
 
