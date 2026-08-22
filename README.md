@@ -1,5 +1,5 @@
 # amir-fish
-Personal website for amirfish.com
+Personal website for amirfish.ai
 
 ## Publish
 
