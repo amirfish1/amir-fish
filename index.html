@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amir Fish — Field Notes</title>
-    <meta name="description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai — custom AI software for small businesses — and Command Center for Claude. Field notes on AI product work.">
-    <meta property="og:title" content="Amir Fish — Field Notes">
+    <title>Amir Fish - Field Notes</title>
+    <meta name="description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai (custom AI software for small businesses) and Command Center for Claude. Field notes on AI product work.">
+    <meta property="og:title" content="Amir Fish - Field Notes">
     <meta property="og:description" content="20 years building AI products at Google and Meta. Now building Kneaded.ai and Command Center for Claude. Field notes on AI product work.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://amirfish.ai/">
@@ -98,6 +98,91 @@
             border-bottom-color: var(--ink);
         }
         .top-bar nav a:hover { color: var(--ink); }
+
+        /* --- CCC banner --- */
+        .ccc-banner {
+            background: linear-gradient(135deg, #8f2b1f 0%, #aa3527 50%, #c4583f 100%);
+            color: #fbf9f8;
+            text-align: center;
+            padding: 3rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ccc-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0%, transparent 35%),
+                radial-gradient(circle at 80% 80%, rgba(0,0,0,0.12) 0%, transparent 35%);
+            pointer-events: none;
+        }
+        .ccc-banner-inner {
+            position: relative;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+        .ccc-banner .banner-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            font-weight: 600;
+            color: rgba(251, 249, 248, 0.85);
+            margin-bottom: 0.9rem;
+            display: block;
+        }
+        .ccc-banner .banner-headline {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: clamp(2rem, 5.5vw, 3.8rem);
+            font-weight: 500;
+            line-height: 1.05;
+            letter-spacing: -0.025em;
+            margin: 0 auto 1.1rem;
+            max-width: 24ch;
+        }
+        .ccc-banner .banner-headline em {
+            font-style: italic;
+        }
+        .ccc-banner .banner-sub {
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+            font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+            color: rgba(251, 249, 248, 0.92);
+            max-width: 48ch;
+            margin: 0 auto 1.8rem;
+            line-height: 1.45;
+        }
+        .ccc-banner .banner-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fbf9f8;
+            color: #aa3527;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 1rem 1.9rem;
+            border-radius: 999px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        }
+        .ccc-banner .banner-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.25);
+            color: #8f2b1f;
+        }
+        .ccc-banner .banner-arrow {
+            transition: transform 0.15s ease;
+        }
+        .ccc-banner .banner-cta:hover .banner-arrow {
+            transform: translateX(4px);
+        }
+        @media (max-width: 600px) {
+            .ccc-banner { padding: 2.25rem 1.25rem; }
+            .ccc-banner .banner-cta { padding: 0.9rem 1.4rem; }
+        }
 
         /* --- Page grid --- */
         .page {
@@ -398,7 +483,7 @@
             gap: 0.65rem;
         }
         .cta-block ul.modes li::before {
-            content: "—";
+            content: "-";
             color: var(--accent);
             font-weight: 400;
             flex-shrink: 0;
@@ -654,6 +739,17 @@
 </head>
 <body>
 
+    <aside class="ccc-banner" aria-label="Command Center for Claude announcement">
+        <div class="ccc-banner-inner">
+            <span class="banner-eyebrow">Now open source · MIT</span>
+            <p class="banner-headline">Your coding agents <em>outgrew</em> your terminal.</p>
+            <p class="banner-sub">Command Center for Claude puts every session on one local board and tells you which one needs you.</p>
+            <a href="https://ccc.amirfish.ai" class="banner-cta">
+                Try Command Center <span class="banner-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+    </aside>
+
     <header class="top-bar">
         <div class="top-bar-inner">
             <a href="/" class="wordmark">Amir Fish · Field Notes</a>
@@ -676,12 +772,13 @@
 
             <span class="label" style="margin-top: 1.5rem;">Field Notes</span>
             <ol class="toc">
-                <li><a href="#fn-01"><span class="toc-num">01</span>The Spec Is The Hard Part</a></li>
-                <li><a href="#fn-02"><span class="toc-num">02</span>30+ Parallel Sessions</a></li>
-                <li><a href="#fn-03"><span class="toc-num">03</span>Guided Verification</a></li>
-                <li><a href="#fn-04"><span class="toc-num">04</span>SMB Co-Founder</a></li>
-                <li><a href="#fn-05"><span class="toc-num">05</span>The Pilates Platform</a></li>
-                <li><a href="#fn-06"><span class="toc-num">06</span>Cyborg Workflow</a></li>
+                <li><a href="#fn-01"><span class="toc-num">01</span>PM Job Didn't Change</a></li>
+                <li><a href="#fn-02"><span class="toc-num">02</span>The Spec Is The Hard Part</a></li>
+                <li><a href="#fn-03"><span class="toc-num">03</span>30+ Parallel Sessions</a></li>
+                <li><a href="#fn-04"><span class="toc-num">04</span>Guided Verification</a></li>
+                <li><a href="#fn-05"><span class="toc-num">05</span>SMB Co-Founder</a></li>
+                <li><a href="#fn-06"><span class="toc-num">06</span>The Pilates Platform</a></li>
+                <li><a href="#fn-07"><span class="toc-num">07</span>Cyborg Workflow</a></li>
             </ol>
         </aside>
 
@@ -691,8 +788,8 @@
             <header class="hero">
                 <span class="eyebrow">Field Notes · Spring 2026</span>
                 <h1>Amir Fish.</h1>
-                <p class="subtitle">Twenty years building AI products at Google and Meta. Now solo — building <span class="term">Kneaded.ai</span> for small businesses, <span class="term">CCC</span> for parallel agents, and notes on what works in between.</p>
-                <p>I left Meta nearly two years ago because I'd lost track of being close to the work. Most of what I write here is what I've learned since — building software for a single customer, running dozens of Claude Code sessions in parallel, and the UX patterns that turn AI output into something a real person can trust.</p>
+                <p class="subtitle">Twenty years building AI products at Google and Meta. Now solo, building <span class="term">Kneaded.ai</span> for small businesses, <span class="term">CCC</span> for parallel agents, and notes on what works in between.</p>
+                <p>I left Meta nearly two years ago because I'd lost track of being close to the work. Most of what I write here is what I've learned since: building software for a single customer, running dozens of Claude Code sessions in parallel, and the UX patterns that turn AI output into something a real person can trust.</p>
             </header>
 
             <figure class="anchor">
@@ -705,47 +802,54 @@
 
             <div class="index-head">
                 <span class="label">Index</span>
-                <h2>Six field notes, in order of recency.</h2>
-                <p>Short essays on AI product work — written for builders, not buyers. Each one tries to leave you with one operational idea you didn't have when you started reading.</p>
+                <h2>Seven field notes, in order of recency.</h2>
+                <p>Short essays on AI product work, written for builders, not buyers. Each one tries to leave you with one operational idea you didn't have when you started reading.</p>
             </div>
 
             <article class="entry" id="fn-01">
                 <span class="entry-num">01</span>
                 <span class="entry-meta">Field Note · Product · Spring 2026</span>
-                <h3><a href="/spec-is-the-hard-part">The Spec Is The Hard Part.</a></h3>
-                <p class="preview">Notes from a workshop with seven NVIDIA PMs. Code stopped being the bottleneck — and what's left is the harder problem product orgs weren't trained to solve at scale. The shape of an AI-native <span class="term">product operating system</span><sup class="cite">1</sup>: six plain-text files, two composable layers, codification plus multiplication.</p>
+                <h3><a href="/pm-to-builder">The PM Job Didn't Change. The Latency Did.</a></h3>
+                <p class="preview">If you're a PM who can't read code, AI just made you more replaceable, not 10x more powerful. The friction was never engineers; it was time and handoff. A real architecture call from this week, the two-week version of the same decision, and five things to do this week if you want to close the gap.</p>
             </article>
 
             <article class="entry" id="fn-02">
                 <span class="entry-num">02</span>
-                <span class="entry-meta">Field Note · Operations · Spring 2026</span>
-                <h3><a href="/parallel-sessions">Two Fixes for Running 30+ Claude Sessions in Parallel.</a></h3>
-                <p class="preview">A markdown commit-coordination protocol and a local search index over every transcript on the machine. Both built around <span class="term">CCC</span><sup class="cite">2</sup>. The wins aren't smarter prompts — they're better record-keeping. <em>The kanban becomes a directory; the chat becomes a pipe.</em></p>
+                <span class="entry-meta">Field Note · Product · Spring 2026</span>
+                <h3><a href="/spec-is-the-hard-part">The Spec Is The Hard Part.</a></h3>
+                <p class="preview">Notes from a workshop with seven NVIDIA PMs. Code stopped being the bottleneck, and what's left is the harder problem product orgs weren't trained to solve at scale. The shape of an AI-native <span class="term">product operating system</span><sup class="cite">1</sup>: six plain-text files, two composable layers, codification plus multiplication.</p>
             </article>
 
             <article class="entry" id="fn-03">
                 <span class="entry-num">03</span>
-                <span class="entry-meta">Field Note · Product · 2026</span>
-                <h3><a href="/guided-verification">The Guided Verification Problem.</a></h3>
-                <p class="preview">Why <span class="term">human in the loop</span><sup class="cite">3</sup> is usually rubber-stamping — and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google. The third version is the one every team should be building from the start.</p>
+                <span class="entry-meta">Field Note · Operations · Spring 2026</span>
+                <h3><a href="/parallel-sessions">Two Fixes for Running 30+ Claude Sessions in Parallel.</a></h3>
+                <p class="preview">A markdown commit-coordination protocol and a local search index over every transcript on the machine. Both built around <span class="term">CCC</span><sup class="cite">2</sup>. The wins aren't smarter prompts. They're better record-keeping. <em>The kanban becomes a directory; the chat becomes a pipe.</em></p>
             </article>
 
             <article class="entry" id="fn-04">
                 <span class="entry-num">04</span>
-                <span class="entry-meta">Field Note · Thesis · 2026</span>
-                <h3><a href="/small-business-cofounder">Every Small Business Deserves a Technical Co-Founder.</a></h3>
-                <p class="preview">AI just made bespoke software cheap enough to ship for a single customer. The one-size-fits-all SaaS era is quietly ending. The studios and bakeries and plumbers that figure that out first are going to leave generic software behind — and the build cost is now an order of magnitude lower than the SaaS it replaces.</p>
+                <span class="entry-meta">Field Note · Product · 2026</span>
+                <h3><a href="/guided-verification">The Guided Verification Problem.</a></h3>
+                <p class="preview">Why <span class="term">human in the loop</span><sup class="cite">3</sup> is usually rubber-stamping, and the UX pattern that actually works. Three versions of an expense tracker taught me more about AI product design than a year at Google. The third version is the one every team should be building from the start.</p>
             </article>
 
             <article class="entry" id="fn-05">
                 <span class="entry-num">05</span>
+                <span class="entry-meta">Field Note · Thesis · 2026</span>
+                <h3><a href="/small-business-cofounder">Every Small Business Deserves a Technical Co-Founder.</a></h3>
+                <p class="preview">AI just made bespoke software cheap enough to ship for a single customer. The one-size-fits-all SaaS era is quietly ending. The studios and bakeries and plumbers that figure that out first are going to leave generic software behind. The build cost is now an order of magnitude lower than the SaaS it replaces.</p>
+            </article>
+
+            <article class="entry" id="fn-06">
+                <span class="entry-num">06</span>
                 <span class="entry-meta">Field Note · Build · 2026</span>
                 <h3><a href="/pilates">I Built My Wife's Pilates Studio a Custom Platform.</a></h3>
                 <p class="preview">Three weekends of work replaced Acuity, Square, an SMS service, and a Sunday-night spreadsheet. Venmo payments at zero processing fees. <span class="term">Pays-through</span><sup class="cite">4</sup> reconciliation no commercial scheduler will ever ship. Admin time: four hours a week, then twenty minutes. The proof case for everything I'm building now.</p>
             </article>
 
-            <article class="entry" id="fn-06">
-                <span class="entry-num">06</span>
+            <article class="entry" id="fn-07">
+                <span class="entry-num">07</span>
                 <span class="entry-meta">Field Note · Workflow · 2026</span>
                 <h3><a href="/cyborg-workflow">The Cyborg Workflow.</a></h3>
                 <p class="preview">How I build software now: Claude Code writing the application logic on one terminal, Claude in a browser configuring the third-party APIs on another. Two simultaneous threads of work I'm orchestrating, not executing. The setup that scaled to thirty parallel sessions before <span class="term">CCC</span> had to step in.</p>
@@ -754,14 +858,14 @@
             <section class="cta-block" id="advisory">
                 <span class="eyebrow">Advisory · Workshops · 1:1</span>
                 <h3>Talk to me about embedding AI in your product work.</h3>
-                <p>I take a handful of engagements at a time — early-stage AI startups, product orgs scaling AI work, and product teams trying to embed AI deeper into how they actually ship. The bar isn't an impressive demo; it's a clear spec for the right thing. Four flavors:</p>
+                <p>I take a handful of engagements at a time: early-stage AI startups, product orgs scaling AI work, and product teams trying to embed AI deeper into how they actually ship. The bar isn't an impressive demo; it's a clear spec for the right thing. Four flavors:</p>
                 <ul class="modes">
                     <li><strong>Workshop.</strong> Half-day or full-day session for a product team, on embedding AI into how the team writes specs, runs reviews, and ships features. Recent example: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7457432704004050944/" target="_blank">a session with seven NVIDIA PMs</a> &nbsp;·&nbsp; <a href="/workshop" target="_blank">see the deck</a>.</li>
                     <li><strong>1:1 strategy session.</strong> A single 60-minute consultation. $200, focused on your product spec or a specific decision you're stuck on.</li>
-                    <li><strong>Fractional retainer.</strong> Embedded alongside a small product team — monthly cadence, into specific initiatives.</li>
+                    <li><strong>Fractional retainer.</strong> Embedded alongside a small product team: monthly cadence, into specific initiatives.</li>
                     <li><strong>Product-leader engagement.</strong> A weekly thinking-partner cadence with a VP / CPO / founding PM. Deeper context, longer arc.</li>
                 </ul>
-                <a href="mailto:amir@amirfish.com?subject=Advisory%20—%20fit%20check" class="strong-cta">Email me to see if there's a fit →</a>
+                <a href="mailto:amir@amirfish.com?subject=Advisory%20-%20fit%20check" class="strong-cta">Email me to see if there's a fit →</a>
             </section>
 
             <section class="cta-block" id="ccc">
@@ -770,7 +874,7 @@
                 <a href="https://youtu.be/_WRf0hH6yhg" target="_blank" class="video-preview" aria-label="Watch the Command Center for Claude demo on YouTube">
                     <img src="/images/ccc-video-cover-1x.webp"
                          srcset="/images/ccc-video-cover-1x.webp 1x, /images/ccc-video-cover-2x.webp 2x"
-                         alt="Command Center for Claude — open-source v2 cover. Manage hundreds of Claude Code sessions concurrently with ease."
+                         alt="Command Center for Claude, open-source v2 cover. Manage hundreds of Claude Code sessions concurrently with ease."
                          loading="lazy">
                     <span class="play" aria-hidden="true"></span>
                 </a>
@@ -792,7 +896,7 @@ cd claude-command-center && ./run.sh</pre>
                 <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
             </section>
 
-            <p class="signoff">— Amir Fish &nbsp;·&nbsp; Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</p>
+            <p class="signoff">Amir Fish &nbsp;·&nbsp; Sunnyvale, CA &nbsp;·&nbsp; Spring 2026</p>
 
         </main>
 
@@ -801,7 +905,7 @@ cd claude-command-center && ./run.sh</pre>
 
             <div class="marginalia">
                 <span class="num">1</span>
-                <span class="term">Product Operating System.</span> A foundation of plain-text files (overview, KPIs, raw inputs, ledger, style guides, org reality) that an AI agent — or a teammate — can act on without the PM standing over their shoulder.
+                <span class="term">Product Operating System.</span> A foundation of plain-text files (overview, KPIs, raw inputs, ledger, style guides, org reality) that an AI agent (or a teammate) can act on without the PM standing over their shoulder.
             </div>
 
             <div class="marginalia">
@@ -816,7 +920,7 @@ cd claude-command-center && ./run.sh</pre>
 
             <div class="marginalia">
                 <span class="num">4</span>
-                <span class="term">Pays-through.</span> One Venmo account covers two clients (a husband and a wife). The system reconciles automatically. No commercial scheduler models this — it's too specific.
+                <span class="term">Pays-through.</span> One Venmo account covers two clients (a husband and a wife). The system reconciles automatically. No commercial scheduler models this. It's too specific.
             </div>
 
             <div class="marginalia section-block">
@@ -824,7 +928,7 @@ cd claude-command-center && ./run.sh</pre>
                 <ul>
                     <li>
                         <a href="https://kneaded.ai">Kneaded.ai</a>
-                        <span class="desc">Custom AI software for small businesses. <a href="https://bookyourmat.com" target="_blank">bookyourmat.com</a> — the Pilates studio platform — is the first build under it.</span>
+                        <span class="desc">Custom AI software for small businesses. <a href="https://bookyourmat.com" target="_blank">bookyourmat.com</a>, the Pilates studio platform, is the first build under it.</span>
                     </li>
                     <li>
                         <a href="https://github.com/amirfish1/claude-command-center" target="_blank">Command Center for Claude</a>
