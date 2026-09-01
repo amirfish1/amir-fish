@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How My Company Actually Runs on AI Agents — Amir Fish</title>
+    <meta name="description" content="The 11-slide field deck: real customers, real payments, and the agent operating system behind them — roles, group chat, decision gates, tests. Plus the companion video and the open-source resources.">
+    <meta property="og:title" content="How My Company Actually Runs on AI Agents">
+    <meta property="og:description" content="An 11-slide field deck on running a company on AI agents: $160K+ processed, ~5,000 appointments, and the operating system behind it. Companion video included.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/how-my-company-runs">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        :root { --paper: #fbf9f8; --ink: #1b1c1c; --ink-soft: #2a2a2a; --ink-mute: #444748; --rule: #c4c7c7; --rule-soft: #e4e2e2; --rule-strong: #747878; --accent: #aa3527; --accent-soft: #c4583f; }
+        body { font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--ink); background: var(--paper); font-feature-settings: "kern", "liga", "onum"; }
+        a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--rule); text-decoration-thickness: 0.5px; transition: color 0.15s, text-decoration-color 0.15s; }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+        ::selection { background: #ffdad4; color: #410000; }
+        .top-bar { border-bottom: 0.5px solid var(--rule-soft); background: rgba(251,249,248,0.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 50; }
+        .top-bar-inner { max-width: 1280px; margin: 0 auto; padding: 1.1rem 1.5rem; display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+        .top-bar .wordmark { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+        .top-bar nav { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; display: flex; gap: 2rem; }
+        .top-bar nav a { color: #888; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 0.12rem; }
+        .top-bar nav a:hover { color: var(--ink); }
+        .page { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+        main { padding: 5rem 0 6rem; }
+        .hero { max-width: 620px; margin-bottom: 3.5rem; }
+        .hero .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin-bottom: 1.5rem; display: block; }
+        .hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: 2.5rem; font-weight: 400; font-variation-settings: "opsz" 72; letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); margin-bottom: 1.5rem; }
+        .hero .subtitle { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.18rem; line-height: 1.55; color: var(--ink-mute); margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; }
+        .hero p strong { font-weight: 600; color: var(--ink); }
+        .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0 0; padding: 1.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+        .stat .num { font-family: 'Newsreader', Georgia, serif; font-size: 1.55rem; font-weight: 400; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; display: block; }
+        .stat .label { font-family: 'Inter', sans-serif; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--rule-strong); line-height: 1.3; }
+        .section-label { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin-bottom: 1rem; display: block; }
+        .video-wrap { margin-bottom: 4rem; }
+        .video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #0e0d0c; box-shadow: 0 18px 44px -18px rgba(27,28,28,0.35); }
+        .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .video-cap { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--rule-strong); margin-top: 0.75rem; letter-spacing: 0.02em; }
+        .deck { display: flex; flex-direction: column; gap: 2.25rem; }
+        .slide-block { margin: 0; }
+        .slide-block img { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 14px 36px -16px rgba(27,28,28,0.3); border: 0.5px solid var(--rule-soft); }
+        .slide-block figcaption { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--rule-strong); margin-top: 0.6rem; letter-spacing: 0.02em; }
+        .slide-block figcaption .n { color: var(--accent); font-weight: 600; margin-right: 0.5rem; font-variant-numeric: tabular-nums; }
+        .cta-block { margin-top: 4.5rem; padding: 2rem 2.25rem; border: 0.5px solid var(--rule); border-radius: 10px; background: #fff; max-width: 620px; }
+        .cta-block h3 { font-family: 'Newsreader', Georgia, serif; font-size: 1.5rem; font-weight: 400; letter-spacing: -0.015em; margin-bottom: 0.75rem; }
+        .cta-block p { font-size: 1rem; line-height: 1.65; color: var(--ink-soft); margin-bottom: 0.6rem; }
+        .cta-block .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+        footer { border-top: 0.5px solid var(--rule-soft); margin-top: 4rem; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; font-family: 'Newsreader', Georgia, serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.18em; color: #999; }
+        .footer-inner .colophon { font-style: italic; text-transform: none; letter-spacing: 0.02em; color: #999; font-size: 0.85rem; }
+        .footer-inner .links { display: flex; gap: 2rem; }
+        .footer-inner a { color: #888; text-decoration: none; border-bottom: 0.5px solid transparent; }
+        .footer-inner a:hover { color: var(--ink); border-bottom-color: #888; }
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2rem; }
+            main { padding: 3rem 0 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/">Index</a>
+                <a href="/#advisory">Advisory</a>
+                <a href="/#ccc">CCC</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Note · Operations · Fall 2026</span>
+                <h1>How my company actually runs on AI agents.</h1>
+                <p class="subtitle">Eleven slides of receipts, not theory: the operating system behind Kneaded.ai — agent roles, a shared group chat, decision gates, automatic tests — and the open-source pieces you can take home.</p>
+                <p><strong>Kneaded.ai</strong> builds bespoke software for small businesses, AI-native from day one. <strong>CCC</strong> is the platform I built to run agents like a small team. This deck walks the whole pipeline, from a customer asking for something to that thing shipping, with a human decision gating every risky move.</p>
+                <div class="stat-row">
+                    <div class="stat"><span class="num">$160K+</span><span class="label">Processed for customer studios</span></div>
+                    <div class="stat"><span class="num">~5,000</span><span class="label">Appointments booked and run</span></div>
+                </div>
+            </header>
+
+            <section class="video-wrap">
+                <span class="section-label">Watch first · The companion video</span>
+                <div class="video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/BscoC5E3wVA" title="How my company actually runs on AI agents — companion video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+                <p class="video-cap">The deck, narrated. Also on YouTube: <a href="https://youtu.be/BscoC5E3wVA" target="_blank" rel="noopener">youtu.be/BscoC5E3wVA</a></p>
+            </section>
+
+            <section class="deck">
+                <span class="section-label">The deck · 11 slides</span>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-01-1x.webp"
+                         srcset="/images/company-deck/slide-01-1x.webp 1x, /images/company-deck/slide-01-2x.webp 2x"
+                         alt="Title slide: How my company actually runs on AI agents. Kneaded.ai and CCC. $160K+ processed, ~5,000 appointments." loading="eager">
+                    <figcaption><span class="n">01</span>The promise: real receipts first, then the operating system.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-02-1x.webp"
+                         srcset="/images/company-deck/slide-02-1x.webp 1x, /images/company-deck/slide-02-2x.webp 2x"
+                         alt="Proof slide: real customers pay, real software ships, every day. Owner dashboard, a live package purchase, a second industry, and CCC." loading="lazy">
+                    <figcaption><span class="n">02</span>Proof, not theory: live studios, live payments, a second industry.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-03-1x.webp"
+                         srcset="/images/company-deck/slide-03-1x.webp 1x, /images/company-deck/slide-03-2x.webp 2x"
+                         alt="The reveal: each stage has an owner, and the human approves the risky moves. The pipeline of agent roles from ask to shipped." loading="lazy">
+                    <figcaption><span class="n">03</span>The reveal: each stage has an owner; I approve the risky moves.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-04-1x.webp"
+                         srcset="/images/company-deck/slide-04-1x.webp 1x, /images/company-deck/slide-04-2x.webp 2x"
+                         alt="First, let them talk to each other: the shared agent group chat where sessions coordinate." loading="lazy">
+                    <figcaption><span class="n">04</span>First, let them talk to each other: the shared group chat.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-05-1x.webp"
+                         srcset="/images/company-deck/slide-05-1x.webp 1x, /images/company-deck/slide-05-2x.webp 2x"
+                         alt="What really moved things: a full-time tech-lead agent owning execution." loading="lazy">
+                    <figcaption><span class="n">05</span>What really moved things: a "full-time" tech lead owning execution.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-06-1x.webp"
+                         srcset="/images/company-deck/slide-06-1x.webp 1x, /images/company-deck/slide-06-2x.webp 2x"
+                         alt="Fast UX loop: click a broken UI, a builder agent fixes it while testing continues." loading="lazy">
+                    <figcaption><span class="n">06</span>The fast UX loop: I click a broken UI; a builder fixes it while I keep testing.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-07-1x.webp"
+                         srcset="/images/company-deck/slide-07-1x.webp 1x, /images/company-deck/slide-07-2x.webp 2x"
+                         alt="Fast loop with customers: they ask, it ships." loading="lazy">
+                    <figcaption><span class="n">07</span>The customer loop: they ask, it ships.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-08-1x.webp"
+                         srcset="/images/company-deck/slide-08-1x.webp 1x, /images/company-deck/slide-08-2x.webp 2x"
+                         alt="Fast decisions: agents pack and present the topic with voice, an avatar, and captions." loading="lazy">
+                    <figcaption><span class="n">08</span>Fast decisions: agents pack and present the topic — with voice, avatar, captions.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-09-1x.webp"
+                         srcset="/images/company-deck/slide-09-1x.webp 1x, /images/company-deck/slide-09-2x.webp 2x"
+                         alt="Quality: every break becomes a test, automatically." loading="lazy">
+                    <figcaption><span class="n">09</span>Quality: every break becomes a test. Automatically.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-10-1x.webp"
+                         srcset="/images/company-deck/slide-10-1x.webp 1x, /images/company-deck/slide-10-2x.webp 2x"
+                         alt="The resources, open-source: the CCC orchestrator, cookbooks, video-claw, and the ccc.amirfish.ai hub." loading="lazy">
+                    <figcaption><span class="n">10</span>Take something home: CCC, cookbooks, video-claw — all open-source.</figcaption>
+                </figure>
+                <figure class="slide-block">
+                    <img src="/images/company-deck/slide-11-1x.webp"
+                         srcset="/images/company-deck/slide-11-1x.webp 1x, /images/company-deck/slide-11-2x.webp 2x"
+                         alt="This deck was built the same way — by the same agent pipeline it describes." loading="lazy">
+                    <figcaption><span class="n">11</span>The making of: this deck was built the same way.</figcaption>
+                </figure>
+            </section>
+
+            <section class="cta-block">
+                <span class="section-label">Open Source · MIT</span>
+                <h3>All of it is free and open.</h3>
+                <p>The orchestrator in these slides is <a href="https://github.com/amirfish1/claude-command-center" target="_blank" rel="noopener">Command Center for Claude</a> — install, prompts, cookbooks, and the demo video all live at <a href="https://ccc.amirfish.ai" target="_blank" rel="noopener" class="mono">ccc.amirfish.ai</a>. Take what's useful.</p>
+                <p>Questions about applying any of this to your team? <a href="mailto:amir@amirfish.com?subject=How%20my%20company%20runs%20-%20question">Email me</a>.</p>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="/">All Field Notes</a>
+                <a href="https://kneaded.ai" target="_blank">Kneaded.ai</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
