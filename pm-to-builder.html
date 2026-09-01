@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The PM Job Didn't Change. The Latency Did. — Amir Fish</title>
+    <meta name="description" content="AI didn't replace the conversation between PMs and engineers. It collapsed it from two weeks to one hour, and moved it inside one head. A decision from this week and five things to do about it.">
+    <meta property="og:title" content="The PM Job Didn't Change. The Latency Did.">
+    <meta property="og:description" content="PMs who can't read code aren't 10x more powerful in the AI era. They're more replaceable. The bottleneck just moved.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amirfish.ai/pm-to-builder">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        :root { --paper: #fbf9f8; --ink: #1b1c1c; --ink-soft: #2a2a2a; --ink-mute: #444748; --rule: #c4c7c7; --rule-soft: #e4e2e2; --rule-strong: #747878; --accent: #aa3527; --accent-soft: #c4583f; }
+        body { font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--ink); background: var(--paper); font-feature-settings: "kern", "liga", "onum"; }
+        a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--rule); text-decoration-thickness: 0.5px; transition: color 0.15s, text-decoration-color 0.15s; }
+        a:hover { color: var(--accent); text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+        ::selection { background: #ffdad4; color: #410000; }
+        .top-bar { border-bottom: 0.5px solid var(--rule-soft); background: rgba(251,249,248,0.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 50; }
+        .top-bar-inner { max-width: 1280px; margin: 0 auto; padding: 1.1rem 1.5rem; display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+        .top-bar .wordmark { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+        .top-bar nav { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; display: flex; gap: 2rem; }
+        .top-bar nav a { color: #888; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 0.12rem; }
+        .top-bar nav a.active { color: var(--ink); border-bottom-color: var(--ink); }
+        .top-bar nav a:hover { color: var(--ink); }
+        .page { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: grid; grid-template-columns: 200px minmax(0, 1fr) 280px; column-gap: 64px; align-items: start; }
+        .left-rail { position: sticky; top: 4.5rem; padding-top: 5rem; font-size: 0.92rem; }
+        .left-rail .label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; color: var(--accent); margin-bottom: 0.4rem; display: block; }
+        .left-rail .context-title { font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: var(--ink); font-size: 1rem; margin-bottom: 1.6rem; }
+        .left-rail .toc { display: flex; flex-direction: column; gap: 0.7rem; list-style: none; }
+        .left-rail .toc a { font-family: 'Newsreader', Georgia, serif; font-size: 0.92rem; color: #888; text-decoration: none; line-height: 1.4; }
+        .left-rail .toc a:hover { color: var(--ink); }
+        .left-rail .toc-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-right: 0.45rem; font-variant-numeric: tabular-nums; }
+        main { max-width: 520px; padding: 5rem 0 6rem; position: relative; }
+        .hero { margin-bottom: 4rem; }
+        .hero .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin-bottom: 1.5rem; display: block; }
+        .hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: 2.5rem; font-weight: 400; font-variation-settings: "opsz" 72; letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); margin-bottom: 1.5rem; }
+        .hero .subtitle { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.18rem; line-height: 1.55; color: var(--ink-mute); margin-bottom: 2rem; }
+        .hero p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; }
+        section.essay-section { margin-bottom: 3.5rem; position: relative; }
+        section.essay-section .section-number { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; position: absolute; left: -3rem; top: 0.25rem; user-select: none; }
+        section.essay-section .section-date { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--rule-strong); margin-bottom: 0.75rem; display: block; }
+        section.essay-section h2 { font-family: 'Newsreader', Georgia, serif; font-size: 1.8rem; font-weight: 400; font-variation-settings: "opsz" 60; letter-spacing: -0.018em; line-height: 1.2; color: var(--ink); margin-bottom: 1.4rem; }
+        main p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.1rem; }
+        main p strong { font-weight: 600; color: var(--ink); }
+        main em, main i { font-style: italic; }
+        .term { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        sup.cite { font-family: 'Inter', sans-serif; font-size: 0.65em; color: var(--accent); font-weight: 600; margin-left: 1px; font-variant-numeric: tabular-nums; line-height: 0; cursor: default; }
+        main ol, main ul { margin: 0.5rem 0 1.4rem 1.5rem; color: var(--ink-soft); }
+        main ol li, main ul li { margin-bottom: 0.5rem; font-size: 1.0625rem; line-height: 1.7; padding-left: 0.3rem; }
+        main ol li::marker { font-variant-numeric: oldstyle-nums; color: var(--accent); }
+        main ul li::marker { color: var(--accent); }
+        .pullquote { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.45rem; line-height: 1.4; color: var(--ink); position: relative; padding: 1.75rem 0 1.75rem 2rem; margin: 3rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+        .pullquote::before { content: ''; position: absolute; left: 0; top: 1.25rem; bottom: 1.25rem; width: 3px; background: var(--accent); }
+        main code { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; background: #f1ece5; padding: 0.06rem 0.32rem; color: #444; }
+        .listing-label { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--rule-strong); font-weight: 500; margin: 1.6rem 0 0.5rem; display: block; }
+        figure.fig { margin: 2.5rem 0; }
+        figure.fig img { display: block; width: 100%; height: auto; border: 0.5px solid var(--rule); }
+        figure.fig figcaption { display: none; }
+        hr.divider { border: none; border-top: 0.5px solid var(--rule-soft); margin: 3rem 0; }
+        .right-rail { position: sticky; top: 4.5rem; padding-top: 5rem; display: flex; flex-direction: column; gap: 2.25rem; }
+        .marginalia { border-left: 0.5px solid var(--rule-strong); padding-left: 1rem; font-size: 0.86rem; line-height: 1.55; color: var(--ink-mute); }
+        .marginalia .num { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; display: block; font-variant-numeric: tabular-nums; }
+        .marginalia .term { font-style: italic; font-variant: all-small-caps; letter-spacing: 0.04em; color: var(--ink); font-weight: 500; }
+        .marginalia em { font-style: italic; }
+        .marginalia .fig-num { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; margin-bottom: 0.35rem; display: block; }
+        .marginalia.section-block { border-left: none; padding-left: 0; border-top: 0.5px solid var(--rule); padding-top: 1rem; }
+        .marginalia.section-block .heading { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 500; margin-bottom: 0.55rem; display: block; }
+        .marginalia.section-block ul { list-style: none; margin: 0; padding: 0; }
+        .marginalia.section-block ul li { margin-bottom: 0.5rem; font-size: 0.86rem; }
+        .marginalia.section-block ul li a { text-decoration: none; border-bottom: 0.5px solid var(--rule); color: var(--ink-mute); }
+        .marginalia.section-block ul li a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+        .cta-block { margin: 3.5rem 0; padding: 2.5rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+        .cta-block .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--accent); margin-bottom: 0.9rem; display: block; }
+        .cta-block h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-variation-settings: "opsz" 60; font-size: 1.65rem; letter-spacing: -0.018em; line-height: 1.22; color: var(--ink); margin-bottom: 1rem; }
+        .cta-block p { font-size: 1.0625rem; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1.25rem; }
+        .cta-block pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.55; background: #f5f3f0; padding: 0.95rem 1.05rem; border: 0.5px solid var(--rule-soft); color: var(--ink-soft); overflow-x: auto; margin-bottom: 1.4rem; white-space: pre-wrap; word-break: break-word; }
+        .cta-block .cta-links { display: flex; gap: 1.6rem 2rem; flex-wrap: wrap; }
+        .cta-block .cta-links a { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.05rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+        .cta-block .cta-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .cta-block .meta-line { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 0.9rem; color: #999; margin-top: 1.1rem; }
+        .closing { margin: 3.5rem 0 2rem; padding: 2.25rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); text-align: center; }
+        .closing h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--ink); }
+        .closing p { font-size: 0.95rem; color: var(--ink-mute); margin-bottom: 1.2rem; }
+        .closing .cta { display: inline-block; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 1.02rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; margin: 0 0.9rem; }
+        .closing .cta:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        footer { border-top: 0.5px solid var(--rule-soft); margin-top: 4rem; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; font-family: 'Newsreader', Georgia, serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.18em; color: #999; }
+        .footer-inner .colophon { font-style: italic; text-transform: none; letter-spacing: 0.02em; color: #999; font-size: 0.85rem; }
+        .footer-inner .links { display: flex; gap: 2rem; }
+        .footer-inner a { color: #888; text-decoration: none; border-bottom: 0.5px solid transparent; }
+        .footer-inner a:hover { color: var(--ink); border-bottom-color: #888; }
+        @media (max-width: 1180px) { .page { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 48px; } .left-rail { display: none; } section.essay-section .section-number { position: static; display: block; margin-bottom: 0.5rem; } }
+        @media (max-width: 900px) { .page { grid-template-columns: minmax(0, 1fr); } .right-rail { position: static; padding-top: 0; margin-top: 1.5rem; } main { padding: 3rem 0 2rem; max-width: 600px; margin: 0 auto; } .marginalia { font-size: 0.92rem; } .top-bar nav { display: none; } }
+        @media (max-width: 500px) { .hero h1 { font-size: 2rem; } .hero .subtitle { font-size: 1.05rem; } section.essay-section h2 { font-size: 1.55rem; } main p, main ol li, main ul li { font-size: 1rem; } }
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <a href="/" class="wordmark">Amir Fish · Field Notes</a>
+            <nav>
+                <a href="/">Index</a>
+                <a href="/#advisory">Advisory</a>
+                <a href="/#ccc">CCC</a>
+                <a href="mailto:amir@amirfish.com">Correspond</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+
+        <aside class="left-rail">
+            <span class="label">Field Note · 01</span>
+            <div class="context-title">The PM Job Didn't Change. The Latency Did.</div>
+            <ol class="toc">
+                <li><a href="#s1"><span class="toc-num">01</span>The Unpopular Version</a></li>
+                <li><a href="#s2"><span class="toc-num">02</span>What Actually Changed</a></li>
+                <li><a href="#s3"><span class="toc-num">03</span>A Decision From This Week</a></li>
+                <li><a href="#s4"><span class="toc-num">04</span>The Old-World Version</a></li>
+                <li><a href="#s5"><span class="toc-num">05</span>Five Things To Do This Week</a></li>
+                <li><a href="#s6"><span class="toc-num">06</span>The Bigger Move</a></li>
+                <li><a href="#s7"><span class="toc-num">07</span>Who I'm Talking To</a></li>
+            </ol>
+        </aside>
+
+        <main>
+
+            <header class="hero">
+                <span class="eyebrow">Field Note · Product · Spring 2026</span>
+                <h1>The PM Job Didn't Change. The Latency Did.</h1>
+                <p class="subtitle">AI didn't replace the conversation between PMs and engineers. It collapsed it from two weeks to one hour, and moved it inside one head.</p>
+                <p>This week I made an architecture call on the Claude SDK for an AI assistant I'm building. Last decade I would have written a ticket and waited eight working days for an engineer to come back with the options. Same decision. The work didn't get smaller. The handoff just got eliminated.</p>
+            </header>
+
+            <section class="essay-section" id="s1">
+                <span class="section-number">01</span>
+                <span class="section-date">The Unpopular Version</span>
+                <h2>PMs Without Code Just Got More Replaceable, Not Less.</h2>
+
+                <p>If you're a PM who can't read code or evaluate a technical tradeoff in real time, AI just made you more replaceable, not 10x more powerful. That's the unpopular version of "AI changes everything for product." The popular version is that prompting your way to faster shipping makes you a better PM. It doesn't. It just makes you a faster bottleneck.</p>
+
+                <p>The mechanic is simple. AI makes the engineer 10x faster. It doesn't make the PM 10x better at deciding what to build. So the engineer ships in a day what used to take two weeks, and then waits on the PM for the next call. The bottleneck shifted. Whoever's slowest now sets the pace, and the PM is increasingly the slowest part.</p>
+
+                <p>I'm not going to spend the rest of this writing on whether that means I'm "still a PM" or "now an engineer." The better question is whether you can still make the product call when the engineering tradeoff arrives before the meeting does. The honest answer for me is the same person doing the same job at higher speed, and the speed exposes a skill gap that didn't matter when handoffs hid it.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s2">
+                <span class="section-number">02</span>
+                <span class="section-date">What Actually Changed</span>
+                <h2>Two Weeks Became One Hour.</h2>
+
+                <p>Good PMs have always thought about engineering constraints. They just used to meet them later, when an engineer walked into a room and said <em>"you need to make a call, here are three options, here's what each one breaks."</em> That conversation took two weeks of back-and-forth, because the PM didn't have the vocabulary to ask the right follow-up and the engineer didn't have the time to translate everything down a level.</p>
+
+                <p>AI didn't replace that conversation. It collapsed it. The same exchange now happens in an hour, in the same head, with the docs and the codebase open. The tradeoff is the same tradeoff. The decision is the same decision. The two-week wall in the middle is gone.</p>
+
+                <p>Which is good news for engineers. It pulls a tax off the back of their week. It's mixed news for PMs, because the version of the job that survived was the version that could carry the technical half of the conversation themselves. Everything else got faster around it.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s3">
+                <span class="section-number">03</span>
+                <span class="section-date">A Decision From This Week</span>
+                <h2>The Three-Bucket Constraint Nobody Tells You About.</h2>
+
+                <p>Concrete example, because the abstraction is doing too much work. Last week I was building an AI assistant inside the studio platform I run for small business owners. Stack: Claude Agent SDK behind a Next.js API route. The ask was almost embarrassingly simple. The assistant should remember what the user said two messages ago.</p>
+
+                <p>Turns out the SDK doesn't do that by default. Not in my deployment shape.</p>
+
+                <p>The Agent SDK has three deployment buckets. <strong>Bucket 1</strong> is the raw <code>@anthropic-ai/sdk</code>, which every normal chatbot uses (ChatGPT, Cursor, Claude.ai itself). It takes a list of role-tagged messages, <code>[{role:user...}, {role:assistant...}]</code>, straight to the model. Multi-turn works out of the box. <strong>Bucket 2</strong> is the SDK as a long-lived process, the way Claude Code itself runs. The <code>query()</code> call stays open, the SDK owns the session in memory, the conversation never ends from its point of view. Multi-turn works because there's no "restart from history" step. <strong>Bucket 3</strong><sup class="cite">1</sup> is what I was in. SDK called from a stateless HTTP handler, one fresh process per user message, dies when the response returns. The SDK's streaming-input only accepts user-role messages, so I couldn't even fake history by inlining the prior assistant turn. Every new message hit a fresh process with no memory of the previous one.</p>
+
+                <p>Two paths. Swap the Agent SDK for the raw <code>@anthropic-ai/sdk</code> and manage the message array myself, the way Bucket 1 does. Or stay on the Agent SDK and add <code>SessionStore.resume(sessionId)</code><sup class="cite">2</sup> to rehydrate the prior session on each HTTP request, which is the textbook fix but adds a server-side session-store dependency I didn't need for v1.</p>
+
+                <p>I took the raw-SDK path. Forty-line refactor, ninety minutes from "huh" to shipped. Multi-turn worked that night.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s4">
+                <span class="section-number">04</span>
+                <span class="section-date">The Old-World Version</span>
+                <h2>Two Weeks, Same Decision, Different Calendar.</h2>
+
+                <p>Old-world version of that call. I write a ticket. <em>"The assistant should remember previous turns."</em> An engineer picks it up Monday, reads the SDK docs for half a day, comes back Thursday with three options and a recommendation. We meet. We debate the dependency cost. We plan a session-store migration. Two weeks gone before users see multi-turn.</p>
+
+                <div class="pullquote">Same decision. The decision didn't get smaller. The handoff just got eliminated.</div>
+
+                <p>And here's the part that should worry every PM reading this. The risk if I'd punted to an engineer wasn't "slower." It was a silent capability gap. The engineer ships Bucket 3 as-is with a "the assistant answers one question at a time" UX and a ticket to add multi-turn later. Users hate it. I never know the constraint existed, because the constraint lives three deployment buckets deep in a third-party SDK I don't read.</p>
+
+                <p>I caught it because I was the one reading the SDK docs at 9pm. That's the whole move. The hour that used to be the engineer's hour is now your hour, and the call you make in it determines whether your product ships right or ships wrong. You don't get a second handoff.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s5">
+                <span class="section-number">05</span>
+                <span class="section-date">Five Things To Do This Week</span>
+                <h2>If You Want To Close The Gap, Start Here.</h2>
+
+                <p>Six months of this and you'll catch yourself making the kind of call I made last week. None of this is about learning to write code. It's about understanding the architecture and the technical details well enough to have a real conversation with the AI (or the engineer in the room), and end up with a system that's scalable, monitored, logged, and not broken at 3am. Six concrete moves, in order.</p>
+
+                <ol>
+                    <li><strong>Pick one feature shipping next sprint. Read the choices, not the code.</strong> Find the design doc or the PR description and identify the three or four real calls: which database and why, how do we know when it breaks, where do the logs go, what happens when load spikes. Ask the engineer about those, not the syntax. The bar is catching the call that would have shipped wrong if nobody asked.</li>
+
+                    <li><strong>Open Claude Code or Cursor on your laptop. Build something you'd actually use.</strong> Not a tutorial. A real tool. A script that summarizes your team's standup notes. A dashboard that pulls your usage data. A CLI that does one annoying thing in your workflow. The point isn't the artifact. It's the moment you hit a bug and have to reason about why the code does what it does instead of what you told it to do.</li>
+
+                    <li><strong>When an engineer says "we can't do that easily," ask "why?" until you understand the actual constraint.</strong> Not the politeness layer. The real one. Half the time it's "the database can't do that join cheaply" or "the SDK doesn't accept assistant-role messages in the input stream," and you should be able to follow the answer one level down. If you can't, that's the exact gap to close.</li>
+
+                    <li><strong>Stop writing PRDs. Write specs an agent could read.</strong><sup class="cite">3</sup> Markdown files. Concrete examples. The exact UI states. The edge cases. If you can hand the spec to Claude Code and watch it ship a working v1 in twenty minutes, your spec was good. If Claude gets stuck or builds the wrong thing, the spec wasn't tight. The agent is the litmus test.</li>
+
+                    <li><strong>Sit in on one architecture review per month. Take notes on what you didn't follow. Ask after.</strong> Architecture reviews are where the real product tradeoffs hide, dressed up as engineering minutiae. The PM who shows up and asks <em>"wait, why do we need both queues?"</em> is the PM who catches the silent capability gap before it ships.</li>
+
+                    <li><strong>Look at your team chart. Find the role that doesn't exist yet but should.</strong> The cross-functional integrator. The PM/eng hybrid. The standardization owner. The role that gets shot down in headcount planning because it doesn't fit cleanly into any box. Build toward it for six months. By the time someone proposes the role, you're the obvious person to hire into it.</li>
+                </ol>
+
+                <p>None of these requires you to "become an engineer." They require you to stop treating the engineering layer as opaque. The opacity used to be a feature of the org. It's a liability now.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s6">
+                <span class="section-number">06</span>
+                <span class="section-date">The Bigger Move</span>
+                <h2>The New Senior Role Is The Person Who Builds The Missing Layer.</h2>
+
+                <p>Closing the gap is table stakes. The bigger move, once you can hold the technical half of the conversation, is to see the integration or automation layer your department has been waiting for and just build it. The custom dashboard your team currently wires together in three off-the-shelf tools and a spreadsheet. The workflow that takes a colleague half a day every Monday and could be a script. The in-house alternative to a vendor your org is paying tens of thousands a year for and never quite uses right.</p>
+
+                <p>A nine-figure-revenue company I know was a week from signing a multi-year Tableau renewal. The renewal was already in legal review. Someone two functions over, not on the analytics team, raised a hand: <em>"I can build the thirty percent we actually use, tailored to our systems."</em> They did. It doesn't have every Tableau bell and whistle, but it has integrations with the company's own systems Tableau never would. The renewal got killed. That person got appointed cross-company integrator and now works directly with the CTO. A new senior role created by the artifact, not by a reorg.</p>
+
+                <p>That's the second-order effect of closing the gap. It's not just that you become a faster PM. It's that you become the person who built the thing the org needed and didn't know how to ask for. The standardization layer, the automation layer, the in-house tool. The job didn't exist on the org chart on Monday. It does on Friday. AI is what makes that solo-buildable in 2026 in a way it wasn't in 2020. The window is open because most orgs haven't decided yet who owns these internal AI-built tools. Once they do, the role hardens around the people who already shipped the first useful version. Walk into your next vendor-renewal meeting and ask <em>"could one person inside the company rebuild the thirty percent we actually use?"</em> If the room can't immediately say no, the window is still open at your company. The first person who answers yes gets the role.</p>
+            </section>
+
+            <hr class="divider">
+
+            <section class="essay-section" id="s7">
+                <span class="section-number">07</span>
+                <span class="section-date">Who I'm Talking To</span>
+                <h2>If You're Trying To Figure Out The Next Six Months.</h2>
+
+                <p>If you're a PM trying to decide which six months of investment compounds and which is busy-work, this is what I'd put my own time into right now. If you're trying to get hired into a product role at a company that ships AI products, the bar moved. The recruiter screen still asks about frameworks. The hiring manager wants to see the GitHub. Build the GitHub.</p>
+
+                <p>And if you're a product leader trying to upskill a team in this direction, that's the conversation I'm spending most of my time on. Email's at the bottom. The companies whose PMs can hold the technical half of the call themselves are going to feel an order of magnitude faster three years from now. The rest are going to be waiting on someone who's now 10x faster than they used to be.</p>
+            </section>
+
+            <section class="cta-block" id="advisory">
+                <span class="eyebrow">Advisory · Workshops · 1:1</span>
+                <h3>Want this for your team or for yourself?</h3>
+                <p>I take a handful of engagements at a time. Product leaders who want to push their team across this exact gap, individual PMs working on it alone, and AI-native orgs trying to build the spec-writing and review muscle in public. Three flavors:</p>
+                <div class="cta-links">
+                    <a href="mailto:amir@amirfish.com?subject=Workshop%20%E2%80%94%20fit%20check">Workshop for a product team →</a>
+                    <a href="mailto:amir@amirfish.com?subject=1%3A1%20strategy%20session">1:1 strategy session →</a>
+                    <a href="mailto:amir@amirfish.com?subject=Fractional%20retainer">Fractional retainer →</a>
+                </div>
+                <p class="meta-line">Recent example: <a href="/spec-is-the-hard-part">a half-day with seven NVIDIA PMs</a>. Tailored to the team each time.</p>
+            </section>
+
+            <section class="cta-block" id="ccc">
+                <span class="eyebrow">Open Source · MIT</span>
+                <h3>The tool I built to keep up with myself.</h3>
+                <p>Once you start making engineering calls in real time, you also start running more parallel work than a single terminal can hold. Command Center for Claude is the local kanban that emerged when "two terminals, two Claudes" turned into thirty parallel sessions and the coordination cost started to dominate.</p>
+                <pre>git clone https://github.com/amirfish1/claude-command-center
+cd claude-command-center && ./run.sh</pre>
+                <div class="cta-links">
+                    <a href="https://github.com/amirfish1/claude-command-center" target="_blank">GitHub →</a>
+                    <a href="https://youtu.be/_WRf0hH6yhg" target="_blank">2:46 demo →</a>
+                    <a href="/parallel-sessions">Field note →</a>
+                </div>
+                <p class="meta-line">Not affiliated with Anthropic. Community-built.</p>
+            </section>
+
+            <div class="closing">
+                <h3>Three doors</h3>
+                <p>If this resonated, the most useful next step is one of these:</p>
+                <a href="/" class="cta">More Field Notes →</a>
+                <a href="mailto:amir@amirfish.com" class="cta">Email me →</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank" class="cta">Star CCC →</a>
+            </div>
+
+        </main>
+
+        <aside class="right-rail">
+
+            <div class="marginalia">
+                <span class="num">1</span>
+                <span class="term">Bucket 3.</span> Claude Agent SDK called from a stateless HTTP handler. One process per user message. The SDK's streaming-input only accepts <code>role:user</code> messages, so prior assistant turns can't be inlined. This is the shape every "Agent SDK behind a web app" sits in, and the one that hides the multi-turn constraint.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">2</span>
+                <span class="term">SessionStore.resume.</span> The textbook fix if you want to stay on the Agent SDK. Persist the session id alongside your conversation id, rehydrate the prior session on each HTTP request. Adds a server-side session-store dependency. Right call for v3. Wrong call for v1.
+            </div>
+
+            <div class="marginalia">
+                <span class="num">3</span>
+                <span class="term">The agent is the litmus test.</span> The spec that ships a working v1 from Claude in twenty minutes is the same spec the rest of your team will actually be able to act on. The PRD that produces ambiguous output produces ambiguous engineering. <a href="/spec-is-the-hard-part">More on this →</a>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Source</span>
+                <p>The decision in section 03 was made on the <a href="https://bookyourmat.com" target="_blank">BookYourMat</a> studio assistant, week of May 19, 2026. The Bucket-3 analysis is from the Anthropic SDK source and the in-repo agent docs. The forty-line refactor is in the public repo if you want to read the diff.</p>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Related Field Notes</span>
+                <ul>
+                    <li><a href="/spec-is-the-hard-part">→ The Spec Is The Hard Part</a></li>
+                    <li><a href="/cyborg-workflow">→ The Cyborg Workflow</a></li>
+                    <li><a href="/parallel-sessions">→ Two Fixes for 30+ Parallel Sessions</a></li>
+                </ul>
+            </div>
+
+            <div class="marginalia section-block">
+                <span class="heading">Method</span>
+                <p>Field notes are short essays for builders, not buyers. Each tries to leave the reader with one operational idea that wasn't theirs before they started reading. No conclusions, no abstracts, no SEO outros.</p>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="colophon">© 2026 Amir Fish. Typeset in Newsreader and Inter. Built with Claude Code.</span>
+            <div class="links">
+                <a href="/">All Field Notes</a>
+                <a href="https://github.com/amirfish1/claude-command-center" target="_blank">CCC</a>
+                <a href="mailto:amir@amirfish.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
