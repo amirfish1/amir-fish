@@ -1,0 +1,10 @@
+.git
+.gitignore
+.DS_Store
+.claude
+.hunch
+backups
+reddit-strategy
+concept-*.html
+scripts
+*.md
