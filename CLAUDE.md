@@ -14,7 +14,7 @@ He lives in Sunnyvale, CA with his wife (who runs a Pilates studio) and children
 ## The Two Businesses
 
 ### 1. AmirFish.com — AI Consulting
-**Domain:** amirfish.com
+**Domain:** amirfish.ai (deployment target; amirfish.com repo path is legacy)
 **What it is:** Personal AI consulting brand offering "fractional CPO-level thinking" to Bay Area startups.
 **Status:** Website is live but needs work. it's available on git. 
 **Service tiers:**
