@@ -1,7 +1,9 @@
 .vercel
 .DS_Store
 .claude/
+# Hunch is permanently removed; never commit leftovers.
 .hunch/
+.hunch-cache/
 backups/
 reddit-strategy/
 concept-*.html
